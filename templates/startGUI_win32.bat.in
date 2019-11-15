@@ -1,0 +1,14 @@
+@echo off
+set PATH=@INSTDIR@\GUI\@J3DLIB@;%PATH%
+rem set this variable to the full path to java launcher: java.exe (32 bit version)
+set JRE=@JRE@
+if exist "%JRE%" (
+  echo %0
+  echo Starting Java launcher ... 
+  "%JRE%" -jar "@INSTDIR@\GUI\simresGUI.jar" -g "@INSTDIR@\GUI"
+) else (
+  echo Can't find java.exe for a 32 bit platform. 
+  echo Edit the JRE variable in the startup script:
+  echo %0
+)
+pause

@@ -1,0 +1,22 @@
+#!/bin/bash
+export LD_LIBRARY_PATH="@INSTDIR@/GUI/@J3DLIB@:$LD_LIBRARY_PATH"
+GUI=@INSTDIR@/GUI/simresGUI.jar
+# Give full path to Java VM launcher 
+JRE=@JRE@
+if [ -f @INSTDIR@/motd ] ; then
+  cat @INSTDIR@/motd
+fi
+if [ ! -f $GUI ] ; then
+  echo "GUI file not found: "
+  echo "$GUI"
+  exit
+fi
+if [ -f $JRE ] ; then  
+  echo "Starting Java launcher ... "
+  $JRE -jar "$GUI" -g "@INSTDIR@/GUI"
+else
+  echo "Can''t find java for this platform. "
+  echo "Edit the JRE variable in the startup script:"
+  echo $0
+fi
+

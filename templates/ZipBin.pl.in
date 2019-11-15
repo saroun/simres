@@ -1,0 +1,122 @@
+#! /usr/bin/perl
+##################################################################
+#  $Id: ZipBin.pl.in,v 1.9 2019/09/06 19:32:11 saroun Exp $
+#  *****  Script for packing SIMRES  binary distribution *****
+#  Usage: perl ZipBin.pl
+##################################################################
+BEGIN {
+	push @INC, '.';
+}
+use Restrax;
+use strict;
+use Cwd;
+use vars qw/*dbg *SYSNAME *PATHDEL *HOST *PROMPT/;
+*dbg      = *Restrax::dbg;
+*SYSNAME  = *Restrax::SYSNAME;
+*HOST     = *Restrax::HOST;
+*PROMPT   = *Restrax::PROMPT;
+
+# -------------------  PROJECT DEFINITIONS (edit to your convenience)------------
+
+# Executable files to be packed in addition to those installed
+my @EXECS=("Install.pl","Restrax.pm");
+
+# Template *.in files to be copied to the distribution
+# (they will be parsed by Install.pl during installation)
+my @TEMPLATES = ("setup","GUI","motd.in");
+if ($SYSNAME eq 'win32') {
+ push @TEMPLATES,("startGUI_win32.bat.in","startCON_win32.bat.in");	
+} else {
+ push @TEMPLATES,("startGUI.in","startCON.in");
+}
+# Demo projects to be included
+my @DEMOS = ("demo/STRESSSPEC","demo/BEER","demo/ENGINX","demo/MEREDIT","demo/TAS","demo/simres_mcstas","demo/multiple_reflections",
+    "demo/crystal_reflectivity","demo/MAUD");
+push @TEMPLATES,@DEMOS;	
+#-----------------------------------------------------------------------------
+
+# Global declarations
+$dbg=0;          # set 1 for debug: no system commands will be executed
+$PROMPT="yes";   # set to no if you dont want any user confirmation on file delete
+my @INFILES=();     # array for *.in files
+my $PGMNAME="@PGMNAME@"; # program executable name
+my $VERSION="@VERSION@"; # version string
+# Get system info for archive filename
+
+# temporary subdirectory for the archive
+my $TD="$PGMNAME-$VERSION-$HOST-$SYSNAME";
+
+# ------------------------------------ PROCEDURES ------------------------------------------
+# handle command line parameters
+sub CmdParam {
+  if ($#ARGV > -1) {
+    foreach my $a (@ARGV) {
+      if ($a =~ m/[-]*Q\z/) {$PROMPT="no";};
+      if ($a =~ m/[-]*help\z/) {
+        print "\n";
+        print "Usage:\n";
+        print "perl $0 [options]\n";
+        print "Options:\n";
+        print "  -Q       ... quiet mode: does not prompt for anything \n";
+        print "  -help    ... this help \n";
+        print "\n";
+        exit;
+      };
+    };
+  };
+};
+
+# ------------------------------ MAIN SECTION ----------------------------------
+CmdParam;
+
+# clean/recreate target directory
+if ($dbg == 0) {
+  if ( -d "$TD" ) { RmDirCmd("$TD")};
+  mkdir("$TD");
+};
+
+# Install to the target directory,
+my @cmd=("perl","Install.pl","$TD");
+dosystem(@cmd);
+
+# Copy *.in files in the distribution
+@INFILES=CollectResources("in","",@TEMPLATES);
+my @notfound=();
+foreach my $F (@INFILES) {
+  if ((my $res = FileCopyCmd($F,$TD,"0644")) ne "") {
+    push @notfound,("$res");
+  };
+};
+
+# Copy executable scripts
+for my $F (@EXECS) {
+  if ((my $res = FileCopyCmd($F,$TD,"0755")) ne "") {
+    push @notfound,("$res");
+  };
+};
+
+# pack the directory
+my $ARCH=ZipDirCmd($TD);
+
+# remove the temporary directory
+RmDirCmd($TD);
+
+if ( $ARCH ne "" ) {
+  printf("Archive $ARCH has been created.\n");
+} else {
+  printf("WARNING! Archive could not be created.\n");
+};
+
+# report uninstalled files:
+if ($#notfound > -1) {
+  printf("WARNING! Could not find following files: \n");
+  foreach my $f (@notfound) {
+    printf("     %s \n",$f);
+  };
+  die;
+};
+
+
+
+
+

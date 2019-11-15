@@ -1,0 +1,183 @@
+#! /usr/bin/perl
+##################################################################
+#  $Id: ZipSrc.pl.in,v 1.17 2019/09/06 19:32:11 saroun Exp $
+#  *****  Script for packing SIMRES  source distribution *****
+#  Usage: perl ZipBin.pl
+##################################################################
+BEGIN {
+	push @INC, '.';
+}
+use Restrax;
+use strict;
+use Cwd;
+use vars qw/*dbg *SYSNAME *PROMPT *HOST/;
+*dbg      = *Restrax::dbg;
+*SYSNAME  = *Restrax::SYSNAME;
+*PROMPT   = *Restrax::PROMPT;
+*HOST     = *Restrax::HOST;
+
+# -------------------  PROJECT DEFINITIONS (edit to your convenience)------------
+
+# source files/directories
+# script DOES descent directories, so you can define the whole tree
+# Note that *.in files are added automatically
+my @SOURCES=(
+# complete directories
+    "config","doc","pgplot","setup","src","mcplio",
+# demos (add GUI binary also to sources)
+    "demo/STRESSSPEC","demo/BEER","demo/ENGINX","demo/MEREDIT","demo/TAS","demo/simres_mcstas","demo/multiple_reflections",
+    "demo/crystal_reflectivity","demo/MAUD",	
+# some alias and def files for binding with dll
+
+# templates
+    "*.in",
+# information files
+    "AUTHORS","README","COPYING","COPYING.LIB","simres.ico","lib/pgplot/copyright.notice","lib/pgplot/README.txt",
+# Java GUI
+    "GUI/lib/*.jar","GUI/simresCON.jar","GUI/simresGUI.jar","GUI/JSUtils.jar"
+  );
+push @SOURCES,("GUI/*.ini.in");
+
+# extra files that are missed by source collection:
+my @EXTRAS=(
+  "setup/crystal.lib","setup/tables/atoms.lib"
+);
+
+# executable scripts:
+my @EXECS=(
+# perl script system for configuration, installation and packaging
+    "Restrax.pm","configure.pl",
+    "res2html","fsym",
+# batch files useful in win32
+  );
+
+# Utils needed to run compiled SIMRES:
+my @UTILS=(
+# Java 3D files:
+    "GUI/j3d-jre",
+# PGPLOT files with import libs
+); 
+  
+if ($SYSNAME eq 'win32') {
+	push @UTILS,("bin/wrestrax.exe", "bin/jsdrivlib.dll");
+} else {
+	if ($HOST eq 'x86_64') { 
+	# on Linux, distribute also PGPLOT sources
+		push @SOURCES,("pgplot/src", "pgplot/tgt");
+	} else {
+		# TODO
+	} 
+};
+
+
+#-----------------------------------------------------------------------------
+
+# Global declarations
+$dbg=0;          # set 1 for debug: no system commands will be executed
+$PROMPT="yes";   # set to no if you dont want any user confirmation on file delete
+my $WHAT="";   # set to "util" to pack only system dependent files needed to compile and run the SIMRES
+my @INFILES=();     # array for *.in files
+my @SRCFILES=();    # array with files to install
+my $PGMNAME="@PGMNAME@"; # program executable name
+my $VERSION="@VERSION@"; # version string
+# Get system info for archive filename
+
+# temporary subdirectory for the archive
+my $TD="$PGMNAME-$VERSION-src";
+
+# ------------------------------------ PROCEDURES ------------------------------------------
+# handle command line parameters
+sub CmdParam {
+  if ($#ARGV > -1) {
+    foreach my $a (@ARGV) {
+      if ($a =~ m/[-]*Q\z/) {$PROMPT="no";};
+	  if ($a =~ m/[-]*util\z/) {$WHAT="util";};
+      if ($a =~ m/[-]*help\z/) {
+        print "\n";
+        print "Usage:\n";
+        print "perl $0 [options]\n";
+        print "Options:\n";
+        print "  -Q       ... quiet mode: does not prompt for anything \n";
+	print "  -util    ... pack only system dependent files needed to compile and run the SIMRES \n";
+        print "  -help    ... this help \n";
+        print "\n";
+        exit;
+      };
+    };
+  };
+};
+
+# ------------------------------ MAIN SECTION ----------------------------------
+
+# process command parameters
+CmdParam;
+if ($WHAT eq "util") {
+	$TD="$PGMNAME-$VERSION-utils-$HOST-$SYSNAME";
+}
+
+# clean/recreate temporary target directory, $TD
+if ($dbg == 0) {
+  if ( -d "$TD" ) { RmDirCmd("$TD")};
+  mkdir("$TD");
+};
+my @notfound=();
+if ($WHAT eq "util") {
+	my $exclist=""; #excluded extensions
+	my @UTILF = CollectResources("",$exclist,@UTILS);
+	# copy sources to $TD
+	foreach my $F (@UTILF) {
+	  if ((my $res = FileCopyCmd($F,$TD,"0644")) ne "") {
+		push @notfound,("$res")
+	  };
+	};
+	open(OUTFILE,">$TD/README") or die "Cannot create $TD/README:\n $!\n";
+    printf(OUTFILE "This package contains files, which may be needed to compile and then install/run SIMRES. \n");
+	printf(OUTFILE "Copy contents to the SIMRES source directory before compilation.\n");
+	close(OUTFILE);
+} else {
+	# collect all resources defined in $SOURCES list
+	my $exclist="exe|bin|dcu|lib|dpp|dll|so"; #excluded extensions
+	@SRCFILES = CollectResources("",$exclist,@SOURCES);
+	# copy sources to $TD
+	foreach my $F (@SRCFILES) {
+	  if ((my $res = FileCopyCmd($F,$TD,"0644")) ne "") {
+		push @notfound,("$res")
+	  };
+	};
+	# copy extras to $TD
+	my @EXTRAF = CollectResources("","",@EXTRAS);
+	foreach my $F (@EXTRAF) {
+	  if ((my $res = FileCopyCmd($F,$TD,"0644")) ne "") {
+		push @notfound,("$res")
+	  };
+	};	
+	# copy executable scripts to $TD
+	foreach my $F (@EXECS) {
+	  if ((my $res = FileCopyCmd($F,$TD,"0644")) ne "") {
+		push @notfound,("$res");
+	  };
+	};
+};
+
+# pack the directory
+my $ARCH=ZipDirCmd($TD);
+
+# remove the temporary directory
+RmDirCmd($TD);
+
+if ( $ARCH ne "" ) {
+  printf("Archive $ARCH has been created.\n");
+} else {
+  printf("WARNING! Archive could not be created.\n");
+};
+
+# report uninstalled files:
+if ($#notfound > -1) {
+  printf("WARNING! Could not find following files: \n");
+  foreach my $f (@notfound) {
+    printf("     %s \n",$f);
+  };
+  die;
+};
+
+

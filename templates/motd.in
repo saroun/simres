@@ -1,0 +1,82 @@
+*** SIMRES version @VERSION@, @BDATE@ ***
+homepage: @HOMEPAGE@
+see "doc/simres-release-notes.pdf" for the list of changes, bug fixes etc..
+see "doc/simres-guide.pdf" for documentation to the current release
+
+===============
+version 6.4
+===============
+- Improved MCPL functionality (import/export neutrons)
+- Binding with McStas using MCPL (see doc/simres-guide.pdf)
+- Export of sample scattering events (see demo/STRESSPEC)
+- New demo examples (choose demo on starup)
+- Sets of supermirror lookup tables vor various models
+- Simulation of guide misalignment
+- Improved guide waviness model
+- Hollow sample shapes (set wall thickness parameter)
+- Improved stability and monitoring of the simulation kernel
+- 64 bit binaries
+
+===============
+version 6.3.5
+===============
+- New sources: ESS butterfly, ISIS
+- Export to MCPL file (use command MCPL)
+- Choice of gonio-stage order for component positioning
+- Recording of events in guides: m-value, escape coating, escape
+
+===============
+version 6.3
+===============
+- updated user guide (PDF)
+- console command - running simulations on a remote server
+- new source definitions for ESS baseline 2013 and pancake moderators
+- SGUIDE: manual (free shape) or automatic (elliptic, parabolic) shape setting 
+- new bug fixes (see simres-relaese-notes.pdf)
+
+===============
+version 6.2
+===============
+- new user guide (PDF)
+- console command - running simulations on a remote server
+- new source definitions for ESS baseline 2013 and pancake moderators
+- new components:
+  SGUIDE: free shape multisegment guide (quadratic or straight segments)
+		manual or automatic (elliptic, parabolic) shape setting 
+  MONITOR: beam monitor with mask area, shows successful rays at any place
+	         various modes of 2D mask in x,y,kx,... useful for instr. optimization
+- strain gradients for polycrytsalline samples			 
+- choice of beam monitor to be used with BEAM1D,BEAM2D commands
+- list of mirror tables located in home/.simres/tables
+- without table, mirror reflectivity for SGUIDE is analytical (parameters are given in sguide dialog)
+- bug fixes (see simres-relaese-notes.pdf)
+
+============
+version 6.1
+============
+- ToF components (disc chopper, wide-angle ToF detector, pulsed sources)  
+- tools for powder diffractometers:
+  event-based evaluation of difractograms from both position and time
+  multi-peak powder sample
+  evaluation of figures-of-merit from diffractograms
+- particle swarm optimization (PSO)
+- extended library of crystal reflections
+- users projects management (storing user data in user's home directory)
+- console version (run java ./GUI/simresCON.jar -h for help)
+- new demo project (ToF powder diffractometer) demonstrating the new features
+- many small bug fixes
+============
+version 6.0
+============
+- radial source distribution (see setup/hcs_radial.dat)
+- XTAL component (bent crystal with multiple reflections)
+- graphical user interface
+- 3D visualisation
+- free definition of instrument layout
+- 1D and 2D scans with any instrument parameter
+- script recorder / runner
+- instrument definition and simulation options in XML files 
+- new matrix description of instrument optics
+  (automatic sampling optimization)
+- options for upstream or downstream tracing
+

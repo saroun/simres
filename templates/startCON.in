@@ -1,0 +1,29 @@
+#! /bin/sh
+# simresCON command line arguments:
+#  -g [GUI configuration path]      ; directory with restraxCON.ini file  
+#  -p [Project config. file]        ; XML file with current project description 
+#  -s [Script]                      ; Script file to be executed on startup
+#  -c [Instrument config. file]     ; Instrument config. file in XML format
+#  -e [command]                     ; Command to be executed
+#  -o [filename]                    ; Results output file in HTML format
+#  -q                               ; quiet (no console output
+#  -log [filename]                  ; print console output to the given file
+GUI=@INSTDIR@/GUI/simresCON.jar
+JRE=@JRE@
+if [ ! -f $GUI ] ; then
+  echo "jar file not found: "
+  echo "$GUI"
+  exit
+fi
+if [ -f $JRE ] ; then  
+  echo "Starting Java launcher ... "
+  OPT="-g @INSTDIR@/GUI"
+  $JRE -jar "$GUI" $OPT $@
+else
+  echo "Can''t find java for this platform. "
+  echo "Edit the JRE variable in the startup script:"
+  echo $0
+fi
+
+
+
