@@ -21,4 +21,5 @@ pgplot/src/*
 
 # Project specific excludes:
 pgplot/linux/pgxwin_server
+src/config.inc
 
