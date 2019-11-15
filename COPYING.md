@@ -62,10 +62,10 @@ https://github.com/mctools/mcpl
 ### Software dynamically linked to SIMRES, distributed in binary packages
 
 `PGPLOT` - The Fortran graphics library written by Tim Pearson, California Institute of Technology, provides graphical representation of results.  
-http://www.astro.caltech.edu/~tjp/pgplot  
+http://www.astro.caltech.edu/~tjp/pgplot   
 *License*: see licenses/pgplot.txt
 
 `Java3D` - 3D Graphics Package  
-http://www.java3d.org/
+http://www.java3d.org/  
 *License*: Sun Microsystems, see licenses/java3d.txt
 
