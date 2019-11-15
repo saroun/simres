@@ -1,0 +1,24 @@
+# generated binaries and temporary files
+*.dll
+*.lib
+*.exe
+*.o
+*.mod
+*.def
+*.a
+*.so
+lib
+bin
+backup
+
+# Lazarus generated files:
+*.lps
+
+# PGPLOT generated files
+grfont.dat
+# ignore PGPLOT sources
+pgplot/src/*
+
+# Project specific excludes:
+pgplot/linux/pgxwin_server
+

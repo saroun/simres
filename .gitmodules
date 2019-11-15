@@ -1,0 +1,3 @@
+[submodule "pgplot/jsdriv_server"]
+	path = pgplot/jsdriv_server
+	url = https://github.com/saroun/jsdriv_server
