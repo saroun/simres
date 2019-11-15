@@ -1,0 +1,39 @@
+# Double crystal setup:
+# Monochromator Si 111, bent perfect crystal
+# Sample: Mosaic Cu 220
+#
+# This example simulates beam profile after reflection from a mosaic crystal (Cu220).
+# It is possible to add strain gradient to the mosaic crystal and see how reflectivity and beam profile changes.
+# To be used with configuration: topography.xml
+# ----------------------------------------------------------
+
+# without strain gradient
+set CR DGR 0.0
+XML CR
+do mc
+cmd BEAM1D COM strain gradient = 0  cm-1
+DO BEAM1D
+
+# strain gradient = 0.001  cm-1
+set CR DGR  2.0
+XML CR
+do mc
+cmd BEAM1D COM strain gradient = 0.001 cm-1
+DO BEAM1D
+
+# strain gradient = 0.005  cm-1
+set CR DGR  5.0
+XML CR
+do mc
+cmd BEAM1D COM strain gradient = 0.005 cm-1
+DO BEAM1D
+
+# strain gradient = 0.01  cm-1
+set CR DGR  10.0
+XML CR
+do mc
+cmd BEAM1D COM strain gradient = 0.01 cm-1
+DO BEAM1D
+
+
+

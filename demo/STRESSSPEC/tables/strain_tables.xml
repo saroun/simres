@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+List of strain tables
+You can edit this list or make a modified copy in your project directory.
+Path is ignored, use only filenames.
+Files are searched in the subdirectory ./tablesof the user profile or project paths.
+ -->
+<STABLE version="1.1">
+	<ITEM id="1">strain_bending.dat</ITEM>
+	<ITEM id="2">strain_planar.dat</ITEM>
+</STABLE>

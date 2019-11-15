@@ -1,0 +1,50 @@
+# Double crystal setup:
+# Monochromator Si 111, bent perfect crystal
+# Sample: Mosaic Cu 220
+#
+# This example simulates the reflectivity curve of a mosaic crystal (Cu220).
+# It is possible to add strain gradient to the mosaic crystal and see how reflectivity and beam profile changes.
+# The underlying simulation model is described in J. Šaroun, Nucl. Instr. and Meth. A 529 (2004), 162-165.
+# To be used with configuration: rocking_curve.xml
+# ----------------------------------------------------------
+
+# set sample crystal to the reflection position automatically
+set CR AUTOADJ 1
+XML CR
+
+# Now switch the aoto orientation off in order to be able to scan the gonio angle
+set CR AUTOADJ 0
+XML CR
+
+# setup the scan parameters
+cmd SCAN1D VARS CR GON(1)
+cmd SCAN1D START -1.0
+cmd SCAN1D END 1.0
+cmd SCAN1D NS 41
+cmd SCAN1D TYPE 0
+
+
+# without strain gradient
+set CR DGR 0.0
+XML CR
+cmd SCAN1D FILE rocking_curve_grad=0.dat
+DO SCAN1D
+
+# strain gradient = 0.001  cm-1
+set CR DGR  2.0
+XML CR
+cmd SCAN1D FILE rocking_curve_grad=0.001.dat
+DO SCAN1D
+
+# strain gradient = 0.005  cm-1
+set CR DGR  5.0
+XML CR
+cmd SCAN1D FILE rocking_curve_grad=0.005.dat
+DO SCAN1D
+
+# strain gradient = 0.01  cm-1
+set CR DGR  10.0
+XML CR
+cmd SCAN1D FILE rocking_curve_grad=0.01.dat
+DO SCAN1D
+

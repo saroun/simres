@@ -1,0 +1,840 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+$Id: classes.xml,v 1.139 2019/06/22 22:57:16 saroun Exp $
+****************************************************************
+WARNING:
+DON'T EDIT THIS FILE - unless you know what you are doing
+elements defined here must correspond to those implemented in SIMRES
+****************************************************************
+This file serves two purposes:
+  1) define identifiers and types of fields for each component class
+  2) automatic construction of property editors
+Tag names define variable type (CLASS,FLOAT,INT,STRING,ENUM, NOYES or SIGN)
+Attributes:
+  ID   ... field identifier
+  name ... descriptive name (caption)
+  units ... physical units
+  size  ... dimension (for vectors)
+  cal    ... if yes, RESTRAX does not parse this field from XML input
+  inherits ... reference to parent class
+  max ... max. number of instances (checked by GUI)
+Optional data within tags contain tooltips
+-->
+<SIMRES version="6.3.2">
+<CLASSES>
+
+<!--  standard enumerators -->
+  <ENUM id="NOYES">
+		<ENUMITEM>no</ENUMITEM>
+    <ENUMITEM>yes</ENUMITEM>
+  </ENUM>
+  <ENUM id="SIGN">
+	<ENUMITEM>-1</ENUMITEM>
+    <ENUMITEM>+1</ENUMITEM>
+  </ENUM>
+	<ENUM id="RESVAR">
+     resolution function variable
+		<ENUMITEM>dQ/Q</ENUMITEM>
+		<ENUMITEM>theta</ENUMITEM>
+		<ENUMITEM>E</ENUMITEM>
+		<ENUMITEM>QX</ENUMITEM>
+		<ENUMITEM>QY</ENUMITEM>
+		<ENUMITEM>QZ</ENUMITEM>
+  </ENUM>
+	<ENUM id="PHSVAR">
+     phase-space variable
+		<ENUMITEM>x</ENUMITEM>
+		<ENUMITEM>y</ENUMITEM>
+		<ENUMITEM>z</ENUMITEM>
+		<ENUMITEM>kx/k</ENUMITEM>
+		<ENUMITEM>ky/k</ENUMITEM>
+		<ENUMITEM>kz/k</ENUMITEM>
+		<ENUMITEM>t</ENUMITEM>
+		<ENUMITEM>E</ENUMITEM>
+    <ENUMITEM>lambda</ENUMITEM>
+  </ENUM>
+  <ENUM id="LOGWALL">
+      orientation of a wall or their combination
+	<ENUMITEM>none</ENUMITEM>  
+	<ENUMITEM>left</ENUMITEM>
+	<ENUMITEM>right</ENUMITEM>
+	<ENUMITEM>top</ENUMITEM>
+	<ENUMITEM>bottom</ENUMITEM>
+	<ENUMITEM>left and right</ENUMITEM>
+	<ENUMITEM>top and bottom</ENUMITEM>
+	<ENUMITEM>any</ENUMITEM>
+  </ENUM>  
+  <ENUM id="DETVAR">
+     detector variable
+		<ENUMITEM>scattering angle</ENUMITEM>
+		<ENUMITEM>dhkl</ENUMITEM>
+		<ENUMITEM>dhkl-TOF</ENUMITEM>
+		<ENUMITEM>TOF</ENUMITEM>
+  </ENUM>
+ <!--  NOTE: GAUGEVAR items after intensity must be identical with DETVAR -->  
+  <ENUM id="GAUGEVAR">
+     gauge variable
+	    <ENUMITEM>intensity</ENUMITEM>
+		<ENUMITEM>scattering angle</ENUMITEM>
+		<ENUMITEM>dhkl</ENUMITEM>
+		<ENUMITEM>dhkl-TOF</ENUMITEM>
+		<ENUMITEM>TOF</ENUMITEM>
+  </ENUM> 
+  <ENUM id="AXLIM">
+     axis limit
+		<ENUMITEM>minimum</ENUMITEM>
+		<ENUMITEM>zero</ENUMITEM>
+		<ENUMITEM>minimum positive</ENUMITEM>
+  </ENUM>  
+  <ENUM id="COORD">
+     coordinate system
+		<ENUMITEM>incident axis</ENUMITEM>
+		<ENUMITEM>local</ENUMITEM>
+		<ENUMITEM>world</ENUMITEM>
+  </ENUM>
+ <!--  NOTE: names in this variable must be identical to ID attributes from crystals.xml-->
+  <ENUM id="CRNAMES">
+     crystal ID string
+		<ENUMITEM>Si</ENUMITEM>
+		<ENUMITEM>Ge</ENUMITEM>
+		<ENUMITEM>C-dia</ENUMITEM>
+		<ENUMITEM>Cu</ENUMITEM>
+		<ENUMITEM>MgF2</ENUMITEM>
+		<ENUMITEM>Be</ENUMITEM>
+		<ENUMITEM>Zn</ENUMITEM>
+		<ENUMITEM>a-Al2O3</ENUMITEM>
+		<ENUMITEM>SiO2</ENUMITEM>
+		<ENUMITEM>PG</ENUMITEM>
+		<ENUMITEM>HS</ENUMITEM>
+  </ENUM>
+	<ENUM id="PROFILE" name="profile" size="4">
+		<ENUMITEM>manual</ENUMITEM>
+		<ENUMITEM>flat</ENUMITEM>
+		<ENUMITEM>parabolic</ENUMITEM>
+		<ENUMITEM>elliptic</ENUMITEM>
+	</ENUM>
+  <GROUP id="hidden">
+<!--  abstract class for commands -->
+		<CLASS id="COMMAND" name="undefined">
+		</CLASS>
+<!--  abstract class for options -->
+		<CLASS id="OPTION" name="undefined">
+		</CLASS>
+  </GROUP>
+<!--  CLASS FIELDS  -->
+  <CLASS id="FOCARRAY" name="focusing crystal array">
+		<INT id="NSEG" name="segments">number of segments</INT>
+		<FLOAT id="GAP" name="gaps" units="mm">gaps between segments</FLOAT>
+		<FLOAT id="RHO" name="curvature" units="m^-1"  readonly="AUTO=1">curvature, 1/R</FLOAT>
+		<NOYES id="BENT" name="bent surface">segments are bent</NOYES>
+		<NOYES id="STACK" name="curved stack">segments are on a curved surface</NOYES>
+		<NOYES id="AUTO" name="autofocus">automatic focusing</NOYES>
+		<FLOAT id="FOC1" name="source distance" units="m" hidden="AUTO=0">source focal distance</FLOAT>
+		<FLOAT id="FOC2" name="target distance" units="m" hidden="AUTO=0">target focal distance</FLOAT>		
+	</CLASS>
+	
+<!--  OPTIONS - TRACING -->
+  <CLASS id="TRACING" name="tracing options" inherits="OPTION">
+    <ENUM id="DIR" name="tracing direction" size="2">
+      tracing direction
+      <ENUMITEM>downstream</ENUMITEM>
+      <ENUMITEM>upstream</ENUMITEM>
+    </ENUM>
+    <NOYES id="VARI" name="variance reduction">use automated variance reduction</NOYES>
+    <NOYES id="MAXV" name="optimize limits">optimization of sampling limits</NOYES>
+    <NOYES id="SWPOOL" name="safety pool">safety pool for limits</NOYES>
+    <INT id="CNT" name="counts">count target for succesful events</INT>
+    <FLOAT id="ELIMIT" name="efficiency limit" units=" ">number of trials without success before tracing stops</FLOAT>
+    <FLOAT id="PLIMIT" name="precision limit" units=" ">tracing stops when counting error falls below this limit</FLOAT>
+    <NOYES id="DBC" name="double cycle">separate tracing of primary and secondary parts</NOYES>
+	<ENUM id="MODE" name="tracing mode" size="3">
+      which part of the instrument is traced. If mcstas: run SIMRES + McStas [+ SIMRES].
+      <ENUMITEM>primary</ENUMITEM>
+      <ENUMITEM>secondary</ENUMITEM>
+      <ENUMITEM>all</ENUMITEM>
+    </ENUM>
+	<NOYES id="MCSTAS" name="run McStas">Run McStas simulation instead of the sample (see Tools/McStas)</NOYES>
+	<FLOAT id="PATHIN" name="path to sample" units="mm" hidden="MCSTAS=0">additional path from the last component on the primary beam to sample axis</FLOAT>
+    <FLOAT id="PATHOUT" name="path from sample" units="mm" hidden="MCSTAS=0">additional path from sample axis to 1st component on the scattered  beam</FLOAT>
+	<INT id="SPLIT" name="split factor">Number of repetitions for the secondary part</INT>
+    <ENUM id="STORE" name="storage mode" hidden="yes" size="2">
+     at which place are the events collected (use "sample" for resolution functions)
+      <ENUMITEM>detector</ENUMITEM>
+      <ENUMITEM>sample</ENUMITEM>
+    </ENUM>
+    <GROUP id="advanced" collapsed="yes">
+		<FLOAT id="GRAVITY" name="gravity" units="G">set to 1 to anable earth gravity (experimental)</FLOAT>
+		<ENUM id="PSMODE" name="sampling space" size="2">
+			choice of phase space variables for sampling
+			<ENUMITEM>k-space</ENUMITEM>
+			<ENUMITEM>lambda-space</ENUMITEM>
+		</ENUM>
+		<NOYES id="ADJT0" name="adjust T0">T0 is adjusted for the passed slit at the T0 chopper</NOYES>
+		<ENUM id="SAMPLING" name="sampling distribution" size="3">
+			distribution of generated random numbers (use uniform for unbiased sampling)
+			<ENUMITEM>uniform</ENUMITEM>
+			<ENUMITEM>normal</ENUMITEM>
+			<ENUMITEM>cauchy</ENUMITEM>
+		</ENUM>
+    </GROUP>
+  </CLASS>
+<!--  OPTIONS - REPORTS -->
+  <CLASS id="REPORTS" name="reports options" inherits="OPTION">
+    <NOYES id="ELOG" name="events log">log NRAYS events in a file</NOYES>
+    <INT id="NRAYS" name="log count">number of events to log</INT>
+    <NOYES id="STATS" name="statistics">report tracing statistics</NOYES>
+    <NOYES id="VOL" name="sampling volume">report changes in sampling volume</NOYES>
+    <NOYES id="VARI" name="variance reduction">report variance reduction progress</NOYES>
+    <NOYES id="PROG" name="progress">show progress bar</NOYES>
+    <NOYES id="RES" name="results">report basic results (e.g. intensity)</NOYES>
+    <NOYES id="MAXV" name="limits">report limits optimization progress</NOYES>
+    <FLOAT id="TIME" name="interval" units="s">progress bar update interval</FLOAT>
+  </CLASS>
+<!-- INTERFACE - BASIC -->
+  <CLASS id="SPECTROMETER" name="basic instrument interface" >
+    <ENUM id="INPSET" name="input parameter set" size="2">
+		define either wavelength and angle (diffraction) or KI,KF,Q,E (spectroscopy)
+        <ENUMITEM>diffraction</ENUMITEM>
+        <ENUMITEM>spectroscopy</ENUMITEM>
+    </ENUM>
+    <ENUM id="FIX" name="fixed K" size="2" hidden="INPSET=0">
+        <ENUMITEM>Ki</ENUMITEM>
+        <ENUMITEM>Kf</ENUMITEM>
+    </ENUM>
+    <FLOAT id="KI" name="Ki" units="A^-1" readonly="INPSET=0">modulus of the initial wave vector</FLOAT>
+    <FLOAT id="KF" name="Kf" units="A^-1" readonly="INPSET=0">modulus of the final wave vector</FLOAT>
+    <FLOAT id="Q0" name="Q" units="A^-1"  readonly="INPSET=0">modulus of the scattering vector</FLOAT>
+	<FLOAT id="EN" name="energy" units="meV" readonly="INPSET=0">energy transfer</FLOAT>
+	<FLOAT id="LAMBDA" name="wavelength" units="A" readonly="INPSET=1">wavelength (incident or final, defined by fixed K)</FLOAT>
+	<FLOAT id="THETA" name="thetaS" units="deg" readonly="INPSET=1">scattering angle</FLOAT>
+    <SIGN id="SS" name="sign of thetaS">sign of the scattering angle</SIGN>
+    <FLOAT id="PSI" name="psi" units="deg" >off-plane rotation of the Kf axis</FLOAT>
+    <GROUP id="options" collapsed="yes">
+      <NOYES id="ADJ" name="auto-adjust instrument">automaticaly adjust instrument for sample Q</NOYES>
+      <NOYES id="ORISAM" name="auto-orient sample">automaticaly orient sample for given Q (single crystals)</NOYES>
+      <ENUM id="KFMODE" name="off-plane Kf mode" size="2">
+	    Meaning of PSI: vertical tilt (flat) or azimuthal angle around incident beam (TOF)
+        <ENUMITEM>flat</ENUMITEM>
+        <ENUMITEM>TOF</ENUMITEM>
+      </ENUM>
+	  <NOYES id="QCONST" name="Q constant">adjust wavelength instead of Q when changing THETA</NOYES>
+      <NOYES id="OFFPL" name="Q off-plane">lift kf-axis if the sample has an off-plane Q-component</NOYES>
+      <NOYES id="FLATCONE" name="flat-cone analyzer">flat-cone analyzer orientation</NOYES>
+    </GROUP>
+  </CLASS>
+<!-- FRAME -->
+  <CLASS id="FRAME" name="Frame" max="32">
+    <FLOAT id="DIST" name="distance" units="mm" > </FLOAT>
+    <ENUM id="SHAPE" name="shape" size="4">
+        shape of the entrance/exit window (2D) or a container (3D)
+        <ENUMITEM>ellipsoid</ENUMITEM>
+        <ENUMITEM>cylinder</ENUMITEM>
+        <ENUMITEM>disc</ENUMITEM>
+        <ENUMITEM>box</ENUMITEM>
+    </ENUM>
+    <ENUM id="ORDER" name="stage-gonio order" size="2">
+        order of the linear stage and goniometer
+        <ENUMITEM>gonio on stage</ENUMITEM>
+        <ENUMITEM>stage on gonio</ENUMITEM>
+    </ENUM>
+    <FLOAT id="SIZE" name="dimensions" units="mm" size="3">object dimensions</FLOAT>
+    <FLOAT id="AX" name="axis" units="deg" size="3" >exit axis angles</FLOAT>
+    <FLOAT id="STA" name="stage" units="mm" size="3">linear stage position</FLOAT>
+    <FLOAT id="GON" name="gonio" units="deg" size="3">goniometer position</FLOAT>
+    <FLOAT id="VEL" name="velocity" units="m.s^-1" size="3">constant velocity</FLOAT>
+  </CLASS>
+<!-- SOURCE -->
+  <CLASS id="SOURCE" name="Source" inherits="FRAME" max="1">
+	  <TRANSLATE>TABNAME=FLUXTAB</TRANSLATE>
+    <FLOAT id="FLUX" name="flux" units="10^14/s/cm^2">integral isotropic flux</FLOAT>
+    <FLOAT id="TEMP" name="temperature" units="K">moderator temperature</FLOAT>
+		<FLOAT id="LAMW" name="wavelength band" units="rel">wavelength band if there is no monochromator (0 to ignore)</FLOAT>		
+		<STRING id="FLUXTAB" name="flux table" file="read" filter="Source tables|tab:Lookup tables|dat">flux lookup table ("none" to ignore)</STRING>
+		<ENUM id="TYPE" name="type" size="2">				
+        <ENUMITEM>steady-state</ENUMITEM>
+        <ENUMITEM>pulsed</ENUMITEM>
+    </ENUM>
+	<GROUP id="time structure" collapsed="no">  
+		<FLOAT id="FRQ" name="frequency" units="Hz">repetition rate</FLOAT>
+		<FLOAT id="DELAY" name="delay time" units="ms">delay time</FLOAT>
+		<NOYES id="OVERLAP" name="allow overlap">allow frame overlap</NOYES>
+		<FLOAT id="PULSW" name="pulse width" units="ms">pulse width, set 0 to ignore</FLOAT>
+	</GROUP>
+  </CLASS>
+<!-- DETECTOR -->
+  <CLASS id="DETECTOR" name="Detector" inherits="FRAME" max="1">
+    <ENUM id="TYPE" name="type" size="5">
+        <ENUMITEM>area</ENUMITEM>
+        <ENUMITEM>array</ENUMITEM>
+        <ENUMITEM>PSD</ENUMITEM>
+		<ENUMITEM>cylindrical</ENUMITEM>
+		<ENUMITEM>spherical</ENUMITEM>				
+    </ENUM>
+    <FLOAT id="RES" name="resolution" units="mm" size="2">spatial resolution</FLOAT>
+    <FLOAT id="ALPHA" name="efficiency" units="A^-1.cm^-1">efficiency coeff.</FLOAT>
+	<FLOAT id="RAD" name="radius" units="mm">detection radius (usually distance from the sample)</FLOAT>
+	<FLOAT id="THMIN" name="theta min." units="deg">minimum scattering angle for data analysis</FLOAT>
+	<FLOAT id="THMAX" name="theta max." units="deg">maximum scattering angle for data analysis</FLOAT>
+	<GROUP id="array parameters" collapsed="yes"> 
+		<FLOAT id="SPACE" name="spacing" units="mm">distance between adjacent tubes</FLOAT>
+		<INT id="ND" name="tubes">number of tubes in an array</INT>
+	</GROUP> 
+  </CLASS>
+	<!-- MONITOR -->
+  <CLASS id="MONITOR" name="Monitor" inherits="FRAME" max="5">
+    <ENUM id="CMODE" name="counting mode" size="4">
+				Counts either all (sum), inside area(inner), outside (outer), or weighted = Iin^2/(Iin+Iout) 
+        <ENUMITEM>sum</ENUMITEM>
+        <ENUMITEM>inner</ENUMITEM>
+        <ENUMITEM>outer</ENUMITEM>
+				<ENUMITEM>weighted</ENUMITEM>
+    </ENUM>
+		<GROUP id="clip area" collapsed="no">
+		  inner counting area limits (refer to "counting mode")
+			<PHSVAR id="IX" name="x-variable">phase-space variable for x-axis</PHSVAR>
+			<PHSVAR id="IY" name="y-variable">phase-space variable for y-axis</PHSVAR>
+			<FLOAT id="X0" name="x-center" units=" ">x-scale center</FLOAT>
+			<FLOAT id="DX" name="x-range" units=" ">x-scale range</FLOAT>
+			<FLOAT id="Y0" name="y-center" units=" ">y-scale center</FLOAT>
+			<FLOAT id="DY" name="y-range" units=" ">y-scale range</FLOAT>
+			<NOYES id="BLOCK" name="blocking area">absorb neutrons passing outside the clip area</NOYES>
+		</GROUP>   
+  </CLASS>
+<!-- DISC CHOPPER -->
+  <CLASS id="DCHOPPER" name="Disc chopper" inherits="FRAME" max="32">
+    <FLOAT id="FRQ" name="frequency" units="Hz">repetition rate</FLOAT>
+    <FLOAT id="PHASE" name="phase" units="2PI">phase shift as a fraction of period</FLOAT>
+    <FLOAT id="RAD" name="radius" units="mm">rotation radius (to the center of entrance aperture)</FLOAT>
+    <FLOAT id="WIN" name="window width" units="2PI">window width as a fraction of full circle</FLOAT>
+    <INT id="NWIN" name="number of windows">number of windows - equidistant around the circle</INT>
+	<STRING id="TIMING" name="timing">timing of pulses, "phase1:width1:phase2:width2:..." relative to PHASE and WIN values</STRING>		
+    <ENUM id="PROF" name="profile" size="2">
+		profile of the disc window 
+        <ENUMITEM>V-shape</ENUMITEM>
+        <ENUMITEM>U-shape</ENUMITEM>
+    </ENUM>
+	<ENUM id="ORI" name="orientation" size="2">
+		position of the window with respect to rotation axis
+        <ENUMITEM>vertical</ENUMITEM>
+        <ENUMITEM>horizontal</ENUMITEM>
+    </ENUM>
+	<NOYES id="ADJ" name="auto adjust">automatically adjust phase</NOYES>
+	<NOYES id="OVERLAP" name="overlap">allow frame overlap</NOYES>
+	<NOYES id="T0" name="T0">T0 chopper (phase=0)</NOYES>
+	<NOYES id="LOCKT0" name="lock to T0">lock phase to the T0 chopper</NOYES>
+  </CLASS>
+<!-- SAMPLE -->
+  <CLASS id="SAMPLE" name="Sample" inherits="FRAME" max="1">
+    <ENUM id="TYPE" name="type" size="4">
+        <ENUMITEM>inelastic resolution</ENUMITEM>
+        <ENUMITEM>elastic resolution</ENUMITEM>
+        <ENUMITEM>powder</ENUMITEM>
+        <ENUMITEM>vanad</ENUMITEM>
+      <!--   <ENUMITEM>phonon</ENUMITEM> -->  
+    </ENUM>
+    <SIGN id="SGN" name="sign">sign of the scattering angle</SIGN>
+ 	<FLOAT id="THICK" name="thickness" units="mm" >thickness for hollow objects</FLOAT>
+    <FLOAT id="SIGSC" name="Sigma_s" units="cm^-1">total coherent scattering cross-section</FLOAT>
+    <FLOAT id="SIGA" name="Sigma_a" units="cm^-1A^-1">total absorption cross-section</FLOAT>
+    <FLOAT id="SIGI" name="Sigma_i" units="cm^-1">total incoherent scattering cross-section</FLOAT>
+    <FLOAT id="TEMP" name="temperature" units="K">temperature</FLOAT>
+	<NOYES id="TRANS" name="allow transmission">allow for tracing of non-scattered neutrons</NOYES>
+	<NOYES id="SCATT" name="allow scattering">allow for tracing of scattered neutrons</NOYES>
+    <FLOAT id="MAG" name="magnetic field" units="gauss" size="3" hidden="yes">magnetic field</FLOAT>
+    <FLOAT id="STRAIN" name="strain" units=" " size="3" hidden="yes">strain</FLOAT>
+    <FLOAT id="PRESS" name="isotropic pressure" units="MPa" hidden="yes">isotropic pressure</FLOAT>
+  </CLASS>
+<!-- SCRYST -->
+  <CLASS id="SCRYST" name="single crystal" inherits="SAMPLE" max="1">
+    <FLOAT id="VECA" name="A vector" units="hkl" size="3">vector along z in the scattering plane</FLOAT>
+    <FLOAT id="VECB" name="B vector" units="hkl" size="3">another vector in the scattering plane</FLOAT>
+    <FLOAT id="CELLS" name="cell size" units="hkl" size="3">unit cell size</FLOAT>
+    <FLOAT id="CELLA" name="cell angles" units="deg" size="3">unit cell angles</FLOAT>
+    <FLOAT id="TAU" name="tau" units="hkl" size="3">Bragg point or Brillouin zone center</FLOAT>
+    <FLOAT id="QHKL" name="q_hkl" units="hkl" size="3">scattering vector relative to TAU</FLOAT>
+    <FLOAT id="EN" name="EN" units="meV">energy transfer</FLOAT>
+    <FLOAT id="ZERO" name="zeros" units="deg" size="3">zero positions for gonio</FLOAT>
+    <FLOAT id="MOS" name="mosaicity" units="minutes" hidden="yes" >mosaicity</FLOAT>
+    <FLOAT id="GHKL" name="gradE_direction" units="hkl" size="3" hidden="yes">disp. plane gradient (direction)</FLOAT>
+    <FLOAT id="GRAD" name="gradE_magnitude" units="meV/rlu" hidden="yes">disp. plane gradient (magnitude)</FLOAT>
+    <FLOAT id="EIG" name="phonon eigenvector" units="hkl" size="3" hidden="yes">phonon eigenvector (assume real)</FLOAT>
+</CLASS>
+<!-- PCRYST -->
+  <CLASS id="PCRYST" name="polycrystal" inherits="SAMPLE" max="1">
+    <FLOAT id="FHKL" name="structure factor" units="fm.A^-3">structure factor per unit volume</FLOAT>
+    <FLOAT id="DHKL" name="d-spacing" units="A">d-spacing</FLOAT>
+    <FLOAT id="THETA" name="scattering angle" units="deg">scattering angle</FLOAT>
+    <FLOAT id="DD" name="d-spread" units=" ">fwhm of d-spacing distribution</FLOAT>
+    <FLOAT id="GRAIN" name="grain size" units="um">grain size</FLOAT>
+    <INT id="JHKL" name="plane multiplicity">plane multiplicity</INT>
+	<STRING id="REFTAB" name="reflections table" file="read" filter="Tables|tab,dat">table with reflections list (dhkl [A],jhkl,FHKL/VOL[fm/A^3]) ("none" to ignore)</STRING>
+	<INT id="STRTAB" name="strain table index">index to the list of strain tables (0 = no table)</INT>
+	<INT id="IREF" name="reflection index">selected reflection from the table (0 for no selection)</INT>
+  </CLASS>
+<!-- GUIDE -->
+  <CLASS id="GUIDE" name="Collimator or guide" inherits="FRAME" max="128">
+    <ENUM id="TYPE" name="type" size="5">
+        <ENUMITEM>soller or coarse</ENUMITEM>
+        <ENUMITEM>guide or bender</ENUMITEM>
+        <ENUMITEM>tapered parabolic</ENUMITEM>
+        <ENUMITEM>tapered parabolic (special)</ENUMITEM>
+        <ENUMITEM>tapered elliptic</ENUMITEM>
+    </ENUM>
+    <FLOAT id="EXIT" name="exit window" units="mm" size="2">dimensions of the exit window</FLOAT>
+    <FLOAT id="RO" name="curvature" units="m^-1" size="2">curvatures</FLOAT>
+    <INT id="N" name="slits" size="2">number of  slits</INT>
+    <FLOAT id="DL" name="lamella thickness" units="mm" size="2">thickness of lamellae</FLOAT>
+    <FLOAT id="M" name="m-value" units="Ni_nat" size="2">critical angles</FLOAT>
+    <FLOAT id="REF" name="reflectivity" units=" " size="2">mirror reflectivity (if no lookup table is found)</FLOAT>
+	<ENUM id="MATER" name="blade material" size="4">
+	Select blade absorption model 
+        <ENUMITEM>absorbing</ENUMITEM>
+        <ENUMITEM>MU*lambda</ENUMITEM>
+        <ENUMITEM>Si</ENUMITEM>
+        <ENUMITEM>Al2O3</ENUMITEM>
+    </ENUM>
+    <FLOAT id="MU" name="absorption" units="cm^-1A^-1" readonly="MATER!=1">absorption coefficient of the lamellae (only guides and benders)</FLOAT>
+    <FLOAT id="WAV" name="waviness" units="mrad">waviness of the surface (sigma)</FLOAT>
+	<FLOAT id="MISALIGN" name="misalignment" units="mm" size="2">misalignment of segments (sigma)</FLOAT>
+	<NOYES id="MONITOR" name="monitor" >monitor neutrons absorbed in walls</NOYES>
+	<GROUP id="options" collapsed="yes">    
+		<NOYES id="CLOSED" name="closed" >no neutrons pass through, except the monitored ones</NOYES>
+		<NOYES id="ONESIDE" name="one-sided">only concave side is reflecting </NOYES>
+		<NOYES id="NODIR" name="no direct view">adjust curvature to prevent direct view (only for guide or bender) </NOYES>
+		<NOYES id="TRFRONT" name="front transmission">front face is transmitting (only guides and benders)</NOYES>
+		<NOYES id="OSC" name="oscillate">oscillating collimator (only for radial soller)</NOYES>
+		<LOGWALL id="LOGBNC" name="log bounces">log neutron reflections at the mirrors</LOGWALL>
+	</GROUP>
+  </CLASS>
+<!-- SGUIDE -->
+  <CLASS id="SGUIDE" name="Segmented guide" inherits="FRAME" max="16">
+	<INT id="NSEG" name="segments" >number of segments</INT>
+    <FLOAT id="RHO" name="curvature" units="m^-1" size="2">curvatures</FLOAT>
+	<FLOAT id="GAP" name="gap" units="mm">gap between segments</FLOAT>
+	<FLOAT id="WAV" name="waviness" units="mrad">waviness of the surface (sigma)</FLOAT>
+	<FLOAT id="MISALIGN" name="misalignment" units="mm" size="2">misalignment of segments (sigma)</FLOAT>
+	<INT id="ACTIVE" name="active" size="4">bit mask for active walls (left,right,top,bottom)</INT>
+	<INT id="SMOOTH" name="smooth" size="4">bit mask for smooth walls (left,right,top,bottom), smooth = cubic spline profile of segments</INT>
+	<INT id="MONITOR" name="monitor" size="4">bit mask for monitored walls (left,right,top,bottom), monitor = store events absorbed in walls</INT>
+    <GROUP id="reflectivity" hidden="yes" collapsed="yes">
+		parameters for analyticaly calculated reflectivity
+		<FLOAT id="REF0" name="r_0" units=" ">reflectivity at m=0</FLOAT>
+		<FLOAT id="REFM" name="r_m" units=" ">reflectivity at m=mc</FLOAT>
+		<FLOAT id="REFW" name="width" units="Ni_nat">cut-off width</FLOAT>
+	</GROUP>
+	<GROUP id="profile" collapsed="yes">    
+		<PROFILE id="PROFH" name="horizontal">horizontal profile</PROFILE>
+		<PROFILE id="PROFV" name="vertical">vertical profile</PROFILE>
+		<FLOAT id="EXIT" name="exit window" units="mm" size="2">exit window dimensions (w,h)</FLOAT>
+	</GROUP>
+	<GROUP id="options" collapsed="yes">    
+		<NOYES id="CLOSED" name="closed" >no neutrons pass through, except the monitored ones</NOYES>	
+		<NOYES id="FRONTMASK" name="front mask">clip neutrons by entrance window</NOYES>
+		<NOYES id="GAPABS" name="absorbing gaps">if false, neutrons can leak through the gaps</NOYES>
+		<LOGWALL id="LOGBNC" name="log bounces">log neutron reflections at the mirrors</LOGWALL>
+	</GROUP>
+	<TABLE id="SEG" name="segments parameters" rows="128" cols="7">Table with segments parameters: exit width, height,length,m(left..bottom)</TABLE>
+  </CLASS>
+
+<!--XTAL -->
+  <CLASS id="XTAL" name="crystal" inherits="FRAME" max="32">
+    <CRNAMES id="CRID" name="crystal">ID of the crystal from crystals.xml</CRNAMES>
+    <FLOAT id="ORI" name="orientation" units="hkl" size="3">lattice vector used for crystal orientation</FLOAT>
+    <SELECT id="REF" name="reflection">selected reflection (final lattice node in the case of tracing multiple reflection)</SELECT>
+    <SIGN id="SGN" name="sign">sign of the scattering angle</SIGN>
+    <INT id="A" name="reference vector A" units="hkl" size="3">rec. lattice vector - normal to the front surface</INT>
+    <INT id="B" name="reference vector B" units="hkl" size="3">rec. lattice vector - normal to A in reference plane</INT>
+    <FLOAT id="CHI" name="cut angle horizontal" units="deg">horizontal angle between the vector A and front surface normal (z axis)</FLOAT>
+    <FLOAT id="PSI" name="cut angle vertical" units="deg">vertical angle between the vector A and front surface normal (z-axis)</FLOAT>
+    <FLOAT id="POISS" name="Poisson" units=" ">Poisson elastic constant</FLOAT>
+    <FLOAT id="RHO" name="horizontal bending" units="m^-1" readonly="yes">bending curvature (use focusing to change value)</FLOAT>
+	<FLOAT id="RHV" name="vertical bending" units="m^-1" readonly="yes">bending curvature (use focusing to change value)</FLOAT>
+    <INT id="NSW" name="sandwich layers">number of sandwich layers (FRAME represents single layer !!)</INT>
+    <FLOAT id="SWGAP" name="sandwich gaps" units="mm">gap between sandwich slabs</FLOAT>
+    <FLOAT id="T" name="temperature" units="K" >Temperature</FLOAT>  
+    <FLOAT id="DT" name="temperature gradient" units="K/mm" size="3">temperature gradient</FLOAT> 
+    <CLASSOBJ cid="FOCARRAY" id="VFOC" name="vertical focusing">vertically focusing array. FRAME describes single segment !!</CLASSOBJ>	
+    <CLASSOBJ cid="FOCARRAY" id="HFOC" name="horizontal focusing">horizontally focusing array. FRAME describes single segment !!</CLASSOBJ>	
+    <GROUP id="options" collapsed="yes">    
+       <NOYES id="AUTOADJ" name="autoadjust">automatic orientation in reflection position</NOYES>
+       <FLOAT id="DKK" name="delta_k/k" units=" ">delta_k/k tolerance used in searching for reflections</FLOAT>
+       <INT id="UMWEG" name="multiple reflections">trace multiple reflections up to given level (0 for primary reflections only)</INT>
+       <INT id="MAXHKL" name="max. reflection index">max. reflection index of searched reflections</INT>
+    </GROUP>
+  </CLASS>
+<!-- CRYSTAL -->
+  <CLASS id="CRYSTAL" name="crystal" inherits="FRAME" max="128">
+    <ENUM id="TYPE" name="type" size="4">
+		<ENUMITEM>filter</ENUMITEM>
+        <ENUMITEM>mosaic</ENUMITEM>
+        <ENUMITEM>bent perfect</ENUMITEM>
+        <ENUMITEM>mosaic gradient</ENUMITEM>
+    </ENUM>
+    <ENUM id="REFNAME" name="reflection" size="54">
+      reflection name from crystal.lib
+    <ENUMITEM>Cu 111</ENUMITEM>
+    <ENUMITEM>Cu 200</ENUMITEM>
+    <ENUMITEM>Cu 220</ENUMITEM>
+    <ENUMITEM>Cu 311</ENUMITEM>
+    <ENUMITEM>Cu 400</ENUMITEM>
+    <ENUMITEM>Cu 331</ENUMITEM>
+	<ENUMITEM>Cu 420</ENUMITEM>
+    <ENUMITEM>Cu 440</ENUMITEM>
+    <ENUMITEM>Ge 111</ENUMITEM>
+    <ENUMITEM>Ge 220</ENUMITEM>
+    <ENUMITEM>Ge 311</ENUMITEM>
+    <ENUMITEM>Ge 400</ENUMITEM>
+    <ENUMITEM>Ge 331</ENUMITEM>
+    <ENUMITEM>Ge 422</ENUMITEM>
+    <ENUMITEM>Ge 511</ENUMITEM>
+    <ENUMITEM>Ge 533</ENUMITEM>
+    <ENUMITEM>Ge 711</ENUMITEM>
+    <ENUMITEM>Ge 551</ENUMITEM>
+    <ENUMITEM>Si 111</ENUMITEM>
+    <ENUMITEM>Si 220</ENUMITEM>
+    <ENUMITEM>Si 311</ENUMITEM>
+    <ENUMITEM>Si 400</ENUMITEM>
+    <ENUMITEM>Si 331</ENUMITEM>
+    <ENUMITEM>Si 422</ENUMITEM>
+    <ENUMITEM>Si 333</ENUMITEM>
+    <ENUMITEM>Si 511</ENUMITEM>
+	<ENUMITEM>Si 440</ENUMITEM>
+    <ENUMITEM>Si 711</ENUMITEM>
+    <ENUMITEM>Si 551</ENUMITEM>
+    <ENUMITEM>Be 10.0</ENUMITEM>
+    <ENUMITEM>Be 100</ENUMITEM>
+    <ENUMITEM>Be 102</ENUMITEM>
+    <ENUMITEM>Be 103</ENUMITEM>
+    <ENUMITEM>Be 110</ENUMITEM>
+    <ENUMITEM>Be 112</ENUMITEM>
+    <ENUMITEM>Be 200</ENUMITEM>
+    <ENUMITEM>Be 00.2</ENUMITEM>
+    <ENUMITEM>Be 10.1</ENUMITEM>
+    <ENUMITEM>PG 00.2</ENUMITEM>
+    <ENUMITEM>PG 00.4</ENUMITEM>
+    <ENUMITEM>PG 00.6</ENUMITEM>
+    <ENUMITEM>Fe 110</ENUMITEM>
+    <ENUMITEM>HS 111</ENUMITEM>
+    <ENUMITEM>HS 222</ENUMITEM>
+    <ENUMITEM>HS 111*</ENUMITEM>
+    <ENUMITEM>Di 111</ENUMITEM>
+    <ENUMITEM>Di 220</ENUMITEM>
+    <ENUMITEM>Di 311</ENUMITEM>
+    <ENUMITEM>Di 400</ENUMITEM>
+    <ENUMITEM>Di 331</ENUMITEM>
+    <ENUMITEM>Di 422</ENUMITEM>
+    <ENUMITEM>Di 333</ENUMITEM>
+    <ENUMITEM>Di 511</ENUMITEM>
+    <ENUMITEM>Di 440</ENUMITEM>
+    </ENUM>
+    <FLOAT id="DHKL" name="d-spacing" units="A"></FLOAT>
+    <SIGN id="SGN" name="sign">sign of the scattering angle</SIGN>
+    <FLOAT id="CHI" name="cutting angle" units="deg">angle between diffraction vector and front surface normal</FLOAT>
+    <FLOAT id="MOS" name="mosaicity" units="arc_min">mosaicity</FLOAT>
+    <FLOAT id="ANIZ" name="anisotropy" units=" ">anisotropy of mosaicity (V/H)</FLOAT>
+    <FLOAT id="POISS" name="Poisson" units=" ">Poisson elastic constant</FLOAT>
+    <FLOAT id="RO" name="curvatures" units="m^-1" size="3">curvatures (H,V,Z)</FLOAT>
+    <INT id="N" name="segments" size="3">number of segments</INT>
+    <FLOAT id="D" name="gaps" units="mm" size="3">gaps between segments</FLOAT>
+    <FLOAT id="DGR" name="gradient" units="10^-3.cm^-1">deformation gradient</FLOAT>
+    <FLOAT id="DGA" name="gradient angle" units="deg">angle of the deformation gradient</FLOAT>
+    <FLOAT id="DLAM" name="domain thickness" units="um">effective thickness of mosaic domain (for primary extinction)</FLOAT>
+	<ENUM id="MODEL" name="model" size="2">
+        simulation model 
+        <ENUMITEM>simple</ENUMITEM>
+        <ENUMITEM>random walk</ENUMITEM>
+    </ENUM>
+	<NOYES id="AUTOADJ" name="auto-adjust">automatic orientation in reflection position</NOYES>
+	<GROUP id="stacking" collapsed="yes">  
+		<NOYES id="STACKH" name="smooth horizontal">segments glued on a curved surface</NOYES>
+		<NOYES id="STACKV" name="smooth vertical">segments glued on a curved surface</NOYES>
+		<FLOAT id="ASTACK" name="stacking angle" units="deg">determines x-misfit as a function of z-position</FLOAT>
+	</GROUP>
+    <GROUP id="auto-focus" collapsed="yes">  
+      <NOYES id="FOCH" name="autofocus hor.">automatic horizonal focusing</NOYES>
+      <FLOAT id="FH1" name="hor. focus 1" units="m"  hidden="FOCH=0">horizontal focal distance, source side </FLOAT>
+      <FLOAT id="FH2" name="hor. focus 2" units="m"  hidden="FOCH=0">horizontal focal distance, sample side</FLOAT>
+      <NOYES id="FOCV" name="autofocus vert.">automatic vertical focusing</NOYES>
+      <FLOAT id="FV1" name="vert. focus 1" units="m" hidden="FOCV=0">vertical focal distance, source side</FLOAT>
+      <FLOAT id="FV2" name="vert. focus 2" units="m" hidden="FOCV=0">vertical focal distance, sample side</FLOAT>		
+    </GROUP>
+  </CLASS>
+<!--  
+*******************************************  
+                          COMMANDS 
+ *******************************************  
+-->
+  <GROUP id="console">
+		<CLASS id="SAVE" name="save configuration" inherits="COMMAND">
+			save configuration
+			<STRING id="FILE" name="file name" file="ALL" filter="Instrument files|xml">file name</STRING>
+			<NOYES id="OVER" name="overwrite">overwrite without confirmation</NOYES>
+		</CLASS>
+		<CLASS id="MC" name="run MC simulation" inherits="COMMAND">
+			run ray-tracing with predefined options
+		</CLASS>
+		<CLASS id="GRFDEV" name="set grapic device" inherits="COMMAND" group="plot">
+			set graphics device
+			<STRING id="FILE" name="file name" file="WRITE" filter="Graphic files|ps,gif,jpg,jpeg,png"> file name</STRING>
+			<STRING id="DEVICE" name="device ID">device ID string</STRING>
+		</CLASS>
+		<CLASS id="GRSAVE" name="save graphics" inherits="COMMAND">
+			save data from the last graphics output
+			<STRING id="FILE" name="file name" file="WRITE" filter="Data files|dat">file name</STRING>
+			<NOYES id="OVER" name="overwrite">overwrite without confirmation</NOYES>
+		</CLASS>
+		
+  </GROUP>	
+	<CLASS id="LOAD" name="load configuration" handler="LOAD" buttons="Apply|Load|Close" inherits="COMMAND">
+		load configuration
+		<STRING id="FILE" name="file name" file="READ" filter="Instrument files|xml">file name</STRING>
+	</CLASS>	
+  <CLASS id="CLOAD" name="load component" handler="CLOAD" buttons="Apply|Load|Close" inherits="COMMAND">
+	  load components (update existing)
+	<STRING id="ID" name="component ID">component ID</STRING>
+    <STRING id="FILE" name="file name" file="READ" filter="Component files|rxcp">file name</STRING>
+  </CLASS>	
+  <CLASS id="CSAVE" name="save component" handler="CSAVE" buttons="Apply|Save|Close" inherits="COMMAND">
+	  save a component
+	<STRING id="ID" name="component ID">component ID</STRING>
+    <STRING id="FILE" name="file name" file="ALL" filter="Component files|rxcp">file name</STRING>
+    <NOYES id="OVER" name="overwrite">overwrite without confirmation</NOYES>
+  </CLASS>
+  <CLASS id="CMDSAVE" name="save commands" inherits="COMMAND">
+	  save current input data for all commands
+    <STRING id="FILE" name="file name" file="ALL" filter="Command files|rxco" >file name</STRING>
+    <NOYES id="OVER" name="overwrite">overwrite without confirmation</NOYES>
+  </CLASS>
+	
+<!--  Plot group -->  
+  <GROUP id="Plot">
+		<CLASS id="BEAM1D" name="beam profile 1D" inherits="COMMAND">
+			beam projection 1-dim
+			<PHSVAR id="X" name="x-variable">phase-space variable for x-axis</PHSVAR>
+			<INT id="NP" name="points" >number of points</INT>
+			<FLOAT id="X0" name="center" units=" ">scale center</FLOAT>
+			<FLOAT id="DX" name="range" units=" ">scale range</FLOAT>
+			<NOYES id="XAUTO" name="x-autoscale">set x-scale limits automatically</NOYES>
+			<NOYES id="CAUTO" name="ctr-autoscale">set scale center automatically</NOYES>
+			<NOYES id="YLOG" name="y-logscale">set y-scale logarithmic</NOYES>
+			<NOYES id="ERR" name="errors">plot error bars</NOYES>
+			<NOYES id="GFIT" name="fit gaussian">add Gaussian fit to he plot</NOYES>
+			<NOYES id="APPEND" name="append">don't clear previous data</NOYES>
+			<COORD id="COORD" name="reference frame">reference frame of the monitoring object</COORD>
+			<INT id="FILT" name="filter events" >bit mask for events in guide coating, -1:all, 0:reflection, 1:transmission, 2:capture, 4:scattering</INT>
+			<STRING id="COM" name="comment">user's comment text</STRING>
+		</CLASS>
+		<CLASS id="DET1D" name="detector data 1D" inherits="COMMAND">
+			detector data 1-dim
+			<DETVAR id="X" name="x-variable">detector variable for x-axis</DETVAR>
+			<INT id="NP" name="points" >number of points</INT>
+			<FLOAT id="X0" name="center" units=" ">scale center</FLOAT>
+			<FLOAT id="DX" name="range" units=" ">scale range</FLOAT>
+			<NOYES id="XAUTO" name="x-autoscale">set x-scale limits automatically</NOYES>
+			<NOYES id="CAUTO" name="ctr-autoscale">set scale center automatically</NOYES>
+			<NOYES id="YLOG" name="y-logscale">set y-scale logarithmic</NOYES>
+			<NOYES id="ERR" name="errors">plot error bars</NOYES>
+			<NOYES id="GFIT" name="fit gaussian">add Gaussian fit to he plot</NOYES>
+			<NOYES id="APPEND" name="append">don't clear previous data</NOYES>
+			<INT id="FILT" name="filter events" >bit mask for events in guide coating, -1:all, 0:reflection, 1:transmission, 2:capture, 4:scattering</INT>
+			<STRING id="COM" name="comment">user's comment text</STRING>
+		</CLASS>		
+		<CLASS id="BEAM2D" name="beam map 2D" inherits="COMMAND">
+			beam projection 2-dim
+			<PHSVAR id="X" name="x-variable">phase-space variable for x-axis</PHSVAR>
+			<PHSVAR id="Y" name="y-variable">phase-space variable for y-axis</PHSVAR>
+			<INT id="NX" name="x-pixels" >number of columns</INT>
+			<INT id="NY" name="y-pixels" >number of rows</INT>
+			<FLOAT id="X0" name="x-center" units=" ">x-scale center</FLOAT>
+			<FLOAT id="DX" name="x-range" units=" ">x-scale range</FLOAT>
+			<FLOAT id="Y0" name="y-center" units=" ">y-scale center</FLOAT>
+			<FLOAT id="DY" name="y-range" units=" ">y-scale range</FLOAT>
+			<NOYES id="AUTO" name="autoscale">set scale limits automatically</NOYES>
+			<AXLIM id="MINZ" name="minimum z">how to determine lower z limit</AXLIM>
+			<NOYES id="ZLOG" name="z-logscale">set z-scale logarithmic</NOYES>
+			<NOYES id="APPEND" name="append">don't clear previous data</NOYES>
+			<COORD id="COORD" name="reference frame">reference frame of the monitoring object</COORD>
+			<INT id="FILT" name="filter events" >filter neutrons for given label (-1 to plot all)</INT>
+			<STRING id="COM" name="comment">user's comment text</STRING>
+		</CLASS>
+		<CLASS id="GAUGE2D" name="gauge map 2D" inherits="COMMAND">
+			gauge volume projection 2-dim
+			<PHSVAR id="X" name="x-variable">phase-space variable for x-axis</PHSVAR>
+			<PHSVAR id="Y" name="y-variable">phase-space variable for y-axis</PHSVAR>
+			<GAUGEVAR id="Z" name="z-variable">detector variable to plot as z-value</GAUGEVAR>			
+			<INT id="NX" name="x-pixels" >number of columns</INT>
+			<INT id="NY" name="y-pixels" >number of rows</INT>
+			<FLOAT id="X0" name="x-center" units=" ">x-scale center</FLOAT>
+			<FLOAT id="DX" name="x-range" units=" ">x-scale range</FLOAT>
+			<FLOAT id="Y0" name="y-center" units=" ">y-scale center</FLOAT>
+			<FLOAT id="DY" name="y-range" units=" ">y-scale range</FLOAT>
+			<NOYES id="AUTO" name="autoscale">set scale limits automatically</NOYES>
+			<AXLIM id="MINZ" name="minimum z">how to determine lower z limit</AXLIM>
+			<NOYES id="ZLOG" name="z-logscale">set z-scale logarithmic</NOYES>
+			<NOYES id="APPEND" name="append">don't clear previous data</NOYES>
+			<COORD id="COORD" name="reference frame">reference frame of the monitoring object</COORD>
+			<INT id="FILT" name="filter events" >filter neutrons for given label (-1 to plot all)</INT>
+			<STRING id="COM" name="comment">user's comment text</STRING>
+		</CLASS>		
+		<CLASS id="DET2D" name="detector data 2D" inherits="COMMAND">
+			detector data 2-dim
+			<DETVAR id="X" name="x-variable">detector variable for x-axis</DETVAR>
+			<DETVAR id="Y" name="y-variable">detector variable for y-axis</DETVAR>
+			<INT id="NX" name="x-pixels" >number of columns</INT>
+			<INT id="NY" name="y-pixels" >number of rows</INT>
+			<FLOAT id="X0" name="x-center" units=" ">x-scale center</FLOAT>
+			<FLOAT id="DX" name="x-range" units=" ">x-scale range</FLOAT>
+			<FLOAT id="Y0" name="y-center" units=" ">y-scale center</FLOAT>
+			<FLOAT id="DY" name="y-range" units=" ">y-scale range</FLOAT>
+			<NOYES id="AUTO" name="autoscale">set scale limits automatically</NOYES>
+			<AXLIM id="MINZ" name="minimum z">how to determine lower z limit</AXLIM>
+			<NOYES id="ZLOG" name="z-logscale">set z-scale logarithmic</NOYES>
+			<NOYES id="APPEND" name="append">don't clear previous data</NOYES>
+			<INT id="FILT" name="filter events" >filter neutrons for given label (-1 to plot all)</INT>
+			<STRING id="COM" name="comment">user's comment text</STRING>
+		</CLASS>
+		<CLASS id="RES1D" name="resolution profile 1D" inherits="COMMAND">
+			resolution projection 1-dim
+			<RESVAR id="X" name = "x-variable">resolution variable for x-axis</RESVAR>
+			<INT id="NP" name="points" >number of points</INT>
+			<FLOAT id="X0" name="center" units=" ">scale center</FLOAT>
+			<FLOAT id="DX" name="range" units=" ">scale range</FLOAT>
+			<NOYES id="XAUTO" name="x-autoscale">set x-scale limits automatically</NOYES>
+			<NOYES id="YLOG" name="y-logscale">set y-scale logarithmic</NOYES>
+			<NOYES id="ERR" name="errors">plot error bars</NOYES>
+			<NOYES id="GFIT" name="fit gaussian">add Gaussian fit to he plot</NOYES>
+			<STRING id="COM" name="comment">user's comment text</STRING>
+		</CLASS>
+		<CLASS id="RES2D" name="resolution map 2D" inherits="COMMAND">
+			resolution projection 2-dim
+			<RESVAR id="X" name="x-variable">resolution variable for x-axis</RESVAR>
+			<RESVAR id="Y" name="y-variable">resolution variable for y-axis</RESVAR>
+			<INT id="NX" name="x-pixels" >number of columns</INT>
+			<INT id="NY" name="y-pixels" >number of rows</INT>
+			<FLOAT id="X0" name="x-center" units=" ">x-scale center</FLOAT>
+			<FLOAT id="DX" name="x-range" units=" ">x-scale range</FLOAT>
+			<FLOAT id="Y0" name="y-center" units=" ">y-scale center</FLOAT>
+			<FLOAT id="DY" name="y-range" units=" ">y-scale range</FLOAT>
+			<NOYES id="AUTO" name="autoscale">set scale limits automatically</NOYES>
+			<NOYES id="ZLOG" name="z-logscale">set z-scale logarithmic</NOYES>
+			<STRING id="COM" name="comment">user's comment text</STRING>
+		</CLASS>
+		<CLASS id="PLOT" name="plot definition" inherits="COMMAND">
+			plot definition
+			<ENUM id="TYPE" name="type" size="8">
+				selection o available graph types
+				<ENUMITEM>BEAM 1D</ENUMITEM>
+				<ENUMITEM>BEAM 2D</ENUMITEM>
+				<ENUMITEM>SCAN 1D</ENUMITEM>
+				<ENUMITEM>SCAN 2D</ENUMITEM>
+				<ENUMITEM>RESOL 1D</ENUMITEM>
+        <ENUMITEM>RESOL 2D</ENUMITEM>
+				<ENUMITEM>DETECTOR 1D</ENUMITEM>
+				<ENUMITEM>DETECTOR 2D</ENUMITEM>
+			</ENUM>
+			<NOYES id="PRINT" name="print">print the last plot</NOYES>
+			<NOYES id="ENABLED" name="enabled">graphics is enabled</NOYES>
+		</CLASS>
+	</GROUP> 
+  
+  <!--  Scan group -->  
+  <GROUP id="Scan">  
+  <CLASS id="SCAN1D" name="1D scan" inherits="COMMAND">
+	  1D scan with instrument parameters
+		<STRING id="VARS" name="variables">scan variables</STRING>
+		<STRING id="START" name="start">start values</STRING>
+    <STRING id="END" name="end">end values</STRING>
+		<INT id="NS" name="steps" >number of steps</INT>
+		<INT id="IX" name="x-coord" >X-coordinate to plot (index from the list in "variables", usually 1)</INT>
+		<INT id="IV" name="value index" >value index to plot (depends on "result set", usually 1 means intensity)</INT>
+		<ENUM id="TYPE" name="result set" size="8">
+      select the set of result values
+			<ENUMITEM>BASIC</ENUMITEM>
+			<ENUMITEM>BEAM 1D</ENUMITEM>
+			<ENUMITEM>RESOL 1D</ENUMITEM>
+			<ENUMITEM>DETECTOR 1D</ENUMITEM>
+			<ENUMITEM>FMERIT</ENUMITEM>
+			<ENUMITEM>BEAM PEAK</ENUMITEM>
+			<ENUMITEM>RESOL PEAK</ENUMITEM>
+			<ENUMITEM>DETECTOR PEAK</ENUMITEM>
+    </ENUM>
+		<STRING id="FILE" name="file name" file="write" filter="Data files|dat">output file name</STRING>
+  </CLASS>  
+	<CLASS id="SCAN2D" name="2D scan" inherits="COMMAND">
+	  2D scan with instrument parameters
+		<STRING id="XVAR" name="x-variable">x-variable</STRING>
+		<STRING id="YVAR" name="y-variable">y-variable</STRING>
+		<FLOAT  id="XMIN" name="x-min" units=" ">x-scale minimum</FLOAT>
+		<FLOAT  id="XMAX" name="x-max" units=" ">x-scale maximum</FLOAT>
+		<FLOAT  id="YMIN" name="y-min" units=" ">y-scale minimum</FLOAT>
+		<FLOAT  id="YMAX" name="y-max" units=" ">y-scale maximum</FLOAT>
+		<INT id="NX" name="x-steps" >number of x-steps</INT>
+		<INT id="NY" name="y-steps" >number of y-steps</INT>
+		<INT id="IV" name="value index" >value index (depends on TYPE)</INT>
+		<ENUM id="TYPE" name="result set" size="5">
+      select the set of result values
+			<ENUMITEM>BASIC</ENUMITEM>
+			<ENUMITEM>BEAM 1D</ENUMITEM>
+			<ENUMITEM>RESOL 1D</ENUMITEM>
+			<ENUMITEM>DETECTOR 1D</ENUMITEM>
+			<ENUMITEM>FMERIT</ENUMITEM>
+    </ENUM>
+		<STRING id="FILE" name="file name" filter="Data files|dat">output file name</STRING>
+  </CLASS>  
+  </GROUP> 
+  <!--  Scan group -->  
+  <GROUP id="Optimization">  	
+	<CLASS id="FMERIT" name="Figure of merit" inherits="COMMAND">
+	  Define figure of merit
+		<FLOAT id="COST" name="cost" units=" " hidden="yes">>cost per unit</FLOAT>
+		<FLOAT id="NORM" name="norm" units=" ">normalizing factor</FLOAT>
+		<FLOAT id="CHI2LIM" name="chi-square limit" units=" ">FMERIT returns zero if Chi^2 > this limit (only fitted multipeak parameters)</FLOAT>
+		<INT id="WEXP" name="width exponent">value of n in the definition of relative peak width : delta_w/w^n</INT>
+		<ENUM id="TYPE" name="result set" size="4">
+      select the set of result values
+			<ENUMITEM>BASIC</ENUMITEM>
+			<ENUMITEM>BEAM 1D</ENUMITEM>
+			<ENUMITEM>RESOL 1D</ENUMITEM>
+			<ENUMITEM>DETECTOR 1D</ENUMITEM>
+    </ENUM>
+		<ENUM id="FORMULA" name="formula" size="4">
+      select formula for calculation
+			<ENUMITEM>Intensity</ENUMITEM>
+			<ENUMITEM>1/width</ENUMITEM>
+			<ENUMITEM>Intensity/width</ENUMITEM>
+			<ENUMITEM>Intensity/width^2</ENUMITEM>
+    </ENUM>
+	</CLASS>
+	<CLASS id="SWARM" name="Swarm optimizer" handler="SWARM" buttons="Run|Stop|Continue|Apply|Close" inherits="COMMAND">
+	  optimization using AI swarm algorithm (use FMERIT command to define the figure of merit)
+	    <FLOAT id="WCOST" name="cost weight" units=" ">weight for an optoinal cost term</FLOAT>
+		<FLOAT id="ACC" name="acceleration" units=" ">acceleration towards common aim</FLOAT>
+		<FLOAT id="POWN" name="individuality" units=" ">probability for exploring individual aims (not implemented)</FLOAT>	
+		<FLOAT id="PEXP" name="explore probability" units=" ">probability for free exploration of variable space</FLOAT>
+		<FLOAT id="SPREAD" name="random spread" units="tol">random gaussian spread in units of the variables tolerance</FLOAT>
+		<INT id="NSPEC" name="species" >number of species to create</INT>
+		<INT id="UPDLOOP" name="update loops" >loop after which the swarm tries to update search space</INT>
+		<NOYES id="AVE" name="use average">use average of several best trials rather than the best one as the common aim</NOYES>
+		<FLOAT id="TOUT" name="timeout" units="hour">maximum execution time</FLOAT>
+		<INT id="NLOOPS" name="loops" >max. number of loops to go</INT>
+		<INT id="NSTOP" name="stop limit" >max. number of loops without changing the best trial</INT>
+		<ENUM id="SPACE" name="variable space type" size="2">
+			type of variables listed in the input file
+			<ENUMITEM>all</ENUMITEM>
+			<ENUMITEM>guide segments</ENUMITEM>
+		</ENUM>
+		<STRING id="INPUT" name="input parameters" file="read" filter="Swarm variables|psa">file with input parameters</STRING>
+		<STRING id="OUTPUT" name="output data" file="write" filter="Results|dat">file with output data</STRING>
+  </CLASS> 	
+	</GROUP> 
+<!--	
+  <CLASS id="TEST" name="debug" inherits="COMMAND">
+	  test command
+		<FLOAT id="X0" name="center" units=" " size="3">array</FLOAT>
+		<FLOAT id="A" name="number" units=" ">single number</FLOAT>
+		<RANGE id="SCAN" name="variable range" size="2">range of a component parameter</RANGE>
+  </CLASS>  
+ -->	
+
+</CLASSES>
+</SIMRES>

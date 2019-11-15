@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SIMRES version="6.0.4">
+<COMMANDS>
+	<COMMAND class="SAVE" id="SAVE" name="save configuration">
+		<FILE name="file name">default.xml</FILE>
+		<OVER name="overwrite" value="1">yes</OVER>
+	</COMMAND>
+	<COMMAND class="MC" id="MC" name="run MC simulation">
+	</COMMAND>
+	<COMMAND class="GRFDEV" id="GRFDEV" name="set grapic device">
+		<FILE name="file name">restrax.ps</FILE>
+		<DEVICE name="device ID">/JSDRIV</DEVICE>
+	</COMMAND>
+	<COMMAND class="LOAD" id="LOAD" name="load configuration">
+		<FILE name="file name"></FILE>
+	</COMMAND>
+	<COMMAND class="CLOAD" id="CLOAD" name="load component">
+		<FILE name="file name">mono.xml</FILE>
+	</COMMAND>
+	<COMMAND class="GRSAVE" id="GRSAVE" name="save graphics">
+		<FILE name="file name">graph.dat</FILE>
+		<OVER name="overwrite" value="1">yes</OVER>
+	</COMMAND>
+	<COMMAND class="CMDSAVE" id="CMDSAVE" name="save commands">
+		<FILE name="file name">cmdsave.xml</FILE>
+		<OVER name="overwrite" value="1">yes</OVER>
+	</COMMAND>
+	<COMMAND class="CSAVE" id="CSAVE" name="save component">
+		<ID name="component ID">ANA</ID>
+		<FILE name="file name">ana_Si.xml</FILE>
+		<OVER name="overwrite" value="1">yes</OVER>
+	</COMMAND>
+	<COMMAND class="BEAM1D" id="BEAM1D" name="beam profile 1D">
+		<X name="x-variable" value="7">E</X>
+		<NP name="points">128</NP>
+		<X0 name="center" units=" ">0.0</X0>
+		<DX name="range" units=" ">200.0</DX>
+		<XAUTO name="x-autoscale" value="1">yes</XAUTO>
+		<YLOG name="y-logscale" value="0">no</YLOG>
+		<ERR name="errors" value="1">yes</ERR>
+		<GFIT name="fit gaussian" value="1">yes</GFIT>
+		<COM name="comment">user's comment</COM>
+	</COMMAND>
+	<COMMAND class="BEAM2D" id="BEAM2D" name="beam map 2D">
+		<X name="x-variable" value="3">kx/k</X>
+		<Y name="y-variable" value="4">ky/k</Y>
+		<NX name="x-pixels">256</NX>
+		<NY name="y-pixels">256</NY>
+		<X0 name="center" units=" ">0.0</X0>
+		<DX name="range" units=" ">200.0</DX>
+		<Y0 name="center" units=" ">0.0</Y0>
+		<DY name="range" units=" ">200.0</DY>
+		<AUTO name="autoscale" value="1">yes</AUTO>
+		<ZLOG name="z-logscale" value="0">no</ZLOG>
+		<COM name="comment">x,y profile for z-scan</COM>
+	</COMMAND>
+	<COMMAND class="RES1D" id="RES1D" name="resolution profile 1D">
+		<X name="x-variable" value="2">E</X>
+		<NP name="points">128</NP>
+		<X0 name="center" units=" ">0.0</X0>
+		<DX name="range" units=" ">200.0</DX>
+		<XAUTO name="x-autoscale" value="1">yes</XAUTO>
+		<YLOG name="y-logscale" value="0">no</YLOG>
+		<ERR name="errors" value="1">yes</ERR>
+		<GFIT name="fit gaussian" value="0">no</GFIT>
+		<COM name="comment">user's comment</COM>
+	</COMMAND>
+	<COMMAND class="RES2D" id="RES2D" name="resolution map 2D">
+		<X name="x-variable" value="4">QY</X>
+		<Y name="y-variable" value="2">E</Y>
+		<NX name="x-pixels">128</NX>
+		<NY name="y-pixels">128</NY>
+		<X0 name="x-center" units=" ">0.0</X0>
+		<DX name="x-range" units=" ">0.3</DX>
+		<Y0 name="y-center" units=" ">0.0</Y0>
+		<DY name="y-range" units=" ">0.3</DY>
+		<AUTO name="autoscale" value="1">yes</AUTO>
+		<ZLOG name="z-logscale" value="0">no</ZLOG>
+		<COM name="comment">no comment</COM>
+	</COMMAND>
+	<COMMAND class="PLOT" id="PLOT" name="plot definition">
+		<TYPE name="type" value="2">SCAN 1D</TYPE>
+		<PRINT name="print" value="0">no</PRINT>
+		<ENABLED name="enabled" value="1">yes</ENABLED>
+	</COMMAND>
+	<COMMAND class="SCAN1D" id="SCAN1D" name="1D scan">
+		<VARS name="variables">mon ro(1)</VARS>
+		<START name="start">0.05</START>
+		<END name="end">0.55</END>
+		<NS name="steps">11</NS>
+		<IX name="x-coord">1</IX>
+		<IV name="value index">2</IV>
+		<TYPE name="result set" value="2">RESOL 1D</TYPE>
+		<FILE name="file name">mon.dat</FILE>
+	</COMMAND>
+	<COMMAND class="SCAN2D" id="SCAN2D" name="2D scan">
+		<XVAR name="x-variable">mon size(2)</XVAR>
+		<YVAR name="y-variable">mon ro(2)</YVAR>
+		<XMIN name="x-min" units=" ">100.0</XMIN>
+		<XMAX name="x-max" units=" ">200.0</XMAX>
+		<YMIN name="y-min" units=" ">0.4</YMIN>
+		<YMAX name="y-max" units=" ">0.9</YMAX>
+		<NX name="x-steps">32</NX>
+		<NY name="y-steps">32</NY>
+		<IV name="value index">1</IV>
+		<TYPE name="result set" value="0">BASIC</TYPE>
+		<FILE name="file name">scan2d.dat</FILE>
+	</COMMAND>
+</COMMANDS>
+<OPTIONS>
+	<OPTION class="TRACING" id="TR" name="tracing options">
+		<DIR name="tracing direction" value="1">upstream</DIR>
+		<VARI name="variance reduction" value="1">yes</VARI>
+		<MAXV name="optimize limits" value="1">yes</MAXV>
+		<SWPOOL name="safety pool" value="1">yes</SWPOOL>
+		<CNT name="counts">5000</CNT>
+		<ELIMIT name="efficiency limit" units=" ">1.0E4</ELIMIT>
+		<PLIMIT name="precision limit" units=" ">1.0E-3</PLIMIT>
+		<DBC name="double cycle" value="1">yes</DBC>
+		<MODE name="tracing mode" value="2">all</MODE>
+		<STORE name="storage mode" value="1">sample</STORE>
+		<SAMPLING name="sampling distribution" value="0">uniform</SAMPLING>
+	</OPTION>
+	<OPTION class="REPORTS" id="REP" name="reports options">
+		<ELOG name="events log" value="0">no</ELOG>
+		<NRAYS name="log count">40</NRAYS>
+		<STATS name="statistics" value="0">no</STATS>
+		<VOL name="sampling volume" value="0">no</VOL>
+		<VARI name="variance reduction" value="0">no</VARI>
+		<PROG name="progress" value="1">yes</PROG>
+		<RES name="results" value="1">yes</RES>
+		<MAXV name="limits" value="0">no</MAXV>
+		<TIME name="interval" units="s">1.0</TIME>
+	</OPTION>
+</OPTIONS>
+<INSTRUMENT>
+	<CFGTITLE>Three axis spectrometer</CFGTITLE>
+	<MONOCHROMATORS>MON</MONOCHROMATORS>
+	<ANALYZERS>ANA</ANALYZERS>
+	<INTERFACE>
+		<SPECTROMETER class="SPECTROMETER" id="INST" name="basic instrument interface">
+			<FIX name="fixed K" value="1">Kf</FIX>
+			<KI name="Ki" units="A^-1">2.66</KI>
+			<KF name="Kf" units="A^-1">2.66</KF>
+			<Q0 name="Q" units="A^-1">3.5183</Q0>
+			<EN name="energy" units="meV">0.0</EN>
+			<THETA name="thetaS" units="deg">82.8036</THETA>
+			<LAMBDA name="wavelength" units="A">2.3621</LAMBDA>
+			<PSI name="psi" units="deg">0.0</PSI>
+			<SS name="sign of theta_S" value="1">+1</SS>
+			<KFMODE name="off-plane Kf mode" value="0">flat</KFMODE>
+			<FLATCONE name="flat-cone analyzer" value="0">no</FLATCONE>
+			<OFFPL name="off-plane Kf" value="0">no</OFFPL>
+		</SPECTROMETER>
+	</INTERFACE>
+	<SPECIMEN>
+		<FRAME class="SCRYST" id="SAM" name="single crystal">
+			<DIST name="distance" units="mm">750.0</DIST>
+			<SHAPE name="shape" value="1">cylinder</SHAPE>
+			<SIZE name="dimensions" units="mm">10.0 10.0 10.0</SIZE>
+			<AX name="axis" units="deg">82.8036 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">131.4018 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<SAMPLE>
+				<TYPE name="type" value="0">inelastic resolution</TYPE>
+				<SGN name="sign" value="1">+1</SGN>
+				<SIGSC name="Sigma_s" units="cm^-1">1.0E-1</SIGSC>
+				<SIGA name="Sigma_a" units="cm^-1A^-1">0.121</SIGA>
+				<SIGI name="Sigma_i" units="cm^-1">3.4E-2</SIGI>
+				<TEMP name="temperature" units="K">300.0</TEMP>
+				<MAG name="magnetic field" units="gauss">0.0 0.0 0.0</MAG>
+				<STRAIN name="strain" units=" ">0.0 0.0 0.0</STRAIN>
+				<PRESS name="isotropic pressure" units="MPa">0.0</PRESS>
+				<SCRYST>
+					<VECA name="A vector" units="hkl">1.0 1.0 0.0</VECA>
+					<VECB name="B vector" units="hkl">0.0 0.0 1.0</VECB>
+					<CELLS name="cell size" units="hkl">5.43 5.43 5.43</CELLS>
+					<CELLA name="cell angles" units="deg">90.0 90.0 90.0</CELLA>
+					<ZERO name="zeros" units="deg">0.0 0.0 0.0</ZERO>
+					<TAU name="tau" units="hkl">2.0 2.0 0.0</TAU>
+					<QHKL name="q_hkl" units="hkl">0.15 0.15 0.0</QHKL>
+					<EN name="EN" units="meV">0.0</EN>
+					<MOS name="mosaicity" units="minutes">0.0</MOS>
+					<GHKL name="gradE_direction" units="hkl">2.0 2.0 0.0</GHKL>
+					<GRAD name="gradE_magnitude" units="meV/rlu">0.0</GRAD>
+					<EIG name="phonon eigenvector" units="hkl">0.0 0.0 1.0</EIG>
+				</SCRYST>
+			</SAMPLE>
+		</FRAME>
+	</SPECIMEN>
+	<PRIMARY>
+		<FRAME class="SOURCE" id="SOURCE" name="source">
+			<DIST name="distance" units="mm">0.0</DIST>
+			<SHAPE name="shape" value="2">disc</SHAPE>
+			<SIZE name="dimensions" units="mm">100.0 140.0 1.0E-1</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<SOURCE>
+				<FLUX name="flux" units="10^14/s/cm^2">1.0</FLUX>
+				<TEMP name="temperature" units="K">300.0</TEMP>
+				<TABNAME name="lookup table">source_flux.tab</TABNAME>
+			</SOURCE>
+		</FRAME>
+		<FRAME class="GUIDE" id="C1" name="collimator 1">
+			<DIST name="distance" units="mm">2000.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<SIZE name="dimensions" units="mm">60.0 130.0 400.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="0">soller or coarse</TYPE>
+				<EXIT name="exit window" units="mm">60.0 130.0</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">0.5 0.5</DL>
+				<M name="m-value" units="Ni_nat">0.0 0.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MU name="absorption" units="cm^-1A^-1">1.0E10</MU>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="GUIDE" id="VSS" name="input slit">
+			<DIST name="distance" units="mm">1130.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<SIZE name="dimensions" units="mm">25.0 140.0 180.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="0">soller or coarse</TYPE>
+				<EXIT name="exit window" units="mm">25.0 140.0</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">5.0E-2 5.0E-2</DL>
+				<M name="m-value" units="Ni_nat">0.0 0.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MU name="absorption" units="cm^-1A^-1">1.0E10</MU>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="GUIDE" id="BG" name="beam gate">
+			<DIST name="distance" units="mm">266.5</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<SIZE name="dimensions" units="mm">90.0 150.0 391.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="0">soller or coarse</TYPE>
+				<EXIT name="exit window" units="mm">90.0 150.0</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">5.0E-2 5.0E-2</DL>
+				<M name="m-value" units="Ni_nat">0.0 0.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MU name="absorption" units="cm^-1A^-1">1.0E10</MU>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="GUIDE" id="E" name="entrance channel">
+			<DIST name="distance" units="mm">650.5</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<SIZE name="dimensions" units="mm">160.0 185.0 760.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="0">soller or coarse</TYPE>
+				<EXIT name="exit window" units="mm">140.0 185.0</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">5.0E-2 5.0E-2</DL>
+				<M name="m-value" units="Ni_nat">0.0 0.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MU name="absorption" units="cm^-1A^-1">1.0E10</MU>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="CRYSTAL" id="MON" name="monochromator">
+			<DIST name="distance" units="mm">1170.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<SIZE name="dimensions" units="mm">240.0 196.0 10.0</SIZE>
+			<AX name="axis" units="deg">-44.2626 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">-112.1313 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<CRYSTAL>
+				<TYPE name="type" value="2">bent perfect</TYPE>
+				<REFNAME name="reflection" value="17">Si 111</REFNAME>
+				<DHKL name="d-spacing" units="A">3.135</DHKL>
+				<SGN name="sign" value="0">-1</SGN>
+				<CHI name="cutting angle" units="deg">0.0</CHI>
+				<MOS name="mosaicity" units="arc_min">0.0</MOS>
+				<ANIZ name="anisotropy" units=" ">1.0</ANIZ>
+				<POISS name="Poisson" units=" ">0.1808</POISS>
+				<RO name="curvatures" units="m^-1">0.1794 0.89745 0.0</RO>
+				<N name="segments">1 9 10</N>
+				<D name="gaps" units="mm">2.0 2.0 1.0E-1</D>
+				<DGR name="gradient" units="10^-3.cm^-1">0.0</DGR>
+				<DGA name="gradient angle" units="deg">0.0</DGA>
+				<DLAM name="domain thickness" units="um">0.0</DLAM>
+				<MODEL name="model" value="1">random walk</MODEL>
+				<FOCH name="focus horizontally" value="1">yes</FOCH>
+				<FH1 name="horiz. focus 1" units="m">2.1</FH1>
+				<FH2 name="horiz. focus 2" units="m">2.1</FH2>
+				<FOCV name="focus vertically" value="1">yes</FOCV>
+				<FV1 name="vert. focus 1" units="m">5.0</FV1>
+				<FV2 name="vert. focus 2" units="m">2.1</FV2>
+			</CRYSTAL>
+		</FRAME>
+		<FRAME class="GUIDE" id="C2" name="collimator 2">
+			<DIST name="distance" units="mm">1350.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<SIZE name="dimensions" units="mm">80.0 110.0 220.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="0">soller or coarse</TYPE>
+				<EXIT name="exit window" units="mm">80.0 110.0</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-1 1.0E-1</DL>
+				<M name="m-value" units="Ni_nat">0.0 0.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MU name="absorption" units="cm^-1A^-1">1.0E10</MU>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+			</GUIDE>
+		</FRAME>
+	</PRIMARY>
+	<SECONDARY>
+		<FRAME class="GUIDE" id="C3" name="collimator 3">
+			<DIST name="distance" units="mm">600.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<SIZE name="dimensions" units="mm">80.0 110.0 220.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="0">soller or coarse</TYPE>
+				<EXIT name="exit window" units="mm">80.0 110.0</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">30 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-1 1.0E-1</DL>
+				<M name="m-value" units="Ni_nat">0.0 0.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MU name="absorption" units="cm^-1A^-1">1.0E10</MU>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="CRYSTAL" id="ANA" name="analyzer">
+			<DIST name="distance" units="mm">600.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<SIZE name="dimensions" units="mm">240.0 158.0 10.0</SIZE>
+			<AX name="axis" units="deg">-44.2626 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">-112.1313 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<CRYSTAL>
+				<TYPE name="type" value="2">bent perfect</TYPE>
+				<REFNAME name="reflection" value="17">Si 111</REFNAME>
+				<DHKL name="d-spacing" units="A">3.135</DHKL>
+				<SGN name="sign" value="0">-1</SGN>
+				<CHI name="cutting angle" units="deg">0.0</CHI>
+				<MOS name="mosaicity" units="arc_min">0.0</MOS>
+				<ANIZ name="anisotropy" units=" ">1.0</ANIZ>
+				<POISS name="Poisson" units=" ">0.1808</POISS>
+				<RO name="curvatures" units="m^-1">0.31394 2.212 0.0</RO>
+				<N name="segments">1 5 10</N>
+				<D name="gaps" units="mm">2.0 2.0 1.0E-1</D>
+				<DGR name="gradient" units="10^-3.cm^-1">0.0</DGR>
+				<DGA name="gradient angle" units="deg">0.0</DGA>
+				<DLAM name="domain thickness" units="um">0.0</DLAM>
+				<MODEL name="model" value="1">random walk</MODEL>
+				<FOCH name="focus horizontally" value="1">yes</FOCH>
+				<FH1 name="horiz. focus 1" units="m">1.2</FH1>
+				<FH2 name="horiz. focus 2" units="m">1.2</FH2>
+				<FOCV name="focus vertically" value="1">yes</FOCV>
+				<FV1 name="vert. focus 1" units="m">1.2</FV1>
+				<FV2 name="vert. focus 2" units="m">1.2</FV2>
+			</CRYSTAL>
+		</FRAME>
+		<FRAME class="GUIDE" id="C4" name="collimator 4">
+			<DIST name="distance" units="mm">335.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<SIZE name="dimensions" units="mm">80.0 110.0 220.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="0">soller or coarse</TYPE>
+				<EXIT name="exit window" units="mm">80.0 110.0</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">30 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-1 1.0E-1</DL>
+				<M name="m-value" units="Ni_nat">0.0 0.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MU name="absorption" units="cm^-1A^-1">1.0E10</MU>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="DETECTOR" id="DET" name="detector">
+			<DIST name="distance" units="mm">265.0</DIST>
+			<SHAPE name="shape" value="1">cylinder</SHAPE>
+			<SIZE name="dimensions" units="mm">50.0 150.0 50.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<DETECTOR>
+				<TYPE name="type" value="1">array</TYPE>
+				<RES name="resolution" units="mm">1.5 1.5</RES>
+				<ALPHA name="efficiency" units="A^-1.cm^-1">0.5</ALPHA>
+				<SPACE name="spacing" units="mm">0.0</SPACE>
+				<ND name="tubes">1</ND>
+			</DETECTOR>
+		</FRAME>
+	</SECONDARY>
+</INSTRUMENT>
+</SIMRES>

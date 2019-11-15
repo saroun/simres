@@ -1,0 +1,40 @@
+#----------------------------------------------------
+# System dependent part of makefile for RESTRAX
+# Absoft Fortran 95 for Win32
+#----------------------------------------------------
+
+# extension for shared libraries (if different from *.so)
+SHEXT= dll
+
+# ====================  RESTRAX section ===============================
+
+# command calling Fortran compler
+FC= f95
+
+# Fortran options:
+FCFLAGS= -O2 -nowdir -W 132 -f fixed -z 3 -s
+# alternative for debugging:
+# FCFLAGS= -g -nowdir -W 132 -f fixed -z 3 -s
+
+# command calling C compler
+CC= ACC
+
+# C options:
+CCFLAGS= -O2 -windefs -K -DABSOFT
+
+# user static libraries to link with RESTRAX:
+USER_LIBS=.\lib\pgplot\jsdrivlib.lib 
+
+# Path for include files required on some systems
+LPATHS=   -path:".\src" -path:".\src\ness" -path:".\include"
+
+# system libraries:
+restrax_LDADD= ADVAPI32.LIB unix.lib absRT0.lib kernel32.lib fio.lib fmath.lib comdlg32.lib f90math.lib libac.lib
+
+# Command for linking RESTRAX
+restrax_LD= LNK
+
+# option passed to the linker
+restrax_LDFLAGS= -dll -aliases:".\restraxlib.als" -stack:0x1000000,0x20000 -exports:".\restraxlib.exp"
+
+

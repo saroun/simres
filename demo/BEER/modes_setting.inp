@@ -1,0 +1,419 @@
+
+
+
+# load bi-spectral source 
+set SOURCE FLUXTAB ESS2016_W2_thermal_5ms.tab:ESS2016_W2_cold_5ms.tab
+XML SOURCE
+
+# set wavelength
+#-------------------------
+set INST LAMBDA 2
+XML UPDATE
+
+# set wavelength range
+# ------------------------------
+# fraction of LAMBDA:
+set SOURCE LAMW 1.0
+XML SOURCE
+
+# set sample slit as needed
+#--------------------------------------
+# open by default
+set SL3 SIZE(1)  100.0
+set SL3 SIZE(2) 100.0
+XML SL3
+
+#-----------------------------------------------------------------
+# WAVELENGTH SELECTION MODES
+#----------------------------------------------------------------
+# NOTE: always start with mode 0 before executing the script for swicthing to another mode
+# 
+
+#---------------------------------------------------
+# mode mw=0, all choppers stopped
+#----------------------------------------------------
+# FC1A off
+set FC1A FRQ 0.0
+set FC1A TIMING 0:1
+set FC1A T0 0
+set FC1A LOCKT0 0
+XML FC1A
+# FC1B off
+set FC1B FRQ 0.0
+set FC1B TIMING 0:1
+set FC1B T0 0
+set FC1B LOCKT0 0
+XML FC1B
+# FC2A off
+set FC2A FRQ 0.0
+set FC2A TIMING 0:1
+set FC2A T0 0
+set FC2A LOCKT0 0
+XML FC2A
+# FC2B off
+set FC2B FRQ 0.0
+set FC2B TIMING 0:1
+set FC2B T0 0
+set FC2B LOCKT0 0
+XML FC2B
+
+
+#---------------------------------------------------
+# mode mw=1, single frame
+#----------------------------------------------------
+# FC1A on
+set FC1A FRQ 14.0
+set FC1A TIMING -0.047222:1
+XML FC1A
+# FC2A off
+set FC2A FRQ 14.0
+set FC2A TIMING 0:1
+XML FC2A
+
+
+#---------------------------------------------------
+# mode mw=2, double frame frame, pulse suppression
+#----------------------------------------------------
+# possible only with a modulation mode
+# FC1A on
+set FC1A FRQ 7.0
+set FC1A TIMING 0:1
+XML FC1A
+# FC2A off
+set FC2A FRQ 7.0
+set FC2A TIMING 0:1
+XML FC2A
+
+#---------------------------------------------------
+# mode mw=3, double frame frame, alternate frames
+#----------------------------------------------------
+# possible only with a modulation mode
+# FC1A on, FC1B on
+set FC1A FRQ 14.0
+set FC1A TIMING 0:1
+XML FC1A
+set FC1B FRQ 0
+set FC1B TIMING 0:1
+XML FC1B
+# FC2A off, FC2B on
+set FC2B FRQ 7.0
+set FC2B TIMING 0:1
+XML FC2B
+
+
+#-------------------------------------------------------------------------
+# RESOLUTION  MODES
+#-------------------------------------------------------------------------
+# NOTE: always start with mode 0 before executing the script for swicthing to another mode
+
+
+#-----------------------------------------------
+# mode 0: all choppers stopped
+#-------------------------------------------------
+
+# modulation A off
+set MCA FRQ 0
+set MCA ADJ 1
+set MCA OVERLAP 0
+set MCA T0 0
+set MCA LOCKT0 0
+XML MCA
+# modulation B off
+set MCB FRQ 0
+set MCB ADJ 1
+set MCB OVERLAP 0
+set MCB T0 0
+set MCB LOCKT0 0
+XML MCB
+# modulation C off
+set MCC FRQ 0
+set MCC ADJ 1
+set MCC OVERLAP 0
+set MCC T0 0
+set MCC LOCKT0 0
+XML MCC
+# PSC1 off
+set PSC1 FRQ 0.0
+set PSC1 TIMING 0:1
+set PSC1 T0 0
+set PSC1 LOCKT0 0
+XML PSC1
+# PSC2 off
+set PSC2 FRQ 0.0
+set PSC2 TIMING 0:1
+set PSC2 T0 0
+set PSC2 LOCKT0 0
+XML PSC2
+# PSC3 off
+set PSC3 FRQ 0.0
+set PSC3 TIMING 0:1
+set PSC3 T0 0
+set PSC3 LOCKT0 0
+XML PSC3
+# Open slits and put GEX1 on by default
+set SL1 SIZE(1) 40.0
+set SL1 SIZE(2) 80.0
+XML SL1
+set SL2 SIZE(1) 40.0
+set SL2 SIZE(2) 60.0
+XML SL2
+set GEX1 ACTIVE 1 1 1 1
+XML GEX1
+
+#------------------------------------------------------
+# mode 1: high resolution, PSC1 + PSC2
+#------------------------------------------------------
+# PSC1 off
+set PSC1 FRQ 168.0
+set PSC1 TIMING 0.2:1
+set PSC1 T0 1
+set PSC1 LOCKT0 1
+XML PSC1
+set PSC2 FRQ -168.0
+set PSC2 TIMING 0.2:1
+set PSC2 T0 1
+set PSC2 LOCKT0 1
+XML PSC2
+set GCA3 DIST 77
+XML GCA3
+set GCB DIST 287
+XML GCB
+set SL1 SIZE(1)  22.0
+set SL1 SIZE(2)  80.0
+XML SL1
+set SL2 SIZE(1)  15.0
+set SL2 SIZE(2) 80.0
+XML SL2
+set GEX1 ACTIVE 1 1 1 1
+XML GEX1
+
+#------------------------------------------------------
+# mode 2: medium resolution, PSC1 + PSC2
+#------------------------------------------------------
+set PSC1 FRQ 168.0
+set PSC1 TIMING 0.2:1
+set PSC1 T0 1
+set PSC1 LOCKT0 1
+XML PSC1
+set PSC2 FRQ -168.0
+set PSC2 TIMING 0.2:1
+set PSC2 T0 1
+set PSC2 LOCKT0 1
+XML PSC2
+set GCA3 DIST 277
+XML GCA3
+set GCB DIST 87
+XML GCB
+set SL1 SIZE(1) 35.0
+set SL1 SIZE(2) 80.0
+XML SL1
+set SL2 SIZE(1) 20.0
+set SL2 SIZE(2) 80.0
+XML SL2
+set GEX1 ACTIVE 1 1 1 1
+XML GEX1
+
+
+#------------------------------------------------------
+# mode 3: low resolution, PSC1 + PSC3
+#------------------------------------------------------
+set PSC1 FRQ 168.0
+set PSC1 TIMING 0.2:1
+set PSC1 T0 1
+set PSC1 LOCKT0 1
+XML PSC1
+set PSC3 FRQ -168.0
+set PSC3 TIMING 0.2:1
+set PSC3 T0 1
+set PSC3 LOCKT0 1
+XML PSC3
+set SL1 SIZE(1) 40.0
+set SL1 SIZE(2) 80.0
+XML SL1
+set SL2 SIZE(1) 25.0
+set SL2 SIZE(2) 80.0
+XML SL2
+set GEX1 ACTIVE 1 1 1 1
+XML GEX1
+
+
+#------------------------------------------------------
+# mode 4: modulation, high-resolution, MCA
+#------------------------------------------------------
+# NOTE: slits SL1/SL2 should be optimized for given wavelength.
+# The values below are set for lambda=1.65 AA. 
+set MCA FRQ 280.0
+set MCA OVERLAP 1
+set MCA T0 1
+set MCA LOCKT0 0
+XML MCA
+set SL1 SIZE(1) 15.0
+set SL1 SIZE(2) 80.0
+XML SL1
+set SL2 SIZE(1)  13.0
+set SL2 SIZE(2) 60.0
+XML SL2
+set GEX1 ACTIVE 0 0 0 0
+XML GEX1
+
+
+#------------------------------------------------------
+# mode 5: modulation, low-resolution, MCA
+#------------------------------------------------------
+# NOTE: slits SL1/SL2 should be optimized for given wavelength.
+# The values below are set for lambda=1.65 AA. 
+set MCA FRQ 70.0
+set MCA OVERLAP 1
+set MCA T0 1
+set MCA LOCKT0 0
+XML MCA
+set SL1 SIZE(1)  40.0
+set SL1 SIZE(2) 80.0
+XML SL1
+set SL2 SIZE(1)  25.0
+set SL2 SIZE(2) 80.0
+XML SL2
+set GEX1 ACTIVE 1 1 1 1
+XML GEX1
+
+#------------------------------------------------------
+# mode 6: modulation, high-resolution, MCB (larger peak separation)
+#------------------------------------------------------
+# NOTE: slits SL1/SL2 should be optimized for given wavelength.
+# The values below are set for lambda=1.65 AA. 
+set MCB FRQ 280.0
+set MCB OVERLAP 1
+set MCB T0 1
+set MCB LOCKT0 0
+XML MCB
+set SL1 SIZE(1)  15.0
+set SL1 SIZE(2) 80.0
+XML SL1
+set SL2 SIZE(1)  13.0
+set SL2 SIZE(2) 80.0
+XML SL2
+set GEX1 ACTIVE 0 0 0 0
+XML GEX1
+
+
+#------------------------------------------------------
+# mode 7: imaging, 
+#------------------------------------------------------
+# As mode=3, but slits set for  imaging
+set PSC1 FRQ 168.0
+set PSC1 TIMING 0.2:1
+set PSC1 T0 1
+set PSC1 LOCKT0 1
+XML PSC1
+set PSC3 FRQ -168.0
+set PSC3 TIMING 0.2:1
+set PSC3 T0 1
+set PSC3 LOCKT0 1
+XML PSC3
+set SL1 SIZE(1)  20.0
+set SL1 SIZE(2) 20.0
+XML SL1
+set SL2 SIZE(1)  30.0
+set SL2 SIZE(2) 30.0
+XML SL2
+set SL3 SIZE(1)  100.0
+set SL3 SIZE(2) 100.0
+XML SL3
+set GEX1 ACTIVE 0 0 0 0
+XML GEX1
+
+#-----------------------------------------------------------------------
+# COLD NEUTRONS - modulation modes setting
+#-----------------------------------------------------------------------
+
+#------------------------------------------------------
+# mode 4: modulation, high-resolution, MCA
+#------------------------------------------------------
+# NOTE: slits SL1/SL2 should be optimized for given wavelength.
+# The values below are set for lambda=1.65 AA. 
+set MCA FRQ 280.0
+set MCA OVERLAP 1
+set MCA T0 1
+set MCA LOCKT0 0
+XML MCA
+set SL1 SIZE(1) 9.0
+set SL1 SIZE(2) 70.0
+XML SL1
+set SL2 SIZE(1)  9.0
+set SL2 SIZE(2) 45.0
+XML SL2
+set GEX1 ACTIVE 0 0 0 0
+XML GEX1
+
+
+#------------------------------------------------------
+# mode 5: modulation, low-resolution, MCA
+#------------------------------------------------------
+# NOTE: slits SL1/SL2 should be optimized for given wavelength.
+# The values below are set for lambda=1.65 AA. 
+set MCA FRQ 70.0
+set MCA OVERLAP 1
+set MCA T0 1
+set MCA LOCKT0 0
+XML MCA
+set SL1 SIZE(1)  25.0
+set SL1 SIZE(2) 80.0
+XML SL1
+set SL2 SIZE(1)  18.0
+set SL2 SIZE(2) 80.0
+XML SL2
+set GEX1 ACTIVE 1 1 1 1
+XML GEX1
+
+#------------------------------------------------------
+# mode 6: modulation, high-resolution, MCB (larger peak separation)
+#------------------------------------------------------
+# NOTE: slits SL1/SL2 should be optimized for given wavelength.
+# The values below are set for lambda=1.65 AA. 
+set MCB FRQ 280.0
+set MCB OVERLAP 1
+set MCB T0 1
+set MCB LOCKT0 0
+XML MCB
+set SL1 SIZE(1)  9.0
+set SL1 SIZE(2) 80.0
+XML SL1
+set SL2 SIZE(1)  9.0
+set SL2 SIZE(2) 80.0
+XML SL2
+set GEX1 ACTIVE 0 0 0 0
+XML GEX1
+
+#------------------------------------------------------
+#  COLLIMATORS
+#------------------------------------------------------
+# in RAD, load appropriate component RAD_xmm.rxcp, where x=collimation width.
+# Then set correct distances:
+
+# 0.5 mm:
+set RAD DIST 100.0
+XML RAD
+set DET DIST 1900.0
+XML DET
+
+# 1.0 mm:
+set RAD DIST 160.0
+XML RAD
+set DET DIST 1840.0
+XML DET
+
+# 2.0 mm:
+set RAD DIST 310.0
+XML RAD
+set DET DIST 1690.0
+XML DET
+
+# 4.0 mm:
+set RAD DIST 490.0
+XML RAD
+set DET DIST 1510.0
+XML DET
+
+
+
+

@@ -1,0 +1,631 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SIMRES version="6.3.6">
+<HTML>
+ <![CDATA[
+  <STYLE TYPE="text/css">
+  	<!--    
+   div.bluebox  {font-size: 12pt; background-color: #A3C4EA; }
+	 table.bluebox  {font-size: 10pt; background-color: #A3C4EA; 
+	-->
+  </STYLE>
+  <DIV class="bluebox">
+  <P>
+  <B>ToF diffractometer ENGINX@ISIS.</B><BR/>
+  Examples in this project include:
+<ul>
+<li> Example of strain scanning through the surface of a stress-free ferrite sample, <code>engin-x-Fe.xml</code></li>
+<li>Simulation of gauge volume and export of a file with scattering events, <code>engin-x-Fe-1mm-gauge.xml</code></li>
+</ul>
+  Instrument configuration corresponds to the time-of-flight engineering diffractometer ENGIN-X at ISIS.
+  </P>
+  <P>  
+  <I>Remarks:</I><BR />
+  Use the commands in the attached *.inp scripts to perform various settings and commands.<BR />
+  You can open the script in the Tools/Script editor and run selected blocks (select text by mouse, then "Run selected"). See the comments at the command blocks in the scripts for brief explanations.
+  </P>
+   <P>  
+  <I>Configurations in this folder:</I>
+  </P>
+  <P>  
+  <TABLE  class="bluebox" border="1" cellspacing="0" cellpadding="5">
+  <TR>
+  <TD align="LEFT" style="white-space: nowrap;"><code>engin-x-Fe.xml</code></TD>
+  <TD align="LEFT">Simulation of a scan through the surface of a stress-free ferrite plate. Relevant commands are saved in the script <code>engin-x-scan-211.inp</code>. 
+  </TD>
+  </TR>
+  <TR>
+  <TD align="LEFT" style="white-space: nowrap;"><code>engin-x-Fe-1mm-gauge.xml</code></TD>
+  <TD align="LEFT">Example with simulation of sampling distribution for 1x1x5 mm collimation. It permits to simulate, view and export sampling distribution as a list of event data in an ASCII file: 
+  position, incident and exit k-vecotors, probability, time and "as measured" dhkl for selected intrinsic dhkl. 
+  It can be useful e.g. for evaluation of smearing and pseudo-strain effects using another code (it can be faster than ray-tracing simulation, which can do it also, of course).<BR />
+  Relevant commands are saved in the script <code>engin-x-Fe-1mm-gauge.inp</code>. 
+  </TD>
+  </TR>
+  </TABLE>
+   </P>   
+  </DIV>
+]]>
+</HTML>
+<COMMANDS>
+	<COMMAND class="SAVE" id="SAVE" name="save configuration">
+		<FILE name="file name">default.xml</FILE>
+		<OVER name="overwrite" value="1">yes</OVER>
+	</COMMAND>
+	<COMMAND class="MC" id="MC" name="run MC simulation">
+	</COMMAND>
+	<COMMAND class="GRFDEV" id="GRFDEV" name="set grapic device">
+		<FILE name="file name">restrax.ps</FILE>
+		<DEVICE name="device ID">/JSDRIV</DEVICE>
+	</COMMAND>
+	<COMMAND class="GRSAVE" id="GRSAVE" name="save graphics">
+		<FILE name="file name">D:\Data\ENGIN-X\2015\simres\pk110T_SS=+1_z=-5.5.dat</FILE>
+		<OVER name="overwrite" value="0">no</OVER>
+	</COMMAND>
+	<COMMAND class="LOAD" id="LOAD" name="load configuration">
+		<FILE name="file name"></FILE>
+	</COMMAND>
+	<COMMAND class="CLOAD" id="CLOAD" name="load component">
+		<ID name="component ID">ID</ID>
+		<FILE name="file name">mono.xml</FILE>
+	</COMMAND>
+	<COMMAND class="CSAVE" id="CSAVE" name="save component">
+		<ID name="component ID">MON</ID>
+		<FILE name="file name">csave.xml</FILE>
+		<OVER name="overwrite" value="1">yes</OVER>
+	</COMMAND>
+	<COMMAND class="CMDSAVE" id="CMDSAVE" name="save commands">
+		<FILE name="file name">cmdsave.xml</FILE>
+		<OVER name="overwrite" value="1">yes</OVER>
+	</COMMAND>
+	<COMMAND class="BEAM1D" id="BEAM1D" name="beam profile 1D">
+		<X name="x-variable" value="8">lambda</X>
+		<NP name="points">100</NP>
+		<X0 name="center" units=" ">0.0</X0>
+		<DX name="range" units=" ">2.0E-2</DX>
+		<XAUTO name="x-autoscale" value="1">yes</XAUTO>
+		<CAUTO name="ctr-autoscale" value="0">no</CAUTO>
+		<YLOG name="y-logscale" value="0">no</YLOG>
+		<ERR name="errors" value="0">no</ERR>
+		<GFIT name="fit gaussian" value="0">no</GFIT>
+		<APPEND name="append" value="0">no</APPEND>
+		<COORD name="reference frame" value="0">incident axis</COORD>
+		<FILT name="filter events">-1</FILT>
+		<COM name="comment">spectrum at the sample</COM>
+	</COMMAND>
+	<COMMAND class="DET1D" id="DET1D" name="detector data 1D">
+		<X name="x-variable" value="2">dhkl-TOF</X>
+		<NP name="points">120</NP>
+		<X0 name="center" units=" ">1.169</X0>
+		<DX name="range" units=" ">3.0E-2</DX>
+		<XAUTO name="x-autoscale" value="0">no</XAUTO>
+		<CAUTO name="ctr-autoscale" value="0">no</CAUTO>
+		<YLOG name="y-logscale" value="0">no</YLOG>
+		<ERR name="errors" value="1">yes</ERR>
+		<GFIT name="fit gaussian" value="0">no</GFIT>
+		<APPEND name="append" value="0">no</APPEND>
+		<FILT name="filter events">-1</FILT>
+		<COM name="comment">Fe110, trans, SS=-1, z=-5.5</COM>
+	</COMMAND>
+	<COMMAND class="BEAM2D" id="BEAM2D" name="beam map 2D">
+		<X name="x-variable" value="0">x</X>
+		<Y name="y-variable" value="2">z</Y>
+		<NX name="x-pixels">128</NX>
+		<NY name="y-pixels">128</NY>
+		<X0 name="x-center" units=" ">0.0</X0>
+		<DX name="x-range" units=" ">50.0</DX>
+		<Y0 name="y-center" units=" ">0.0</Y0>
+		<DY name="y-range" units=" ">5.0E-2</DY>
+		<AUTO name="autoscale" value="1">yes</AUTO>
+		<MINZ name="minimum z" value="0">minimum</MINZ>
+		<ZLOG name="z-logscale" value="0">no</ZLOG>
+		<APPEND name="append" value="0">no</APPEND>
+		<COORD name="reference frame" value="0">incident axis</COORD>
+		<FILT name="filter events">-1</FILT>
+		<COM name="comment">lam=1.8 src=C</COM>
+	</COMMAND>
+	<COMMAND class="GAUGE2D" id="GAUGE2D" name="gauge map 2D">
+		<X name="x-variable" value="0">x</X>
+		<Y name="y-variable" value="2">z</Y>
+		<Z name="z-variable" value="2">dhkl</Z>
+		<NX name="x-pixels">128</NX>
+		<NY name="y-pixels">128</NY>
+		<X0 name="x-center" units=" ">0.0</X0>
+		<DX name="x-range" units=" ">5.0</DX>
+		<Y0 name="y-center" units=" ">0.0</Y0>
+		<DY name="y-range" units=" ">5.0</DY>
+		<AUTO name="autoscale" value="0">no</AUTO>
+		<MINZ name="minimum z" value="0">minimum</MINZ>
+		<ZLOG name="z-logscale" value="0">no</ZLOG>
+		<APPEND name="append" value="0">no</APPEND>
+		<COORD name="reference frame" value="0">incident axis</COORD>
+		<FILT name="filter events">-1</FILT>
+		<COM name="comment">dump=events_SS_1mm.dat</COM>
+	</COMMAND>
+	<COMMAND class="DET2D" id="DET2D" name="detector data 2D">
+		<X name="x-variable" value="0">scattering angle</X>
+		<Y name="y-variable" value="3">TOF</Y>
+		<NX name="x-pixels">512</NX>
+		<NY name="y-pixels">512</NY>
+		<X0 name="x-center" units=" ">90.0</X0>
+		<DX name="x-range" units=" ">35.0</DX>
+		<Y0 name="y-center" units=" ">6.7E4</Y0>
+		<DY name="y-range" units=" ">3.0E4</DY>
+		<AUTO name="autoscale" value="1">yes</AUTO>
+		<ZLOG name="z-logscale" value="0">no</ZLOG>
+		<APPEND name="append" value="0">no</APPEND>
+		<FILT name="filter events">-1</FILT>
+		<COM name="comment">ferrite</COM>
+	</COMMAND>
+	<COMMAND class="RES1D" id="RES1D" name="resolution profile 1D">
+		<X name="x-variable" value="0">dQ/Q</X>
+		<NP name="points">128</NP>
+		<X0 name="center" units=" ">0.0</X0>
+		<DX name="range" units=" ">200.0</DX>
+		<XAUTO name="x-autoscale" value="0">no</XAUTO>
+		<YLOG name="y-logscale" value="0">no</YLOG>
+		<ERR name="errors" value="1">yes</ERR>
+		<GFIT name="fit gaussian" value="1">yes</GFIT>
+		<COM name="comment">user's comment</COM>
+	</COMMAND>
+	<COMMAND class="RES2D" id="RES2D" name="resolution map 2D">
+		<X name="x-variable" value="3">QX</X>
+		<Y name="y-variable" value="2">E</Y>
+		<NX name="x-pixels">128</NX>
+		<NY name="y-pixels">128</NY>
+		<X0 name="x-center" units=" ">0.0</X0>
+		<DX name="x-range" units=" ">0.3</DX>
+		<Y0 name="y-center" units=" ">0.0</Y0>
+		<DY name="y-range" units=" ">0.3</DY>
+		<AUTO name="autoscale" value="1">yes</AUTO>
+		<ZLOG name="z-logscale" value="0">no</ZLOG>
+		<COM name="comment">no comment</COM>
+	</COMMAND>
+	<COMMAND class="PLOT" id="PLOT" name="plot definition">
+		<TYPE name="type" value="7">DETECTOR 2D</TYPE>
+		<PRINT name="print" value="0">no</PRINT>
+		<ENABLED name="enabled" value="1">yes</ENABLED>
+	</COMMAND>
+	<COMMAND class="SCAN1D" id="SCAN1D" name="1D scan">
+		<VARS name="variables">SAM STA(3)</VARS>
+		<START name="start">-6</START>
+		<END name="end">0</END>
+		<NS name="steps">31</NS>
+		<IX name="x-coord">1</IX>
+		<IV name="value index">3</IV>
+		<TYPE name="result set" value="3">DETECTOR 1D</TYPE>
+		<FILE name="file name">S14-Fe211-T1.dat</FILE>
+	</COMMAND>
+	<COMMAND class="SCAN2D" id="SCAN2D" name="2D scan">
+		<XVAR name="x-variable">mon size(2)</XVAR>
+		<YVAR name="y-variable">mon ro(2)</YVAR>
+		<XMIN name="x-min" units=" ">100.0</XMIN>
+		<XMAX name="x-max" units=" ">200.0</XMAX>
+		<YMIN name="y-min" units=" ">0.4</YMIN>
+		<YMAX name="y-max" units=" ">0.9</YMAX>
+		<NX name="x-steps">32</NX>
+		<NY name="y-steps">32</NY>
+		<IV name="value index">1</IV>
+		<TYPE name="result set" value="0">BASIC</TYPE>
+		<FILE name="file name">scan2d.dat</FILE>
+	</COMMAND>
+	<COMMAND class="FMERIT" id="FMERIT" name="Figure of merit">
+		<COST name="cost" units=" ">1.0</COST>
+		<NORM name="norm" units=" ">1000.0</NORM>
+		<CHI2LIM name="chi-square limit" units=" ">1000.0</CHI2LIM>
+		<WEXP name="width exponent">1</WEXP>
+		<TYPE name="result set" value="0">BASIC</TYPE>
+		<FORMULA name="formula" value="0">Intensity</FORMULA>
+	</COMMAND>
+	<COMMAND class="SWARM" id="SWARM" name="Swarm optimizer">
+		<WCOST name="cost weight" units=" ">0.0</WCOST>
+		<ACC name="acceleration" units=" ">2.0</ACC>
+		<POWN name="individuality" units=" ">1.0E-1</POWN>
+		<PEXP name="explore probability" units=" ">1.0E-1</PEXP>
+		<SPREAD name="random spread" units="tol">10.0</SPREAD>
+		<NSPEC name="species">8</NSPEC>
+		<UPDLOOP name="update loops">0</UPDLOOP>
+		<AVE name="use average" value="0">no</AVE>
+		<TOUT name="timeout" units="hour">5.0</TOUT>
+		<NLOOPS name="loops">2000</NLOOPS>
+		<NSTOP name="stop limit">500</NSTOP>
+		<SPACE name="variable space type" value="0">all</SPACE>
+		<INPUT name="input parameters">hprof.psa</INPUT>
+		<OUTPUT name="output data">tmp.dat</OUTPUT>
+	</COMMAND>
+</COMMANDS>
+<OPTIONS>
+	<OPTION class="TRACING" id="TR" name="tracing options">
+		<DIR name="tracing direction" value="1">upstream</DIR>
+		<VARI name="variance reduction" value="1">yes</VARI>
+		<MAXV name="optimize limits" value="1">yes</MAXV>
+		<SWPOOL name="safety pool" value="1">yes</SWPOOL>
+		<CNT name="counts">10000</CNT>
+		<ELIMIT name="efficiency limit" units=" ">1.0E5</ELIMIT>
+		<PLIMIT name="precision limit" units=" ">1.0E-4</PLIMIT>
+		<DBC name="double cycle" value="0">no</DBC>
+		<MODE name="tracing mode" value="2">all</MODE>
+		<STORE name="storage mode" value="0">detector</STORE>
+		<GRAVITY name="gravity" units="G">0.0</GRAVITY>
+		<PSMODE name="sampling space" value="1">lambda-space</PSMODE>
+		<ADJT0 name="adjust T0" value="0">no</ADJT0>
+		<SAMPLING name="sampling distribution" value="0">uniform</SAMPLING>
+	</OPTION>
+	<OPTION class="REPORTS" id="REP" name="reports options">
+		<ELOG name="events log" value="0">no</ELOG>
+		<NRAYS name="log count">40</NRAYS>
+		<STATS name="statistics" value="0">no</STATS>
+		<VOL name="sampling volume" value="0">no</VOL>
+		<VARI name="variance reduction" value="0">no</VARI>
+		<PROG name="progress" value="1">yes</PROG>
+		<RES name="results" value="1">yes</RES>
+		<MAXV name="limits" value="0">no</MAXV>
+		<TIME name="interval" units="s">1.0</TIME>
+	</OPTION>
+</OPTIONS>
+<INSTRUMENT>
+	<CFGTITLE>BEER guides, baseline 2015 for direct line of sight</CFGTITLE>
+	<INTERFACE>
+		<SPECTROMETER class="SPECTROMETER" id="INST" name="basic instrument interface">
+			<INPSET name="input parameter set" value="0">diffraction</INPSET>
+			<FIX name="fixed K" value="0">Ki</FIX>
+			<KI name="Ki" units="A^-1">3.7999</KI>
+			<KF name="Kf" units="A^-1">3.7999</KF>
+			<Q0 name="Q" units="A^-1">5.3739</Q0>
+			<EN name="energy" units="meV">0.0</EN>
+			<LAMBDA name="wavelength" units="A">1.6535</LAMBDA>
+			<THETA name="thetaS" units="deg">90.0</THETA>
+			<SS name="sign of thetaS" value="1">+1</SS>
+			<PSI name="psi" units="deg">0.0</PSI>
+			<ADJ name="auto-adjust instrument" value="0">no</ADJ>
+			<ORISAM name="auto-orient sample" value="0">no</ORISAM>
+			<KFMODE name="off-plane Kf mode" value="0">flat</KFMODE>
+			<QCONST name="Q constant" value="1">yes</QCONST>
+			<OFFPL name="Q off-plane" value="0">no</OFFPL>
+			<FLATCONE name="flat-cone analyzer" value="0">no</FLATCONE>
+		</SPECTROMETER>
+	</INTERFACE>
+	<SPECIMEN>
+		<FRAME class="PCRYST" id="SAM" name="powder a-Fe">
+			<DIST name="distance" units="mm">50.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="1">stage on gonio</ORDER>
+			<SIZE name="dimensions" units="mm">60.0 60.0 10.0</SIZE>
+			<AX name="axis" units="deg">90.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">135.0 0.0 90.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<SAMPLE>
+				<TYPE name="type" value="2">powder</TYPE>
+				<SGN name="sign" value="1">+1</SGN>
+				<SIGSC name="Sigma_s" units="cm^-1">1.0E-1</SIGSC>
+				<SIGA name="Sigma_a" units="cm^-1A^-1">0.121</SIGA>
+				<SIGI name="Sigma_i" units="cm^-1">0.68</SIGI>
+				<TEMP name="temperature" units="K">300.0</TEMP>
+				<TRANS name="allow transmission" value="0">no</TRANS>
+				<SCATT name="allow scattering" value="1">yes</SCATT>
+				<MAG name="magnetic field" units="gauss">0.0 0.0 0.0</MAG>
+				<STRAIN name="strain" units=" ">0.0 0.0 0.0</STRAIN>
+				<PRESS name="isotropic pressure" units="MPa">0.0</PRESS>
+				<PCRYST>
+					<FHKL name="structure factor" units="fm.A^-3">0.802</FHKL>
+					<DHKL name="d-spacing" units="A">1.169</DHKL>
+					<THETA name="scattering angle" units="deg">90.0197</THETA>
+					<DD name="d-spread" units=" ">0.0</DD>
+					<GRAIN name="grain size" units="um">0.0</GRAIN>
+					<JHKL name="plane multiplicity">24</JHKL>
+					<REFTAB name="reflections table">none</REFTAB>
+					<STRTAB name="strain table index">0</STRTAB>
+				</PCRYST>
+			</SAMPLE>
+		</FRAME>
+	</SPECIMEN>
+	<PRIMARY>
+		<FRAME class="SOURCE" id="SOURCE" name="ISIS CH4">
+			<DIST name="distance" units="mm">0.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">120.0 115.0 1.0E-1</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<SOURCE>
+				<FLUX name="flux" units="10^14/s/cm^2">1.0</FLUX>
+				<TEMP name="temperature" units="K">0.0</TEMP>
+				<LAMW name="wavelength band" units="rel">1.5385</LAMW>
+				<FLUXTAB name="flux table">ISIS-hrpd.tab</FLUXTAB>
+				<TYPE name="type" value="1">pulsed</TYPE>
+				<FRQ name="frequency" units="Hz">25.0</FRQ>
+				<DELAY name="delay time" units="ms">0.155</DELAY>
+				<OVERLAP name="allow overlap" value="0">no</OVERLAP>
+				<PULSW name="pulse width" units="ms">0.0</PULSW>
+			</SOURCE>
+		</FRAME>
+		<FRAME class="GUIDE" id="G0" name="shutter guide m=2">
+			<DIST name="distance" units="mm">1000.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">25.0 60.0 3000.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="1">guide or bender</TYPE>
+				<EXIT name="exit window" units="mm">25.0 60.0</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-1 1.0E-1</DL>
+				<M name="m-value" units="Ni_nat">2.0 2.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="0">absorbing</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+				<OSC name="oscillate" value="0">no</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="GUIDE" id="G1" name="curved guide">
+			<DIST name="distance" units="mm">3001.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">25.0 60.0 3.3E4</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="1">guide or bender</TYPE>
+				<EXIT name="exit window" units="mm">25.0 60.0</EXIT>
+				<RO name="curvature" units="m^-1">-2.0E-4 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-1 1.0E-1</DL>
+				<M name="m-value" units="Ni_nat">3.0 3.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="0">absorbing</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+				<OSC name="oscillate" value="0">no</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="GUIDE" id="G2" name="straight guide">
+			<DIST name="distance" units="mm">3.301E4</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">25.0 60.0 9000.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="1">guide or bender</TYPE>
+				<EXIT name="exit window" units="mm">25.0 60.0</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-1 1.0E-1</DL>
+				<M name="m-value" units="Ni_nat">3.0 3.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="0">absorbing</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+				<OSC name="oscillate" value="0">no</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="FRAME" id="S1" name="slit 1">
+			<DIST name="distance" units="mm">9010.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">14.0 60.0 1.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+		</FRAME>
+		<FRAME class="GUIDE" id="G3" name="straight guide">
+			<DIST name="distance" units="mm">10.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">25.0 60.0 2500.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="1">guide or bender</TYPE>
+				<EXIT name="exit window" units="mm">25.0 60.0</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-1 1.0E-1</DL>
+				<M name="m-value" units="Ni_nat">3.0 3.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="0">absorbing</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+				<OSC name="oscillate" value="0">no</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="FRAME" id="S2" name="slit 2">
+			<DIST name="distance" units="mm">2510.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">7.2 60.0 1.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+		</FRAME>
+		<FRAME class="FRAME" id="S3" name="slit 3">
+			<DIST name="distance" units="mm">1450.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">2.0 5.0 1.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+		</FRAME>
+	</PRIMARY>
+	<SECONDARY>
+		<FRAME class="GUIDE" id="GUIDE" name="radial collimator">
+			<DIST name="distance" units="mm">310.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">173.0 222.6 350.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="0">soller or coarse</TYPE>
+				<EXIT name="exit window" units="mm">369.0 451.0</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">160 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-1 5.0E-2</DL>
+				<M name="m-value" units="Ni_nat">0.0 0.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="0">absorbing</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+				<OSC name="oscillate" value="1">yes</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="DETECTOR" id="DET" name="detector">
+			<DIST name="distance" units="mm">1220.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">744.0 1000.0 2.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<DETECTOR>
+				<TYPE name="type" value="3">cylindrical</TYPE>
+				<RES name="resolution" units="mm">2.0 2.0</RES>
+				<ALPHA name="efficiency" units="A^-1.cm^-1">100.0</ALPHA>
+				<RAD name="radius" units="mm">1530.0</RAD>
+				<THMIN name="theta min." units="deg">75.0</THMIN>
+				<THMAX name="theta max." units="deg">105.0</THMAX>
+				<SPACE name="spacing" units="mm">0.0</SPACE>
+				<ND name="tubes">1</ND>
+			</DETECTOR>
+		</FRAME>
+	</SECONDARY>
+</INSTRUMENT>
+<SCRIPT type="command">
+# Through surface-scan in ferrite sample, 10 mm thick plate
+# Scan each reflection separately,
+# To be used with configuration: engin-x-Fe.xml
+# ----------------------------------------------------------
+# adjust scan command parameters:
+
+# number of points
+cmd SCAN1D NS 31
+
+# use DET1D plot for peak evaluation (check other settings in the DET1D plot dialog)
+cmd SCAN1D TYPE 3
+
+# show peak position
+cmd SCAN1D IV 3
+
+# adjust sample data for 211 reflection at 90 deg
+set INST LAMBDA 1.6535
+set SAM SIGI 0.68
+set SAM DHKL 1.169
+set SAM JHKL 24
+
+# adjust d-range for the DET1D plot
+cmd DET1D X0 1.169
+cmd DET1D XAUTO 0
+XML UPDATE
+
+
+# set BANK1 (left) for transmission if SS=+1
+set SAM GON(1) 135
+set SAM GON(3) 90.0
+XML UPDATE
+
+#------------------------------------------------
+# adjust collimation, divergence slit 14 mm
+set S1 SIZE(1) 14.0
+XML S1
+set S2 SIZE(1) 7.2
+XML S2
+
+#-----------------------------------------------
+# simulate one peak and see the profile:
+DO MC
+DO DET1D
+# and ToF vs. 2 theta plot
+DO DET2D
+#  (see DET1D and DET2D dialog for other plot options)
+
+#--------------------------------------------------
+# Run the scans
+
+# scan in transmission geometry (BANK1), set SS = +1
+set INST SS 1
+XML UPDATE
+
+# front face
+cmd SCAN1D START -6
+cmd SCAN1D END 0
+cmd SCAN1D FILE S14-Fe211-T1.dat
+DO SCAN1D
+
+# back  face
+cmd SCAN1D START 0
+cmd SCAN1D END 6
+cmd SCAN1D FILE S14-Fe211-T2.dat
+DO SCAN1D
+
+# scan in reflection geometry (BANK2), set SS = -1
+set INST SS -1
+XML UPDATE
+
+# front face
+cmd SCAN1D START -6
+cmd SCAN1D END 0
+cmd SCAN1D FILE S14-Fe211-R1.dat
+DO SCAN1D
+
+# back  face
+cmd SCAN1D START 0
+cmd SCAN1D END 6
+cmd SCAN1D FILE S14-Fe211-R2.dat
+DO SCAN1D
+
+
+
+
+
+</SCRIPT>
+</SIMRES>

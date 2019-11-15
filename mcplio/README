@@ -1,0 +1,20 @@
+Source files for compiling libmcplio.so library.
+This library provides MCPL I/O functions to SIMRES.
+
+See the mcpl/* for the 3rd party MCPL files. 
+See https://github.com/mctools/mcpl for the MCPL project.
+
+How to compile mcplio.so with gcc:
+
+BINDIR=.
+MCPL=libmcplio.so
+MCPLDIR=.
+MCPLOPT= -std=c99 -fPIC 
+$(BINDIR)/mcpl.o: $(MCPLDIR)/mcpl/mcpl.c $(MCPLDIR)/mcpl/mcpl.h 
+	gcc $(MCPLOPT) -c $(MCPLDIR)/mcpl/mcpl.c -o $(BINDIR)/mcpl.o 
+$(BINDIR)/mcplio.o: $(MCPLDIR)/mcplio.c $(MCPLDIR)/mcplio.h 
+	gcc $(MCPLOPT) -c $(MCPLDIR)/mcplio.c -o $(BINDIR)/mcplio.o 
+$(MCPL): $(MCPLDIR)/mcpl.o $(MCPLDIR)/mcplio.o 
+	gcc -shared $(MCPLOPT) $(BINDIR)/mcpl.o $(BINDIR)/mcplio.o -Wl,--out-implib,$(BINDIR)/mcplio.lib -o $(MCPL)
+
+

@@ -1,0 +1,1035 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SIMRES version="6.3.6">
+<COMMANDS>
+	<COMMAND class="SAVE" id="SAVE" name="save configuration">
+		<FILE name="file name">default.xml</FILE>
+		<OVER name="overwrite" value="1">yes</OVER>
+	</COMMAND>
+	<COMMAND class="MC" id="MC" name="run MC simulation">
+	</COMMAND>
+	<COMMAND class="GRFDEV" id="GRFDEV" name="set grapic device">
+		<FILE name="file name">restrax.ps</FILE>
+		<DEVICE name="device ID">/JSDRIV</DEVICE>
+	</COMMAND>
+	<COMMAND class="GRSAVE" id="GRSAVE" name="save graphics">
+		<FILE name="file name">wafer_3m-001_L051.dat</FILE>
+		<OVER name="overwrite" value="1">yes</OVER>
+	</COMMAND>
+	<COMMAND class="LOAD" id="LOAD" name="load configuration">
+		<FILE name="file name"></FILE>
+	</COMMAND>
+	<COMMAND class="CLOAD" id="CLOAD" name="load component">
+		<ID name="component ID">ID</ID>
+		<FILE name="file name">mono.xml</FILE>
+	</COMMAND>
+	<COMMAND class="CSAVE" id="CSAVE" name="save component">
+		<ID name="component ID">MON</ID>
+		<FILE name="file name">csave.xml</FILE>
+		<OVER name="overwrite" value="1">yes</OVER>
+	</COMMAND>
+	<COMMAND class="CMDSAVE" id="CMDSAVE" name="save commands">
+		<FILE name="file name">cmdsave.xml</FILE>
+		<OVER name="overwrite" value="1">yes</OVER>
+	</COMMAND>
+	<COMMAND class="BEAM1D" id="BEAM1D" name="beam profile 1D">
+		<X name="x-variable" value="8">lambda</X>
+		<NP name="points">200</NP>
+		<X0 name="center" units=" ">3.0</X0>
+		<DX name="range" units=" ">2.0</DX>
+		<XAUTO name="x-autoscale" value="0">no</XAUTO>
+		<CAUTO name="ctr-autoscale" value="0">no</CAUTO>
+		<YLOG name="y-logscale" value="0">no</YLOG>
+		<ERR name="errors" value="1">yes</ERR>
+		<GFIT name="fit gaussian" value="0">no</GFIT>
+		<APPEND name="append" value="0">no</APPEND>
+		<COORD name="reference frame" value="0">incident axis</COORD>
+		<FILT name="filter events">-1</FILT>
+		<COM name="comment">transmitted spectrum</COM>
+	</COMMAND>
+	<COMMAND class="DET1D" id="DET1D" name="detector data 1D">
+		<X name="x-variable" value="2">dhkl-TOF</X>
+		<NP name="points">863</NP>
+		<X0 name="center" units=" ">1.6</X0>
+		<DX name="range" units=" ">1.2</DX>
+		<XAUTO name="x-autoscale" value="0">no</XAUTO>
+		<CAUTO name="ctr-autoscale" value="0">no</CAUTO>
+		<YLOG name="y-logscale" value="0">no</YLOG>
+		<ERR name="errors" value="0">no</ERR>
+		<GFIT name="fit gaussian" value="0">no</GFIT>
+		<APPEND name="append" value="0">no</APPEND>
+		<FILT name="filter events">-1</FILT>
+		<COM name="comment">Fe incoherent, M7 , LR, cold</COM>
+	</COMMAND>
+	<COMMAND class="BEAM2D" id="BEAM2D" name="beam map 2D">
+		<X name="x-variable" value="0">x</X>
+		<Y name="y-variable" value="1">y</Y>
+		<NX name="x-pixels">200</NX>
+		<NY name="y-pixels">200</NY>
+		<X0 name="x-center" units=" ">0.0</X0>
+		<DX name="x-range" units=" ">40.0</DX>
+		<Y0 name="y-center" units=" ">0.0</Y0>
+		<DY name="y-range" units=" ">40.0</DY>
+		<AUTO name="autoscale" value="0">no</AUTO>
+		<MINZ name="minimum z" value="0">minimum</MINZ>
+		<ZLOG name="z-logscale" value="0">no</ZLOG>
+		<APPEND name="append" value="0">no</APPEND>
+		<COORD name="reference frame" value="1">local</COORD>
+		<FILT name="filter events">-1</FILT>
+		<COM name="comment">lam=1.8 src=C</COM>
+	</COMMAND>
+	<COMMAND class="GAUGE2D" id="GAUGE2D" name="gauge map 2D">
+		<X name="x-variable" value="0">x</X>
+		<Y name="y-variable" value="1">y</Y>
+		<Z name="z-variable" value="0">intensity</Z>
+		<NX name="x-pixels">256</NX>
+		<NY name="y-pixels">256</NY>
+		<X0 name="x-center" units=" ">0.0</X0>
+		<DX name="x-range" units=" ">200.0</DX>
+		<Y0 name="y-center" units=" ">0.0</Y0>
+		<DY name="y-range" units=" ">200.0</DY>
+		<AUTO name="autoscale" value="0">no</AUTO>
+		<MINZ name="minimum z" value="0">minimum</MINZ>
+		<ZLOG name="z-logscale" value="0">no</ZLOG>
+		<APPEND name="append" value="0">no</APPEND>
+		<COORD name="reference frame" value="0">incident axis</COORD>
+		<FILT name="filter events">-1</FILT>
+		<COM name="comment">x,y profile for z-scan</COM>
+	</COMMAND>
+	<COMMAND class="DET2D" id="DET2D" name="detector data 2D">
+		<X name="x-variable" value="0">scattering angle</X>
+		<Y name="y-variable" value="3">TOF</Y>
+		<NX name="x-pixels">512</NX>
+		<NY name="y-pixels">512</NY>
+		<X0 name="x-center" units=" ">90.0</X0>
+		<DX name="x-range" units=" ">35.0</DX>
+		<Y0 name="y-center" units=" ">6.7E4</Y0>
+		<DY name="y-range" units=" ">3.0E4</DY>
+		<AUTO name="autoscale" value="1">yes</AUTO>
+		<MINZ name="minimum z" value="0">minimum</MINZ>
+		<ZLOG name="z-logscale" value="0">no</ZLOG>
+		<APPEND name="append" value="0">no</APPEND>
+		<FILT name="filter events">-1</FILT>
+		<COM name="comment">lam=1.42,  low  resolution,  det=90</COM>
+	</COMMAND>
+	<COMMAND class="RES1D" id="RES1D" name="resolution profile 1D">
+		<X name="x-variable" value="0">dQ/Q</X>
+		<NP name="points">128</NP>
+		<X0 name="center" units=" ">0.0</X0>
+		<DX name="range" units=" ">200.0</DX>
+		<XAUTO name="x-autoscale" value="0">no</XAUTO>
+		<YLOG name="y-logscale" value="0">no</YLOG>
+		<ERR name="errors" value="1">yes</ERR>
+		<GFIT name="fit gaussian" value="1">yes</GFIT>
+		<COM name="comment">user's comment</COM>
+	</COMMAND>
+	<COMMAND class="RES2D" id="RES2D" name="resolution map 2D">
+		<X name="x-variable" value="3">QX</X>
+		<Y name="y-variable" value="2">E</Y>
+		<NX name="x-pixels">128</NX>
+		<NY name="y-pixels">128</NY>
+		<X0 name="x-center" units=" ">0.0</X0>
+		<DX name="x-range" units=" ">0.3</DX>
+		<Y0 name="y-center" units=" ">0.0</Y0>
+		<DY name="y-range" units=" ">0.3</DY>
+		<AUTO name="autoscale" value="1">yes</AUTO>
+		<ZLOG name="z-logscale" value="0">no</ZLOG>
+		<COM name="comment">no comment</COM>
+	</COMMAND>
+	<COMMAND class="PLOT" id="PLOT" name="plot definition">
+		<TYPE name="type" value="0">BEAM 1D</TYPE>
+		<PRINT name="print" value="0">no</PRINT>
+		<ENABLED name="enabled" value="1">yes</ENABLED>
+	</COMMAND>
+	<COMMAND class="SCAN1D" id="SCAN1D" name="1D scan">
+		<VARS name="variables">GS1 WAV</VARS>
+		<START name="start">0</START>
+		<END name="end">3</END>
+		<NS name="steps">7</NS>
+		<IX name="x-coord">1</IX>
+		<IV name="value index">1</IV>
+		<TYPE name="result set" value="5">BEAM PEAK</TYPE>
+		<FILE name="file name">test4-wav-down.dat</FILE>
+	</COMMAND>
+	<COMMAND class="SCAN2D" id="SCAN2D" name="2D scan">
+		<XVAR name="x-variable">mon size(2)</XVAR>
+		<YVAR name="y-variable">mon ro(2)</YVAR>
+		<XMIN name="x-min" units=" ">100.0</XMIN>
+		<XMAX name="x-max" units=" ">200.0</XMAX>
+		<YMIN name="y-min" units=" ">0.4</YMIN>
+		<YMAX name="y-max" units=" ">0.9</YMAX>
+		<NX name="x-steps">32</NX>
+		<NY name="y-steps">32</NY>
+		<IV name="value index">1</IV>
+		<TYPE name="result set" value="0">BASIC</TYPE>
+		<FILE name="file name">scan2d.dat</FILE>
+	</COMMAND>
+	<COMMAND class="FMERIT" id="FMERIT" name="Figure of merit">
+		<COST name="cost" units=" ">1.0</COST>
+		<NORM name="norm" units=" ">1.0E6</NORM>
+		<CHI2LIM name="chi-square limit" units=" ">1000.0</CHI2LIM>
+		<WEXP name="width exponent">1</WEXP>
+		<TYPE name="result set" value="3">DETECTOR 1D</TYPE>
+		<FORMULA name="formula" value="3">Intensity/width^2</FORMULA>
+	</COMMAND>
+	<COMMAND class="SWARM" id="SWARM" name="Swarm optimizer">
+		<WCOST name="cost weight" units=" ">0.0</WCOST>
+		<ACC name="acceleration" units=" ">2.0</ACC>
+		<POWN name="individuality" units=" ">1.0E-1</POWN>
+		<PEXP name="explore probability" units=" ">1.0E-1</PEXP>
+		<SPREAD name="random spread" units="tol">10.0</SPREAD>
+		<NSPEC name="species">15</NSPEC>
+		<UPDLOOP name="update loops">0</UPDLOOP>
+		<AVE name="use average" value="0">no</AVE>
+		<TOUT name="timeout" units="hour">48.0</TOUT>
+		<NLOOPS name="loops">2000</NLOOPS>
+		<NSTOP name="stop limit">200</NSTOP>
+		<SPACE name="variable space type" value="0">all</SPACE>
+		<INPUT name="input parameters">tof-mpk-red.inp</INPUT>
+		<OUTPUT name="output data">opt-tof-mpk-n1-red.dat</OUTPUT>
+	</COMMAND>
+</COMMANDS>
+<OPTIONS>
+	<OPTION class="TRACING" id="TR" name="tracing options">
+		<DIR name="tracing direction" value="0">downstream</DIR>
+		<VARI name="variance reduction" value="1">yes</VARI>
+		<MAXV name="optimize limits" value="1">yes</MAXV>
+		<SWPOOL name="safety pool" value="1">yes</SWPOOL>
+		<CNT name="counts">500000</CNT>
+		<ELIMIT name="efficiency limit" units=" ">1.0E5</ELIMIT>
+		<PLIMIT name="precision limit" units=" ">1.0E-4</PLIMIT>
+		<DBC name="double cycle" value="0">no</DBC>
+		<MODE name="tracing mode" value="0">primary</MODE>
+		<STORE name="storage mode" value="0">detector</STORE>
+		<GRAVITY name="gravity" units="G">0.0</GRAVITY>
+		<PSMODE name="sampling space" value="1">lambda-space</PSMODE>
+		<ADJT0 name="adjust T0" value="0">no</ADJT0>
+		<SAMPLING name="sampling distribution" value="0">uniform</SAMPLING>
+	</OPTION>
+	<OPTION class="REPORTS" id="REP" name="reports options">
+		<ELOG name="events log" value="0">no</ELOG>
+		<NRAYS name="log count">40</NRAYS>
+		<STATS name="statistics" value="0">no</STATS>
+		<VOL name="sampling volume" value="0">no</VOL>
+		<VARI name="variance reduction" value="0">no</VARI>
+		<PROG name="progress" value="1">yes</PROG>
+		<RES name="results" value="1">yes</RES>
+		<MAXV name="limits" value="0">no</MAXV>
+		<TIME name="interval" units="s">1.0</TIME>
+	</OPTION>
+</OPTIONS>
+<INSTRUMENT>
+	<CFGTITLE>test bi-spectral optics</CFGTITLE>
+	<INTERFACE>
+		<SPECTROMETER class="SPECTROMETER" id="INST" name="basic instrument interface">
+			<INPSET name="input parameter set" value="0">diffraction</INPSET>
+			<FIX name="fixed K" value="0">Ki</FIX>
+			<KI name="Ki" units="A^-1">2.0944</KI>
+			<KF name="Kf" units="A^-1">2.0944</KF>
+			<Q0 name="Q" units="A^-1">0.10417</Q0>
+			<EN name="energy" units="meV">0.0</EN>
+			<LAMBDA name="wavelength" units="A">3.0</LAMBDA>
+			<THETA name="thetaS" units="deg">2.85</THETA>
+			<SS name="sign of thetaS" value="1">+1</SS>
+			<PSI name="psi" units="deg">0.0</PSI>
+			<ADJ name="auto-adjust instrument" value="0">no</ADJ>
+			<ORISAM name="auto-orient sample" value="1">yes</ORISAM>
+			<KFMODE name="off-plane Kf mode" value="0">flat</KFMODE>
+			<QCONST name="Q constant" value="1">yes</QCONST>
+			<OFFPL name="Q off-plane" value="0">no</OFFPL>
+			<FLATCONE name="flat-cone analyzer" value="0">no</FLATCONE>
+		</SPECTROMETER>
+	</INTERFACE>
+	<PRIMARY>
+		<FRAME class="SOURCE" id="SOURCE" name="source">
+			<DIST name="distance" units="mm">0.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">50.0 50.0 1.0E-1</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<SOURCE>
+				<FLUX name="flux" units="10^14/s/cm^2">1.0</FLUX>
+				<TEMP name="temperature" units="K">20.0</TEMP>
+				<LAMW name="wavelength band" units="rel">0.66667</LAMW>
+				<FLUXTAB name="flux table">flux_flat.tab</FLUXTAB>
+				<TYPE name="type" value="0">steady-state</TYPE>
+				<FRQ name="frequency" units="Hz">1.0</FRQ>
+				<DELAY name="delay time" units="ms">0.0</DELAY>
+				<OVERLAP name="allow overlap" value="0">no</OVERLAP>
+				<PULSW name="pulse width" units="ms">0.0</PULSW>
+			</SOURCE>
+		</FRAME>
+		<FRAME class="FRAME" id="SLIT0" name=" slit 0">
+			<DIST name="distance" units="mm">1000.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">6.0 9.0 1.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+		</FRAME>
+		<FRAME class="FRAME" id="SLIT1" name=" slit 1">
+			<DIST name="distance" units="mm">1380.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">1.5 7.0 1.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+		</FRAME>
+		<FRAME class="XTAL" id="XTAL" name="bent Si">
+			<DIST name="distance" units="mm">550.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">200.0 20.0 0.675</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">2.6 0.0 90.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<XTAL>
+				<CRID name="crystal" value="0">Si</CRID>
+				<ORI name="orientation" units="hkl">1.0 0.0 0.0</ORI>
+				<REF name="reflection" length="39" selected="0">
+					<ITEM>0 0 0</ITEM>
+					<ITEM>1 1 1</ITEM>
+					<ITEM>1 1 -1</ITEM>
+					<ITEM>0 2 2</ITEM>
+					<ITEM>2 0 2</ITEM>
+					<ITEM>2 2 0</ITEM>
+					<ITEM>0 2 -2</ITEM>
+					<ITEM>2 0 -2</ITEM>
+					<ITEM>1 3 -1</ITEM>
+					<ITEM>1 3 1</ITEM>
+					<ITEM>3 1 -1</ITEM>
+					<ITEM>3 1 1</ITEM>
+					<ITEM>1 1 3</ITEM>
+					<ITEM>0 4 0</ITEM>
+					<ITEM>4 0 0</ITEM>
+					<ITEM>1 3 -3</ITEM>
+					<ITEM>3 1 -3</ITEM>
+					<ITEM>1 3 3</ITEM>
+					<ITEM>3 1 3</ITEM>
+					<ITEM>3 3 -1</ITEM>
+					<ITEM>3 3 1</ITEM>
+					<ITEM>4 2 2</ITEM>
+					<ITEM>2 4 -2</ITEM>
+					<ITEM>2 4 2</ITEM>
+					<ITEM>4 2 -2</ITEM>
+					<ITEM>3 3 3</ITEM>
+					<ITEM>5 1 -1</ITEM>
+					<ITEM>5 1 1</ITEM>
+					<ITEM>1 5 -1</ITEM>
+					<ITEM>3 3 -3</ITEM>
+					<ITEM>1 5 1</ITEM>
+					<ITEM>4 4 0</ITEM>
+					<ITEM>5 3 -1</ITEM>
+					<ITEM>3 5 1</ITEM>
+					<ITEM>3 5 -1</ITEM>
+					<ITEM>5 3 1</ITEM>
+					<ITEM>6 2 0</ITEM>
+					<ITEM>2 6 0</ITEM>
+					<ITEM>5 5 1</ITEM>
+				</REF>
+				<SGN name="sign" value="0">-1</SGN>
+				<A name="reference vector A">0 0 1</A>
+				<B name="reference vector B">1 1 0</B>
+				<CHI name="cut angle horizontal" units="deg">0.0</CHI>
+				<PSI name="cut angle vertical" units="deg">0.0</PSI>
+				<POISS name="Poisson" units=" ">0.3</POISS>
+				<RHO name="horizontal bending" units="m^-1">0.33</RHO>
+				<RHV name="vertical bending" units="m^-1">0.0</RHV>
+				<NSW name="sandwich layers">1</NSW>
+				<SWGAP name="sandwich gaps" units="mm">5.0E-3</SWGAP>
+				<T name="temperature" units="K">298.0</T>
+				<DT name="temperature gradient" units="K/mm">0.0 0.0 0.0</DT>
+				<VFOC name="vertical focusing">
+					<NSEG name="segments">1</NSEG>
+					<GAP name="gaps" units="mm">1.0E-3</GAP>
+					<RHO name="curvature" units="m^-1">0.0</RHO>
+					<BENT name="bent surface" value="1">yes</BENT>
+					<STACK name="curved stack" value="0">no</STACK>
+					<AUTO name="autofocus" value="0">no</AUTO>
+					<FOC1 name="source distance" units="m">100.0</FOC1>
+					<FOC2 name="target distance" units="m">2.3</FOC2>
+				</VFOC>
+				<HFOC name="horizontal focusing">
+					<NSEG name="segments">1</NSEG>
+					<GAP name="gaps" units="mm">1.0E-3</GAP>
+					<RHO name="curvature" units="m^-1">0.33</RHO>
+					<BENT name="bent surface" value="1">yes</BENT>
+					<STACK name="curved stack" value="0">no</STACK>
+					<AUTO name="autofocus" value="0">no</AUTO>
+					<FOC1 name="source distance" units="m">2.3</FOC1>
+					<FOC2 name="target distance" units="m">2.3</FOC2>
+				</HFOC>
+				<AUTOADJ name="autoadjust" value="0">no</AUTOADJ>
+				<DKK name="delta_k/k" units=" ">1.0</DKK>
+				<UMWEG name="multiple reflections">1</UMWEG>
+				<MAXHKL name="max. reflection index">20</MAXHKL>
+			</XTAL>
+		</FRAME>
+		<FRAME class="MONITOR" id="M2" name="beam monitor">
+			<DIST name="distance" units="mm">100.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">50.0 50.0 1.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<MONITOR>
+				<CMODE name="counting mode" value="0">sum</CMODE>
+				<IX name="x-variable" value="0">x</IX>
+				<IY name="y-variable" value="3">kx/k</IY>
+				<X0 name="x-center" units=" ">0.0</X0>
+				<DX name="x-range" units=" ">5.0</DX>
+				<Y0 name="y-center" units=" ">0.0</Y0>
+				<DY name="y-range" units=" ">2.0E-3</DY>
+				<BLOCK name="blocking area" value="0">no</BLOCK>
+			</MONITOR>
+		</FRAME>
+	</PRIMARY>
+</INSTRUMENT>
+<SCRIPT type="command">
+# Parasitic and multiple reflections in a bent Si wafer.
+# This example simulates an experiment with transmision of neutrons through 
+# a Si single crystal wafer as a function of elastic bending.
+# It demonstrates the capability of the component XTAL to simulate multiple reflections 
+# in elastically deformed single crystals  
+# To be used with configuration: multiref.xml
+# ----------------------------------------------------------
+
+# The script sections below simulate the transmitted spectra in several wavlength ranges.
+# At short wavelengths, the range has to be kept narrow 
+# due to the large number of contributing reflections 
+
+# See simres-guide.pdf for more details about the XTAL component
+
+# 0.675 um wafer
+set XTAL DIST 550.0
+set XTAL SIZE 200  20 0.675
+set XTAL GON 2.6 0 90
+set XTAL A 0 0 1
+set XTAL B 1 1 0
+set XTAL NSW 1
+set XTAL HFOC.RHO 0.33
+XML XTAL
+
+
+# preparation
+set SOURCE LAMW 0.667
+XML SOURCE
+cmd BEAM1D NP 300
+cmd BEAM1D X0 2.5
+cmd BEAM1D DX 3.0
+cmd GRSAVE OVER yes
+set XTAL DKK 0.2
+set XTAL SIZE(3) 0.675
+set XTAL GON 2.6 0 90
+
+XML XTAL
+set TR CNT 500000
+
+
+#------------------------------------------
+# cut 001/110, slit 6x9
+#------------------------------------------
+set SLIT0 SIZE  6 9 1
+XML SLIT0
+set XTAL A  0 0 1
+set XTAL B  1 1 0
+
+#--------------------------------------------------------------------
+# lambda=0.5 .. 0.52 A
+set INST LAMBDA 0.51
+set SOURCE LAMW 0.039216
+set XTAL DKK 0.045
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.51
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L051.dat
+do GRSAVE 
+
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L051.dat
+do GRSAVE 
+
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L051.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.52 .. 0.54 A
+set INST LAMBDA 0.53
+set SOURCE LAMW 0.037736
+set XTAL DKK 0.049
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.53
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L053.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L053.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L053.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.54 .. 0.56 A
+set INST LAMBDA 0.55
+set SOURCE LAMW 0.0363636
+set XTAL DKK 0.055
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.55
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L055.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L055.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L055.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.56 .. 0.58 A
+set INST LAMBDA 0.57
+set SOURCE LAMW 0.034904014
+set XTAL DKK 0.062
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.57
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L057.dat
+do GRSAVE 
+
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L057.dat
+do GRSAVE 
+
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L057.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.58 .. 0.60 A
+set INST LAMBDA 0.59
+set SOURCE LAMW 0.034904014
+set XTAL DKK 0.068
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.59
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L059.dat
+do GRSAVE 
+
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L059.dat
+do GRSAVE 
+
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L059.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.60 .. 0.62 A
+set INST LAMBDA 0.61
+set SOURCE LAMW 0.03279
+set XTAL DKK 0.077
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.61
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L061.dat
+do GRSAVE 
+
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L061.dat
+do GRSAVE 
+
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L061.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.62 .. 0.64 A
+set INST LAMBDA 0.63
+set SOURCE LAMW 0.031746
+set XTAL DKK 0.084
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.63
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L063.dat
+do GRSAVE 
+
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L063.dat
+do GRSAVE 
+
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L063.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.64 .. 0.66 A
+set INST LAMBDA 0.65
+set SOURCE LAMW 0.0307692
+set XTAL DKK 0.09
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.65
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L065.dat
+do GRSAVE 
+
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L065.dat
+do GRSAVE 
+
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L065.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.66 .. 0.68 A
+set INST LAMBDA 0.67
+set SOURCE LAMW 0.0298507
+set XTAL DKK 0.1
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.67
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L067.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L067.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L067.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+#  lambda=0.68 .. 0.70 A
+set INST LAMBDA 0.69
+set SOURCE LAMW 0.0289855
+set XTAL DKK 0.11
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.69
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L069.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L069.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L069.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.70 .. 0.75 A
+set INST LAMBDA 0.725
+set SOURCE LAMW 0.0689655
+set XTAL DKK 0.125
+set XTAL MAXHKL 20
+cmd BEAM1D NP 25
+cmd BEAM1D X0 0.725
+cmd BEAM1D DX 0.05
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L0725.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L0725.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L0725.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.75 .. 0.8 A
+set INST LAMBDA 0.775
+set SOURCE LAMW 0.064516
+set XTAL DKK 0.15
+set XTAL MAXHKL 20
+cmd BEAM1D NP 25
+cmd BEAM1D X0 0.775
+cmd BEAM1D DX 0.05
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L0775.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L0775.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L0775.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.8 .. 1.0 A
+set INST LAMBDA 0.9
+set SOURCE LAMW 0.22222
+set XTAL DKK 0.235
+set XTAL MAXHKL 20
+cmd BEAM1D NP 40
+cmd BEAM1D X0 0.9
+cmd BEAM1D DX 0.2
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L09.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L09.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L09.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+
+#--------------------------------------------------------------------
+# lambda=1.0 .. 1.2 A
+set INST LAMBDA 1.1
+set SOURCE LAMW 0.181818
+set XTAL DKK 0.22
+set XTAL MAXHKL 20
+cmd BEAM1D NP 40
+cmd BEAM1D X0 1.1
+cmd BEAM1D DX 0.2
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L11.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L11.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L11.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=1.2 .. 2.0 A
+set INST LAMBDA 1.6
+set SOURCE LAMW 0.5
+set XTAL DKK 0.7
+set XTAL MAXHKL 20
+cmd BEAM1D NP 80
+cmd BEAM1D X0 1.6
+cmd BEAM1D DX 0.8
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L16.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L16.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L16.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+#  lambda=2.0 .. 4.0 A
+set INST LAMBDA 3.0
+set SOURCE LAMW 0.66667
+set XTAL DKK 1.0
+set XTAL MAXHKL 20
+cmd BEAM1D NP 200
+cmd BEAM1D X0 3.0
+cmd BEAM1D DX 2.0
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L30.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L30.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L30.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+</SCRIPT>
+</SIMRES>

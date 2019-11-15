@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SIMRES version="6.3.5">
+	<FRAME class="GUIDE" id="C1" name="collimator 1">
+		<DIST name="distance" units="mm">1800.0</DIST>
+		<SHAPE name="shape" value="3">box</SHAPE>
+		<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+		<SIZE name="dimensions" units="mm">60.0 130.0 400.0</SIZE>
+		<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+		<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+		<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+		<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+		<GUIDE>
+			<TYPE name="type" value="0">soller or coarse</TYPE>
+			<EXIT name="exit window" units="mm">60.0 130.0</EXIT>
+			<RO name="curvature" units="m^-1">0.0 0.0</RO>
+			<N name="slits">21 1</N>
+			<DL name="lamella thickness" units="mm">0.5 0.5</DL>
+			<M name="m-value" units="Ni_nat">0.0 0.0</M>
+			<REF name="reflectivity" units=" ">0.0 0.0</REF>
+			<MATER name="blade material" value="0">absorbing</MATER>
+			<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+			<WAV name="waviness" units="mrad">0.2</WAV>
+			<MONITOR name="monitor" value="0">no</MONITOR>
+			<CLOSED name="closed" value="0">no</CLOSED>
+			<ONESIDE name="one-sided" value="0">no</ONESIDE>
+			<NODIR name="no direct view" value="0">no</NODIR>
+			<TRFRONT name="front transmission" value="0">no</TRFRONT>
+			<OSC name="oscillate" value="0">no</OSC>
+			<LOGBNC name="log bounces" value="0">none</LOGBNC>
+		</GUIDE>
+	</FRAME>
+</SIMRES>

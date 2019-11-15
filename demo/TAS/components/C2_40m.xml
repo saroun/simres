@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<SIMRES version="6.0.4">
+<INSTRUMENT redefine="no">
+  <PRIMARY>
+    <FRAME class="GUIDE" id="C2" name="C2">
+      <SHAPE name="shape" enum="FRAME_SHAPE" value="3">box</SHAPE>
+      <SIZE name="dimensions" units="mm">80 110 220</SIZE>
+      <AX name="axis" units="deg">0 0 0</AX>
+      <STA name="stage" units="mm">0 0 0</STA>
+      <GON name="gonio" units="deg">0 0 0</GON>
+      <VEL name="velocity" units="m.s^-1">0 0 0</VEL>
+      <GUIDE>
+        <TYPE name="type" enum="GUIDE_TYPE" value="0">soller or coarse</TYPE>
+        <EXIT name="exit window" units="mm">80 110</EXIT>
+        <RO name="curvature" units="m^-1">0 0</RO>
+        <N name="slits">30 1</N>
+        <DL name="lamella thickness" units="mm">0.1 0.1</DL>
+        <M name="m-value" units="Ni_nat">0 0</M>
+        <REF name="reflectivity" units="">0 0</REF>
+        <MU name="absorption" units="cm^-1">0.10000E+11</MU>
+        <ONESIDE name="one-sided" enum="NOYES" value="0">no</ONESIDE>
+        <TRFRONT name="front transmission" enum="NOYES" value="0">no</TRFRONT>
+      </GUIDE>
+    </FRAME>
+  </PRIMARY>
+</INSTRUMENT>
+</SIMRES>

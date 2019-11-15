@@ -1,0 +1,84 @@
+# Through surface-scan in ferrite sample, 10 mm thick plate
+# Scan for Fe 211
+# To be used with configuration: SSPEC-Fe.xml
+# ----------------------------------------------------------
+# adjust scan command parameters:
+
+# scan with sample z-axis
+cmd SCAN1D VARS sam sta(3)
+
+# number of points
+cmd SCAN1D NS 31
+
+# use DET1D plot for peak evaluation (check other settings in the DET1D plot dialog)
+cmd SCAN1D TYPE 3
+
+# show peak position
+cmd SCAN1D IV 3
+
+# adjust sample data for 211 reflection at 90 deg
+set INST LAMBDA 1.6535
+set SAM SIGI 0.68
+set SAM DHKL 1.169
+set SAM JHKL 24
+
+# adjust d-range for the DET1D plot as automatic
+cmd DET1D X 1
+cmd DET1D XAUTO 1
+XML UPDATE
+
+
+# set sample orientation  for transmission
+set SAM GON(3) 225
+XML UPDATE
+
+#-----------------------------------------------
+# simulate one peak and see the profile:
+DO MC
+DO DET1D
+
+# plot 2D detector image
+DO BEAM2D
+
+#--------------------------------------------------
+# Run the scans - stress-free sample
+set SAM STRTAB 0
+
+# transmission geometry (longitudinal)
+set SAM GON(3) 225
+XML UPDATE
+cmd SCAN1D START -6
+cmd SCAN1D END 0
+cmd SCAN1D FILE stress_free_T.dat
+DO SCAN1D
+
+# reflection geometry (normal)
+set SAM GON(3) 135
+XML UPDATE
+cmd SCAN1D START -6
+cmd SCAN1D END 0
+cmd SCAN1D FILE stress_free_R.dat
+DO SCAN1D
+
+#--------------------------------------------------
+# Run the scans - modelled planar stress from table 2 (see Settings / Strain tables)
+set SAM STRTAB 2
+
+# transmission geometry (longitudinal)
+set SAM GON(3) 225
+XML UPDATE
+cmd SCAN1D START -6
+cmd SCAN1D END 0
+cmd SCAN1D FILE stress_T.dat
+DO SCAN1D
+
+# reflection geometry (normal)
+set SAM GON(3) 135
+XML UPDATE
+cmd SCAN1D START -6
+cmd SCAN1D END 0
+cmd SCAN1D FILE stress_R.dat
+DO SCAN1D
+
+
+

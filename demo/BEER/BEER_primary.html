@@ -1,0 +1,51 @@
+  <STYLE TYPE="text/css">
+  	<!--    
+   div.bluebox  {font-size: 12pt; background-color: #A3C4EA; }
+	 table.bluebox  {font-size: 10pt; background-color: #A3C4EA; 
+	-->
+  </STYLE>
+  <DIV class="bluebox">
+  <P>
+  <B>ToF diffractometer BEER@ESS.</B><BR/>
+  Primary diffractometer (source ... sample).
+  </P>
+  <P>  
+  <I>Remarks:</I><BR />
+  Use commands in the attached *.inp scripts to perform more complex settings.<BR />
+  You can open the script in the Tools/Script window and run selected blocks (select text by mouse, then "Run selected").
+  </P>
+  <P>  
+  <TABLE  class="bluebox" border="1" cellspacing="0" cellpadding="5">
+  <TR>
+  <TD align="LEFT"><code>BEER_setup.inp</code></TD>
+  <TD align="LEFT">Setting of neutron optics geometry, distances etc. </TD>
+  </TR>
+  <TR>
+  <TD align="LEFT"><code>modes_setting.inp</code></TD>
+  <TD align="LEFT">Setting of various operation modes (see comments in the script)</TD>
+  </TR>
+  </TABLE>
+  </P>
+  <P>  
+  <I>Other configurations:</I><BR />
+  </P>
+  <P>  
+  <TABLE  class="bluebox" border="1" cellspacing="0" cellpadding="5">
+  <TR>
+  <TD align="LEFT"><code>BEER_Fe.xml</code></TD>
+  <TD align="LEFT">Complete diffractometer with duplex steel sample. This configuration corresponds to the medium resolution pulse-shaping mode (single frame).
+   Hint: run simulation and view results (plot command DET1D).
+  </TD>
+  </TR>
+  <TR>
+  <TD align="LEFT"><code>BEER_MCPL.xml</code></TD>
+  <TD align="LEFT">Primary diffractometer with a monitor at 50 mm in front of the sample position. 
+  It permits to export neutrons to an MCPL file for subsequent simulation of the sample and secondary part by another program (tested with McStas). 
+  <BR />After simulation, you can export neutrons from the selected monitor to MCPL by typing a command in the console window or in the Tools/Script window, e.g.:
+  <BR /><code>MCPL file.mcpl</code>
+  </TD>
+  </TR>
+  </TABLE>
+   </P>   
+  </DIV>
+  

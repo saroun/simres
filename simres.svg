@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="64"
+   height="64"
+   id="svg2816"
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="simres.svg"
+   inkscape:export-filename="E:\Saroun\WWWpage\public_html\restraxweb\simres_logo.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs2818">
+    <linearGradient
+       id="linearGradient3750">
+      <stop
+         style="stop-color:#bf3737;stop-opacity:1;"
+         offset="0"
+         id="stop3752" />
+      <stop
+         id="stop3619"
+         offset="0.5"
+         style="stop-color:#bf3737;stop-opacity:0.49803922;" />
+      <stop
+         style="stop-color:#bf3737;stop-opacity:0;"
+         offset="1"
+         id="stop3754" />
+    </linearGradient>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 16 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="32 : 16 : 1"
+       inkscape:persp3d-origin="16 : 10.666667 : 1"
+       id="perspective2824" />
+    <inkscape:perspective
+       id="perspective5081"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective5103"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3604"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3635"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3660"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3692"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3714"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2847"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3643"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3750"
+       id="linearGradient3756"
+       x1="-31.61574"
+       y1="11.914407"
+       x2="-14.999264"
+       y2="11.914407"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.2804103,0,0,1.1855382,52.257723,3.8235822)" />
+    <inkscape:perspective
+       id="perspective3657"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3660-1"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3750"
+       id="linearGradient3682"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.5608206,0,0,2.3710764,104.54118,-24.241782)"
+       x1="-31.61574"
+       y1="11.914407"
+       x2="-14.999264"
+       y2="11.914407" />
+    <inkscape:perspective
+       id="perspective2852"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="8.1687091"
+     inkscape:cx="49.387872"
+     inkscape:cy="21.926765"
+     inkscape:current-layer="layer2"
+     showgrid="true"
+     inkscape:grid-bbox="true"
+     inkscape:document-units="px"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:snap-global="false"
+     inkscape:window-width="1280"
+     inkscape:window-height="960"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
+     inkscape:window-maximized="1"
+     inkscape:snap-nodes="false"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-nodes="true">
+    <sodipodi:guide
+       orientation="1,0"
+       position="-11.140071,34.121608"
+       id="guide5064" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="-6.1209182,32"
+       id="guide5066" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="49.457019,-6.2764519"
+       id="guide5068" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="-3.6725509,-15.335411"
+       id="guide5070" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="-24.483673,33.509516"
+       id="guide3625" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="-5.5088264,40.242526"
+       id="guide3681" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="32,18.362755"
+       id="guide3739" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata2821">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     style="display:inline"
+     transform="translate(0,31.910696)">
+    <rect
+       style="fill:#e7e7ec;fill-opacity:1;stroke:none;display:inline"
+       id="rect3604"
+       width="64"
+       height="64"
+       x="0.025737138"
+       y="-31.888947"
+       inkscape:export-filename="C:\Saroun\restrax_project\documents\icons\restrax.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       xml:space="preserve"
+       style="font-size:12.23010921px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#5b5b6e;fill-opacity:1;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana Bold"
+       x="22.994177"
+       y="-24.02475"
+       id="text2826-3-1"
+       sodipodi:linespacing="125%"
+       transform="scale(1.222756,0.81782465)"
+       inkscape:export-filename="C:\Saroun\restrax_project\documents\icons\restrax.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan2828-1-7"
+         x="22.994177"
+         y="-24.02475">0</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:37.34328842px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#5b5b6e;fill-opacity:1;stroke:none;display:inline;font-family:Verdana;-inkscape-font-specification:Verdana"
+       x="31.664524"
+       y="-4.2403684"
+       id="text2826-3"
+       sodipodi:linespacing="125%"
+       transform="scale(1.125609,0.88840797)"
+       inkscape:export-filename="C:\Saroun\restrax_project\documents\icons\restrax.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan2828-1"
+         x="31.664524"
+         y="-4.2403684">n</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Layer 2"
+     style="display:inline"
+     transform="translate(0,31.910696)">
+    <path
+       style="fill:url(#linearGradient3682);fill-opacity:1;fill-rule:nonzero;stroke:none"
+       d="m 69.562537,-31.71034 -56.860525,64 27.681919,-0.17694 31.857704,-60.365028 -2.679098,-3.458032 z"
+       id="path3729"
+       sodipodi:nodetypes="ccccc"
+       clip-path="none" />
+    <rect
+       style="fill:#c3c3c3;fill-opacity:1;stroke:none;display:inline"
+       id="rect3633"
+       width="42.112347"
+       height="59.566662"
+       x="50.607529"
+       y="-48.283375"
+       transform="matrix(0.89376517,0.4485352,-0.46648228,0.88453054,0,0)"
+       inkscape:transform-center-x="-32.626623"
+       inkscape:transform-center-y="-17.280013" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Layer 3"
+     style="display:inline"
+     transform="translate(0,31.910696)">
+    <path
+       style="font-size:22.2061882px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#5b5b6e;fill-opacity:1;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana"
+       d="m 50.954777,-22.363923 c -1.354624,1.9e-5 -2.67457,0.22801 -3.960752,0.670772 -0.439084,0.151162 -0.855054,0.324546 -1.284568,0.515978 l 0,2.683086 c 0.28873,-0.120284 0.561336,-0.255838 0.856378,-0.361185 1.149354,-0.410365 2.264872,-0.619159 3.318468,-0.619174 1.026204,1.5e-5 1.8725,0.139818 2.515614,0.361185 0.643078,0.221405 1.103048,0.526793 1.445138,0.980358 0.328372,0.410395 0.572642,0.973773 0.695808,1.702728 0.12312,0.728978 0.214074,1.541948 0.214096,2.373498 l 0,10.2679632 3.853704,0 0,-11.7127012 c -2.4e-5,-2.213884 -0.680522,-3.931021 -1.980376,-5.108183 -1.299898,-1.177127 -3.196918,-1.754306 -5.67351,-1.754325 z"
+       id="text2826-3-9" />
+    <text
+       xml:space="preserve"
+       style="font-size:57.68733597px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#001c58;fill-opacity:1;stroke:none;display:inline;font-family:Verdana;-inkscape-font-specification:Verdana"
+       x="0.18997775"
+       y="28.123661"
+       id="text2826"
+       sodipodi:linespacing="125%"
+       transform="scale(0.99606225,1.0039533)"
+       inkscape:export-filename="C:\Saroun\restrax_project\documents\icons\restrax.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3617"
+         x="0.18997775"
+         y="28.123661">S</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:20.340168px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#001c58;fill-opacity:1;stroke:none;display:inline;font-family:Verdana;-inkscape-font-specification:Verdana Bold"
+       x="37.803402"
+       y="27.417156"
+       id="text2826-8"
+       sodipodi:linespacing="125%"
+       transform="scale(0.9674888,1.0336037)"
+       inkscape:export-filename="C:\Saroun\restrax_project\documents\icons\restrax.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3617-6"
+         x="37.803402"
+         y="27.417156">im</tspan></text>
+  </g>
+</svg>

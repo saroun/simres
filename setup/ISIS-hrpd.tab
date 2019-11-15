@@ -1,0 +1,12 @@
+# comment: using source table in ISIS format, h.hrpd
+SPALLATION_SOURCE_ISIS	
+# ISIS table name	
+FNAME=h.hrpd
+# power in kW
+POW=160
+# wavelength range	
+LMIN=0.2	# wavelength lower limit [A]
+LMAX=20	# wavelength upper limit [A]
+# time range	
+TMAX=150	# time upper limit [us]
+END SPALLATION_SOURCE_ISIS

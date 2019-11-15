@@ -1,0 +1,54 @@
+# Simulation of gauge volume with 1 mm collimation
+# Use with configuration: engin-x-Fe-1mm-gauge.xml
+#------------------------------------------------------------------------
+
+# Set sample properties:
+#--------------------------------
+# define small values of all scattering and capture cross sections
+# in order to make the beam attenuation negligible:
+set SAM SIGSC 1.0E-4
+set SAM SIGA 0.0
+set SAM SIGI 0.0
+set SAM FHKL 1.0E-4
+XML UPDATE
+# The sample shape is arbitrary, must be larger than the expected gauge size
+
+# Define dhkl for selected reflection 
+set SAM DHKL 1.169
+XML UPDATE
+
+# set simulation and plot parameters
+#--------------------------------------
+ 
+# define required number of events
+set TR CNT 10000
+XML UPDATE
+
+# define gauge plotter: GAUGE2D (see the GAUGE2D dialog for other options)
+
+# plot dhkl from ToF data
+cmd GAUGE2D Z 3
+
+# show events in the incident axis coordinates (see the SIMRES guide) 
+cmd GAUGE2D COORD 0
+
+# set view projection plane to x,z (horizontal plane)
+cmd GAUGE2D X 0
+cmd GAUGE2D Y 2
+
+# set plot range (mm)
+cmd GAUGE2D DX 5.0
+cmd GAUGE2D DY 5.0
+
+# to let the plotter dum events into an ASCII file, set comment in the format
+# dump=filename
+cmd GAUGE2D COM dump=events_EX_1mm.dat
+
+# Run simulation
+DO MC
+
+# Plot the gauge map
+DO GAUGE2D
+
+
+

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SIMRES version="6.3.6">
+	<FRAME class="DCHOPPER" id="MCA" name="modulation chopper A">
+		<DIST name="distance" units="mm">950.0</DIST>
+		<SHAPE name="shape" value="3">box</SHAPE>
+		<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+		<SIZE name="dimensions" units="mm">20.0 80.0 50.0</SIZE>
+		<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+		<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+		<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+		<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+		<DCHOPPER>
+			<FRQ name="frequency" units="Hz">0.0</FRQ>
+			<PHASE name="phase" units="2PI">0.0</PHASE>
+			<RAD name="radius" units="mm">300.0</RAD>
+			<WIN name="window width" units="2PI">1.1111E-2</WIN>
+			<NWIN name="number of windows">16</NWIN>
+			<TIMING name="timing">0:1:0.0625:1:0.125:1:0.1875:1:0.25:1:0.3125:1:0.375:1:0.4375:1:0.5:1:0.5625:1:0.625:1:0.6875:1:0.75:1:0.8125:1:0.875:1:0.9375:1</TIMING>
+			<PROF name="profile" value="0">V-shape</PROF>
+			<ORI name="orientation" value="0">vertical</ORI>
+			<ADJ name="auto adjust" value="1">yes</ADJ>
+			<OVERLAP name="overlap" value="0">no</OVERLAP>
+			<T0 name="T0" value="0">no</T0>
+			<LOCKT0 name="lock to T0" value="0">no</LOCKT0>
+		</DCHOPPER>
+	</FRAME>
+</SIMRES>

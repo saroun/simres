@@ -1,0 +1,44 @@
+#----------------------------------------------------
+# System dependent part of makefile for RESTRAX
+# GCC with gfortran, mingw-w64
+#----------------------------------------------------
+
+# extension for shared libraries (if different from *.so)
+SHEXT= exe
+
+# ====================  RESTRAX section ===============================
+
+# command calling Fortran compler
+FC= gfortran
+
+# -----------------------------------------
+# Fortran flags for warnings and debugging, choose one of following
+# debugging:
+DBGFLAGS=  -Og -fcheck=all -Waliasing -Wampersand  -Wsurprising  -Wc-binding-type  -Wintrinsics-std   -Wintrinsic-shadow  -Wline-truncation  -Wtarget-lifetime  -Winteger-division  -Wreal-q-constant -Wundefined-do-loop  -Wmaybe-uninitialized -Werror
+# optimized for release:
+# DBGFLAGS= -O
+#--------------------------------------------------
+
+# Fortran options:
+FCFLAGS= $(DBGFLAGS)  -funderscoring -ffixed-form -ffixed-line-length-132 -Jbin
+
+# command calling C compler
+CC= gcc
+
+# C options:
+CCFLAGS= -O -DCOMPILE_DLL
+
+# user static libraries to link with RESTRAX:
+# USER_LIBS=.\lib\pgplot\jsdrivlib.lib 
+USER_LIBS=
+
+# other libraries to link with RESTRAX:
+#restrax_LDADD= -lgfortran -lX11
+restrax_LDADD=
+
+# Command for linking RESTRAX
+restrax_LD= $(FC)
+
+# option passed to the linker
+restrax_LDFLAGS= -static-libgfortran   
+

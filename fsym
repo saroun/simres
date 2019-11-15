@@ -1,0 +1,53 @@
+#!/usr/bin/perl
+# $Id: fsym,v 1.15 2016/03/17 15:48:24 saroun Exp $
+  $SS=@ARGV[0];
+  @FNAMES=<src/*.inc include/*.inc src/ness/*.inc >;
+  push @FNAMES,glob("src/*.f");
+  push @FNAMES,glob("src/ness/*.f");
+	push @FNAMES,glob("src/matrix/*.f");
+	push @FNAMES,glob("src/primitives/*.f");
+  push @FNAMES,glob("src/components/*.f");
+	push @FNAMES,glob("src/components/tof/*.f");
+  push @FNAMES,glob("src/instruments/*.f");
+  push @FNAMES,glob("src/tables/*.f");
+  push @FNAMES,glob("src/xml/*.f");
+  push @FNAMES,glob("src/graphics/*.f");
+   push @FNAMES,glob("src/sys/linux/*.f");
+   push @FNAMES,glob("src/sys/win/*.f");
+  
+  shift @ARGV;
+  if (@ARGV < 1) {@ARGVAL=@FNAMES; } else { @ARGVAL=@ARGV};
+  print  "search for $SS: \n";
+  foreach $infile (@ARGVAL) {
+    open (INFILE,$infile) || die "could not open input file $infile";
+    $lino = 0;
+    $linf=$lino;
+    while (<INFILE>) {
+      $lino = $lino + 1;
+      $LINE=$_;
+      if ( (! m/^[Cc*!](.*)/) && (! m/^[\s\t]*[!]/)) {  # ignore comments
+# replace tabelators
+        if (! s/^\t/      / )        {
+        if (! s/^(.{1})\t/$1     /) {
+        if (! s/^(.{2})\t/$1    /) {
+        if (! s/^(.{3})\t/$1   /) {
+        if (! s/^(.{4})\t/$1  /) {
+        if (! s/^(.{5})\t/$1 /) {}}}}}}
+        s/\t/   /g; # in columns 7pp: TAB replaced by three blanks
+        $_ = substr $_,5;
+        if ( m/(.*)[!]/ ) {$_="$1\n";};
+        s/./ /;
+#        s/%/!/;
+        if ( m/([\d ,.()+\*\/\-='\%:;]+)$SS([ ,.()+\*\/\-='\%:;\n]+)/i ) {
+#           print  "$infile  $lino  $1$SS$2 \n";
+          print  "$infile  $lino  $_";
+          $linf=$lino;
+        }
+      }
+    }
+    close INFILE;
+    if ($linf != 0) { print " \n";}
+  }
+#  ( m/^([A-Za-z]\w*)(.*)/ ) {
+ #}
+ exit;

@@ -1,0 +1,97 @@
+# Simulation of a single powder diffraction peak
+# (i) scan diffraction pattern by the detector angle
+# (ii) simulate instrumental peak profile
+# (iii) simulate resolution curve (peak witdh vs. dhkl)
+# To be used with configuration: MEREDIT.xml
+# ----------------------------------------------------------
+
+# set sample parameters: Fe 200
+set SAM DHKL 1.4332
+set SAM JHKL 6
+set SAM FHKL 0.802
+XML UPDATE
+
+
+# (i) Make a scan with detector angle
+#----------------------------------------------------
+# set sample type to "powder"
+set SAM TYPE 2
+# load reflections table
+set SAM REFTAB sample-duplex.dat
+
+# First accumulate incoming neutrons in the sample
+# number of counts
+set TR CNT 100000
+# switch OFF the double cycle in tracing options
+set TR DBC 0
+# set tracing mode to "primary "
+set TR MODE 0
+# run simulation
+do mc
+
+# Make a scan with the detector, using accumulated neutrons from the primary beam
+# number of counts in one step
+set TR CNT 2000
+# switch ON  the double cycle in tracing options
+set TR DBC 1
+# set tracing mode to "secondary "
+set TR MODE 1
+# variable is scattering angle
+cmd SCAN1D VARS SAM THETA
+# set range and number of steps
+cmd SCAN1D START 30
+cmd SCAN1D END 120
+cmd SCAN1D NS 901
+# result set is 1 (BASIC)
+cmd SCAN1D TYPE 3
+# value index is 1 (intensity)
+cmd SCAN1D IV 1
+# output filename
+cmd SCAN1D FILE peak.dat
+# run
+DO SCAN1D
+
+
+# (ii) Simulate resolution function
+#----------------------------------------------------
+# set sample type to "elastic resolution"
+set SAM TYPE 1
+
+# position detector to the selected dhkl
+set SAM DHKL 1.4332
+
+# number of counts
+set TR CNT 10000
+# switch ON the double cycle in tracing options
+set TR DBC 1
+# set tracing mode to "all "
+set TR MODE 2
+# run simulation
+do mc
+
+# Use DET1D plot to see the result:
+cmd DET1D X 1
+cmd DET1D XAUTO 1
+DO DET1D
+
+# (iii) Simulate resolution curve for a range of angles
+#-----------------------------------------------------------------------
+# Use the settings from example (ii)
+# set SCAN1D parameters:
+# variable is DHKL
+cmd SCAN1D VARS SAM DHKL
+# set range and number of steps
+cmd SCAN1D START 0.8
+cmd SCAN1D END 2.8
+cmd SCAN1D NS 21
+# result set is 3 (DET1D)
+cmd SCAN1D TYPE 3
+# value index is 2 (peak width)
+cmd SCAN1D IV 2
+# output filename
+cmd SCAN1D FILE resolution_Cu220.dat
+# run
+DO SCAN1D
+
+
+

@@ -1,0 +1,71 @@
+# Three axis spectrometer - resolution functions
+# To be used with configuration: TAS_resol.xml
+# ----------------------------------------------------------
+
+# The single crystal sample allows to navigate the instrument using the reciprocal lattice coordinates
+# see simres-guide.pdf for details
+
+# Switch the interface parameter set  to "Spectroscopy"
+set INST INPSET 1
+XML UPDATE
+# Switch ON  the interface option "auto-orient sample"
+set INST ORISAM 1
+XML UPDATE
+
+# Ki or Kf (the fixed one) is set in the interface dialog
+set INST FIX 1
+XML UPDATE
+set INST KF 3.0
+XML UPDATE
+
+# other angles are set through the sample dialog
+
+# tau (BZ centre)
+set SAM TAU 2 2 0
+XML UPDATE
+
+# q (propagation vector)
+set SAM QHKL 0 0 0.35
+XML UPDATE
+
+# energy transfer
+set SAM EN 5
+XML UPDATE
+
+# simulate resolution
+#-----------------------------------------
+# set sample type to "inelastic resolution"
+set SAM TYPE 0
+XML UPDATE
+
+# set tracing options to double cycle = yes, tracing mode = all
+set TR DBC 1
+set TR MODE 2
+
+# run simulation
+DO MC
+
+# Plot 1D resolution, e.g.  scan along E
+cmd RES1D X 2
+DO RES1D
+# or along QX (C&N coordinates)
+cmd RES1D X 3
+DO RES1D
+
+# Plot 2D projection, e.g. QY vs. E
+cmd RES2D X 4
+cmd RES2D Y 2
+DO RES2D
+# or QX vs. QZ
+cmd RES2D X 3
+cmd RES2D Y 5
+DO RES2D
+
+# You can always save anything what is just plotted in a data file
+cmd GRSAVE FILE resol2D.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+
+
+

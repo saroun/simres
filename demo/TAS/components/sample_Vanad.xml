@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<SIMRES version="6.0.4">
+<INSTRUMENT redefine="no">
+  <SPECIMEN>
+    <FRAME class="SCRYST" id="SAM" name="Vanad">
+      <SAMPLE>
+        <TYPE name="type" enum="SAMPLE_TYPE" value="3">vanad</TYPE>
+        <SGN name="sign" enum="SIGN" value="1">+1</SGN>
+        <SIGSC name="Sigma_s" units="cm^-1">0.367</SIGSC>
+        <SIGA name="Sigma_a" units="cm^-1A^-1">0.204</SIGA>
+        <SIGI name="Sigma_i" units="cm^-1">0.367</SIGI>
+        <TEMP name="temperature" units="K">300</TEMP>
+        <MAG name="magnetic field" units="gauss">0 0 0</MAG>
+        <STRAIN name="strain" units="">0 0 0</STRAIN>
+        <PRESS name="isotropic pressure" units="MPa">0</PRESS>
+        <SCRYST>
+          <VECA name="A vector" units="hkl">1 1 0</VECA>
+          <VECB name="B vector" units="hkl">0 0 1</VECB>
+          <CELLS name="cell size" units="hkl">5.43 5.43 5.43</CELLS>
+          <CELLA name="cell angles" units="deg">90 90 90</CELLA>
+          <ZERO name="zeros" units="deg">0 0 0</ZERO>
+          <TAU name="tau" units="hkl">2 2 0</TAU>
+          <QHKL name="q_hkl" units="hkl">0.15 0.15 0</QHKL>
+          <EN name="EN" units="meV">0</EN>
+          <MOS name="mosaicity" units="minutes">0</MOS>
+          <GHKL name="gradE_direction" units="hkl">2 2 0</GHKL>
+          <GRAD name="gradE_magnitude" units="meV/rlu">0</GRAD>
+          <EIG name="phonon eigenvector" units="hkl">0 0 1</EIG>
+        </SCRYST>
+      </SAMPLE>
+    </FRAME>
+  </SPECIMEN>
+</INSTRUMENT>
+</SIMRES>

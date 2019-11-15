@@ -1,0 +1,637 @@
+# Parasitic and multiple reflections in a bent Si wafer.
+# This example simulates an experiment with transmision of neutrons through 
+# a Si single crystal wafer as a function of elastic bending.
+# It demonstrates the capability of the component XTAL to simulate multiple reflections 
+# in elastically deformed single crystals  
+# To be used with configuration: multiref.xml
+# ----------------------------------------------------------
+
+# The script sections below simulate the transmitted spectra in several wavlength ranges.
+# At short wavelengths, the range has to be kept narrow 
+# due to the large number of contributing reflections 
+
+# See simres-guide.pdf for more details about the XTAL component
+
+# 0.675 um wafer
+set XTAL DIST 550.0
+set XTAL SIZE 200  20 0.675
+set XTAL GON 2.6 0 90
+set XTAL A 0 0 1
+set XTAL B 1 1 0
+set XTAL NSW 1
+set XTAL HFOC.RHO 0.33
+XML XTAL
+
+
+# preparation
+set SOURCE LAMW 0.667
+XML SOURCE
+cmd BEAM1D NP 300
+cmd BEAM1D X0 2.5
+cmd BEAM1D DX 3.0
+cmd GRSAVE OVER yes
+set XTAL DKK 0.2
+set XTAL SIZE(3) 0.675
+set XTAL GON 2.6 0 90
+
+XML XTAL
+set TR CNT 500000
+
+
+#------------------------------------------
+# cut 001/110, slit 6x9
+#------------------------------------------
+set SLIT0 SIZE  6 9 1
+XML SLIT0
+set XTAL A  0 0 1
+set XTAL B  1 1 0
+
+#--------------------------------------------------------------------
+# lambda=0.5 .. 0.52 A
+set INST LAMBDA 0.51
+set SOURCE LAMW 0.039216
+set XTAL DKK 0.045
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.51
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L051.dat
+do GRSAVE 
+
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L051.dat
+do GRSAVE 
+
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L051.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.52 .. 0.54 A
+set INST LAMBDA 0.53
+set SOURCE LAMW 0.037736
+set XTAL DKK 0.049
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.53
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L053.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L053.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L053.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.54 .. 0.56 A
+set INST LAMBDA 0.55
+set SOURCE LAMW 0.0363636
+set XTAL DKK 0.055
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.55
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L055.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L055.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L055.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.56 .. 0.58 A
+set INST LAMBDA 0.57
+set SOURCE LAMW 0.034904014
+set XTAL DKK 0.062
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.57
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L057.dat
+do GRSAVE 
+
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L057.dat
+do GRSAVE 
+
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L057.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.58 .. 0.60 A
+set INST LAMBDA 0.59
+set SOURCE LAMW 0.034904014
+set XTAL DKK 0.068
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.59
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L059.dat
+do GRSAVE 
+
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L059.dat
+do GRSAVE 
+
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L059.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.60 .. 0.62 A
+set INST LAMBDA 0.61
+set SOURCE LAMW 0.03279
+set XTAL DKK 0.077
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.61
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L061.dat
+do GRSAVE 
+
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L061.dat
+do GRSAVE 
+
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L061.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.62 .. 0.64 A
+set INST LAMBDA 0.63
+set SOURCE LAMW 0.031746
+set XTAL DKK 0.084
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.63
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L063.dat
+do GRSAVE 
+
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L063.dat
+do GRSAVE 
+
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L063.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.64 .. 0.66 A
+set INST LAMBDA 0.65
+set SOURCE LAMW 0.0307692
+set XTAL DKK 0.09
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.65
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L065.dat
+do GRSAVE 
+
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L065.dat
+do GRSAVE 
+
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L065.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.66 .. 0.68 A
+set INST LAMBDA 0.67
+set SOURCE LAMW 0.0298507
+set XTAL DKK 0.1
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.67
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L067.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L067.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L067.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+#  lambda=0.68 .. 0.70 A
+set INST LAMBDA 0.69
+set SOURCE LAMW 0.0289855
+set XTAL DKK 0.11
+set XTAL MAXHKL 20
+cmd BEAM1D NP 20
+cmd BEAM1D X0 0.69
+cmd BEAM1D DX 0.02
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L069.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L069.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L069.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.70 .. 0.75 A
+set INST LAMBDA 0.725
+set SOURCE LAMW 0.0689655
+set XTAL DKK 0.125
+set XTAL MAXHKL 20
+cmd BEAM1D NP 25
+cmd BEAM1D X0 0.725
+cmd BEAM1D DX 0.05
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L0725.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L0725.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L0725.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.75 .. 0.8 A
+set INST LAMBDA 0.775
+set SOURCE LAMW 0.064516
+set XTAL DKK 0.15
+set XTAL MAXHKL 20
+cmd BEAM1D NP 25
+cmd BEAM1D X0 0.775
+cmd BEAM1D DX 0.05
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L0775.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L0775.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L0775.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=0.8 .. 1.0 A
+set INST LAMBDA 0.9
+set SOURCE LAMW 0.22222
+set XTAL DKK 0.235
+set XTAL MAXHKL 20
+cmd BEAM1D NP 40
+cmd BEAM1D X0 0.9
+cmd BEAM1D DX 0.2
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L09.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L09.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L09.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+
+#--------------------------------------------------------------------
+# lambda=1.0 .. 1.2 A
+set INST LAMBDA 1.1
+set SOURCE LAMW 0.181818
+set XTAL DKK 0.22
+set XTAL MAXHKL 20
+cmd BEAM1D NP 40
+cmd BEAM1D X0 1.1
+cmd BEAM1D DX 0.2
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L11.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L11.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L11.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+# lambda=1.2 .. 2.0 A
+set INST LAMBDA 1.6
+set SOURCE LAMW 0.5
+set XTAL DKK 0.7
+set XTAL MAXHKL 20
+cmd BEAM1D NP 80
+cmd BEAM1D X0 1.6
+cmd BEAM1D DX 0.8
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L16.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L16.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L16.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+
+#--------------------------------------------------------------------
+#  lambda=2.0 .. 4.0 A
+set INST LAMBDA 3.0
+set SOURCE LAMW 0.66667
+set XTAL DKK 1.0
+set XTAL MAXHKL 20
+cmd BEAM1D NP 200
+cmd BEAM1D X0 3.0
+cmd BEAM1D DX 2.0
+XML BEAM1D
+XML UPDATE
+set XTAL HFOC.RHO 0.33
+XML XTAL
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_3m-001_L30.dat
+do GRSAVE 
+
+set XTAL HFOC.RHO 0
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE wafer_INF-001_L30.dat
+do GRSAVE 
+
+set XTAL GON 0 0 0 
+XML XTAL
+XML UPDATE
+DO MC
+DO BEAM1D
+cmd GRSAVE FILE direct_L30.dat
+do GRSAVE 
+set XTAL GON 2.6 0 90
+XML XTAL
+

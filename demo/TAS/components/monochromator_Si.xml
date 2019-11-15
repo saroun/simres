@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<SIMRES version="6.0.4">
+<INSTRUMENT redefine="no">
+  <PRIMARY>
+    <FRAME class="CRYSTAL" id="MON" name="monochromator">
+      <SHAPE name="shape" enum="FRAME_SHAPE" value="3">box</SHAPE>
+      <SIZE name="dimensions" units="mm">240 196 10</SIZE>
+      <AX name="axis" units="deg">-28.2946 0 0</AX>
+      <STA name="stage" units="mm">0 0 0</STA>
+      <GON name="gonio" units="deg">-104.1473 0 0</GON>
+      <VEL name="velocity" units="m.s^-1">0 0 0</VEL>
+      <CRYSTAL>
+        <TYPE name="type" enum="CRYSTAL_TYPE" value="2">bent perfect</TYPE>
+        <REFNAME name="reflection" enum="CRYSTAL_REFNAME" value="17">Si 111</REFNAME>
+        <DHKL name="d-spacing" units="A">3.135</DHKL>
+        <SGN name="sign" enum="SIGN" value="0">-1</SGN>
+        <CHI name="cutting angle" units="deg">0</CHI>
+        <MOS name="mosaicity" units="arc_min">0</MOS>
+        <ANIZ name="anisotropy" units="">1</ANIZ>
+        <POISS name="Poisson" units="">0.1808</POISS>
+        <RO name="curvatures" units="m^-1">0.1 1.4 0</RO>
+        <N name="segments">1 9 10</N>
+        <D name="gaps" units="mm">2 2 0.1</D>
+        <DGR name="gradient" units="10^-3.cm^-1">0</DGR>
+        <DGA name="gradient angle" units="deg">0</DGA>
+        <DLAM name="domain thickness" units="um">0</DLAM>
+        <MODEL name="model" enum="CRYSTAL_MODEL" value="1">random walk</MODEL>
+      </CRYSTAL>
+    </FRAME>
+  </PRIMARY>
+</INSTRUMENT>
+</SIMRES>

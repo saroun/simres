@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+$Id: crystals.xml,v 1.10 2013/07/17 12:08:26 saroun Exp $
+****************************************************************
+WARNING:
+DON'T EDIT THIS FILE - unless you know what you are doing
+elements defined here must correspond to those implemented in SIMRES
+****************************************************************
+This file defines crystal parameters used by SIMRES to describe diffraction by single crystals
+
+
+THETAD.... Debye temperature (K)
+C2 ....constant from the Freund's paper  [A^-2 eV^-1]
+ALPHA ... linear thermal expansion coefficient [10^-6 K^-1] at 298 K
+AX , ANG ... unit cell axes and angles
+EQPOS ... equivalent positions
+ATOM ... atom positions 
+ISO ... isotropic axis (optional, for PG)
+
+Resources:
+Springer Handbook of Condensed Matter and Materials Data, W, Marienssen and H. Warlimont (eds.) ISBN 3-540-44376-2
+Crystallography Open Database, http://www.crystallography.net/ 
+D. Brown et al., Acta Materialia, Volume 57, Issue 4, Pages 972-979
+M. HUMBERT, J. WEGRIA* and C. ESLING, Textures and Microstructures, 1991, Vols 14-18, pp. 463-470 
+http://www.webelements.com
+http://usa.kyocera.com/kicc/pdf/Kyocera%20Sapphire.pdf
+http://www.optical-components.com/optical-materials.html
+http://www.advceramics.com/downloads/documents/85507.pdf
+NOTE: some data in this file should be checked, particularly thermal expansion coefficients
+
+
+-->
+<SIMRES version="6.0.7">
+<CRTABLE>
+  <CRDATA id="Si" name="Silicon">
+  <C2>6.36</C2>
+  <XHAR>1</XHAR>
+  <XANH>0</XANH>
+  <LATTICE>
+    <AX>5.430941  5.430941  5.430941</AX>
+    <ANG>90.0  90.0  90.0</ANG>
+    <EQPOS>0  0  0</EQPOS>
+    <EQPOS>1/2  1/2  0</EQPOS>
+    <EQPOS>1/2  0    1/2</EQPOS>
+    <EQPOS>0    1/2  1/2</EQPOS>
+    <ATOM id="Si">0  0  0</ATOM>
+    <ATOM id="Si">1/4  1/4  1/4</ATOM>    
+    <ALPHA>2.92 2.92 2.92</ALPHA>  
+    <THETAD>420</THETAD>
+  </LATTICE>
+  </CRDATA>
+  <CRDATA id="Ge" name="Germanium">
+  <C2>9.0</C2>
+  <XHAR>1.0</XHAR>
+  <XANH>0.0</XANH>
+  <LATTICE>
+    <AX>5.6578  5.6578  5.6578</AX>
+    <ANG>90.0  90.0  90.0</ANG>
+    <EQPOS>0  0  0</EQPOS>
+    <EQPOS>1/2  1/2  0</EQPOS>
+    <EQPOS>1/2  0    1/2</EQPOS>
+    <EQPOS>0    1/2  1/2</EQPOS>
+    <ATOM id="Ge">0  0  0</ATOM>
+    <ATOM id="Ge">1/4  1/4  1/4</ATOM>    
+    <ALPHA>5.9 5.9 5.9</ALPHA>
+    <THETAD>290</THETAD>
+  </LATTICE>
+  </CRDATA>  
+  <CRDATA id="C-dia" name="Diamond">
+  <C2>3.02</C2>
+  <XHAR>1.0</XHAR>
+  <XANH>0.0</XANH>
+  <LATTICE>
+    <AX>3.5670  3.5670  3.5670</AX>
+    <ANG>90.0  90.0  90.0</ANG>
+    <EQPOS>0  0  0</EQPOS>
+    <EQPOS>1/2  1/2  0</EQPOS>
+    <EQPOS>1/2  0    1/2</EQPOS>
+    <EQPOS>0    1/2  1/2</EQPOS>
+    <ATOM id="C">0  0  0</ATOM>
+    <ATOM id="C">1/4  1/4  1/4</ATOM>  
+    <ALPHA>1.06 1.06 1.06</ALPHA>    
+    <THETAD>1860</THETAD>
+  </LATTICE>
+  </CRDATA>    
+  <CRDATA id="Cu" name="Copper">
+  <C2>12</C2>  
+  <XHAR>1.0</XHAR>
+  <XANH>0.0</XANH>
+  <LATTICE>
+    <AX>3.6149  3.6149  3.6149</AX>
+    <ANG>90.0  90.0  90.0</ANG>
+    <EQPOS>0  0  0</EQPOS>
+    <EQPOS>1/2  1/2  0</EQPOS>
+    <EQPOS>1/2  0    1/2</EQPOS>
+    <EQPOS>0    1/2  1/2</EQPOS>
+    <ATOM id="Cu">0  0  0</ATOM> 
+    <ALPHA>16.5 16.5 16.5</ALPHA>
+    <THETAD>300</THETAD>
+  </LATTICE>
+  </CRDATA>   
+  <CRDATA id="MgF2" name="MgF2">
+  <C2>6.97</C2>  
+  <XHAR>1.0</XHAR>
+  <XANH>0.0</XANH>
+  <LATTICE>
+    <AX>4.623  4.623  3.052</AX>
+    <ANG>90.0  90.0  90.0</ANG>
+    <EQPOS>0  0  0</EQPOS>
+    <ATOM id="Mg">0  0  0</ATOM> 
+    <ATOM id="Mg">1/2  1/2  1/2</ATOM>
+    <ATOM id="F">0.303  0.303  0</ATOM>
+    <ATOM id="F">0.697  0.697  0</ATOM>
+    <ATOM id="F">0.803  0.197  0.5</ATOM>
+    <ATOM id="F">0.197  0.803  0.5</ATOM>
+    <ALPHA>13.7 13.7 8.48</ALPHA>
+    <THETAD>610</THETAD>
+  </LATTICE>
+  </CRDATA>
+  <CRDATA id="Be" name="Beryllium">
+  <C2>7.62</C2>  
+  <XHAR>1.0</XHAR>
+  <XANH>0.0</XANH>
+  <LATTICE>
+    <AX>2.2858 2.2858 3.5843</AX>
+    <ANG>90.0  90.0  120.0</ANG>
+    <EQPOS>0  0  0</EQPOS>
+    <EQPOS>1/3  2/3  1/2</EQPOS>
+    <ATOM id="Be">0  0  0</ATOM> 
+    <ALPHA>12.42 12.42 9.881</ALPHA>
+    <THETAD>1100</THETAD>
+  </LATTICE>
+  </CRDATA>
+  <CRDATA id="Zn" name="Zinc">
+  <C2>7.0</C2>  
+  <XHAR>1.0</XHAR>
+  <XANH>0.0</XANH>
+  <LATTICE>
+    <AX>2.6649 2.6649 4.9468</AX>
+    <ANG>90.0  90.0  120.0</ANG>
+    <EQPOS>0  0  0</EQPOS>
+    <EQPOS>1/3  2/3  1/2</EQPOS>
+    <ATOM id="Zn">0  0  0</ATOM>
+    <ALPHA>13.1 13.1 63.1</ALPHA>    
+    <THETAD>327</THETAD>
+  </LATTICE>
+  </CRDATA>  
+  <CRDATA id="a-Al2O3" name="Sapphire">
+  <C2>4.6</C2>  
+  <XHAR>1.0</XHAR>
+  <XANH>0.0</XANH>
+  <LATTICE>
+    <AX>4.7607  4.7607  12.9947</AX>
+    <ANG>90.0  90.0  120.0</ANG>
+    <EQPOS>0  0  0</EQPOS>
+    <ATOM id="Al">0.0	0.0	0.147840</ATOM> 
+    <ATOM id="Al">0.0	0.0	0.352160</ATOM> 
+    <ATOM id="Al">0.0	0.0	0.647840</ATOM> 
+    <ATOM id="Al">0.0	0.0	0.852160</ATOM> 
+    <ATOM id="Al">1/3	2/3	0.018830</ATOM> 
+    <ATOM id="Al">1/3	2/3	0.314510</ATOM> 
+    <ATOM id="Al">1/3	2/3	0.518830</ATOM> 
+    <ATOM id="Al">1/3	2/3	0.814510</ATOM> 
+    <ATOM id="Al">2/3	1/3	0.185490</ATOM> 
+    <ATOM id="Al">2/3	1/3	0.481170</ATOM> 
+    <ATOM id="Al">2/3	1/3	0.685490</ATOM> 
+    <ATOM id="Al">2/3	1/3	0.981170</ATOM> 
+    <ATOM id="O">0.0	0.306100	1/4</ATOM> 
+    <ATOM id="O">0.0	0.693900	3/4</ATOM> 
+    <ATOM id="O">0.027230	0.360570	0.916670</ATOM> 
+    <ATOM id="O">0.027230	2/3	0.416670</ATOM> 
+    <ATOM id="O">0.306100	0.0	1/4</ATOM> 
+    <ATOM id="O">0.306100	0.306100	3/4</ATOM> 
+    <ATOM id="O">1/3	0.360570	0.416670</ATOM> 
+    <ATOM id="O">1/3	0.972770	0.916670</ATOM> 
+    <ATOM id="O">0.360570	0.027230	7/12</ATOM> 
+    <ATOM id="O">0.360570	1/3	1/12</ATOM> 
+    <ATOM id="O">0.639430	2/3	0.916670</ATOM> 
+    <ATOM id="O">0.639430	0.972770	0.416670</ATOM> 
+    <ATOM id="O">2/3	0.027230	1/12</ATOM> 
+    <ATOM id="O">2/3	0.639430	7/12</ATOM> 
+    <ATOM id="O">0.693900	0.0	3/4</ATOM> 
+    <ATOM id="O">0.693900	0.693900	1/4</ATOM> 
+    <ATOM id="O">0.972770	1/3	7/12</ATOM> 
+    <ATOM id="O">0.972770	0.639430	1/12</ATOM> 
+    <ALPHA>4.5 4.5 5.3</ALPHA>
+    <THETAD>1040</THETAD>
+  </LATTICE>
+  </CRDATA>  
+  <CRDATA id="SiO2" name="Quartz">
+  <C2>8.5</C2>  
+  <XHAR>1.0</XHAR>
+  <XANH>0.0</XANH>
+  <LATTICE>
+    <AX>4.91239 4.91239 5.40385</AX>
+    <ANG>90.0  90.0  120.0</ANG>
+    <EQPOS>0  0  0</EQPOS>
+    <ATOM id="Si">0.0	0.470100	1/3</ATOM> 
+    <ATOM id="Si">0.470100	0.0	2/3</ATOM> 
+    <ATOM id="Si">0.529900	0.529900	0.0</ATOM> 
+    <ATOM id="O">0.146500	0.732600	0.547700</ATOM> 
+    <ATOM id="O">0.267400	0.413900	0.214400</ATOM> 
+    <ATOM id="O">0.413900	0.267400	0.785600</ATOM> 
+    <ATOM id="O">0.586100	0.853500	0.881100</ATOM> 
+    <ATOM id="O">0.732600	0.146500	0.452300</ATOM> 
+    <ATOM id="O">0.853500	0.586100	0.118900</ATOM> 
+    <ALPHA>16.6 16.6 10.6</ALPHA>
+    <THETAD>500</THETAD>
+  </LATTICE>
+  </CRDATA> 
+  <CRDATA id="PG" name="Pyrolytic graphite">
+  <C2>20</C2>  
+  <XHAR>1.0</XHAR>
+  <XANH>0.0</XANH>
+  <ISO>0 0 1</ISO>
+  <LATTICE>
+    <AX>2.464 2.464 6.711</AX>
+    <ANG>90.0  90.0  120.0</ANG>
+    <EQPOS>0  0  0</EQPOS>
+    <EQPOS>0  0  1/2</EQPOS>
+    <EQPOS>1/3  2/3  0</EQPOS>
+    <EQPOS>2/3  1/3  1/2</EQPOS>
+    <ATOM id="C">0  0  0</ATOM>
+    <ALPHA>0.5 0.5 20</ALPHA>
+    <THETAD>1050</THETAD>
+  </LATTICE>
+  </CRDATA>  
+  <CRDATA id="HS" name="Heusler">
+  <!--   ALPHA data not available for Heusler, using those for Cu
+     only nuclear scattering, magnetic to do
+    -->  
+  <C2>12</C2>
+  <XHAR>1.0</XHAR>
+  <XANH>0.0</XANH>
+  <LATTICE>
+    <AX>5.949 5.949 5.949</AX>
+    <ANG>90.0  90.0  90.0</ANG>
+    <EQPOS>0  0  0</EQPOS>
+    <EQPOS>1/2  1/2  0</EQPOS>
+    <EQPOS>1/2  0    1/2</EQPOS>
+    <EQPOS>0    1/2  1/2</EQPOS>
+    <ATOM id="Cu">1/4  1/4  1/4</ATOM>
+    <ATOM id="Cu">3/4  3/4  3/4</ATOM>
+    <ATOM id="Mn" mag="5.0  1  -1  0">1/2  1/2  1/2</ATOM>
+    <ATOM id="Al">0  0  0</ATOM>
+    <ALPHA>16.5 16.5 16.5</ALPHA>  
+    <THETAD>300</THETAD>
+  </LATTICE>
+  </CRDATA> 
+ </CRTABLE>
+</SIMRES>

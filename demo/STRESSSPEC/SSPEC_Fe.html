@@ -1,0 +1,44 @@
+  <STYLE TYPE="text/css">
+  	<!--    
+   div.bluebox  {font-size: 12pt; background-color: #A3C4EA; }
+	 table.bluebox  {font-size: 10pt; background-color: #A3C4EA; 
+	-->
+  </STYLE>
+  <DIV class="bluebox">
+  <P>
+  <B>Engineering diffractometer STRESSSPEC@FRMII.</B><BR/>
+  Examples in this project include:
+<ul>
+<li>Example of strain scanning through the surface of a ferrite sample
+in a stress free state and with a modelled planar stress with depth distibution (see ./tables/strain_planar and simres-guide.pdf for details), <code>SSPEC_Fe.xml</code> </li>
+<li>Simulation of gauge volume and export of a file with scattering events, <code>SSPEC_Fe_1mm_gauge.xml</code></li>
+</ul>
+  Instrument configuration corresponds to the monochromatic engineering diffractometer STRESSSPEC at FRMII, Garching.
+  </P>
+  <P>  
+  <I>Remarks:</I><BR />
+  Use the commands in the attached *.inp scripts to perform various settings and commands.<BR />
+  You can open the script in the Tools/Script editor and run selected blocks (select text by mouse, then "Run selected"). See the comments at the command blocks in the scripts for brief explanations.
+  </P>
+   <P>  
+  <I>Configurations in this folder:</I><BR />
+  </P>
+  <P>  
+  <TABLE  class="bluebox" border="1" cellspacing="0" cellpadding="5">
+  <TR>
+  <TD align="LEFT" style="white-space: nowrap;"><code>SSPEC_Fe.xml</code></TD>
+  <TD align="LEFT">Simulation of a scan through the surface of a ferrite plate. Relevant commands are saved in the script <code>SSPEC_Fe.inp</code>. 
+  </TD>
+  </TR>
+  <TR>
+  <TD align="LEFT" style="white-space: nowrap;"><code>SSPEC_Fe_1mm_gauge.xml</code></TD>
+  <TD align="LEFT">Example with simulation of sampling distribution for 1x1x5 mm collimation. It permits to simulate, view and export sampling distribution as a list of event data in an ASCII file: 
+  position, incident and exit k-vecotors, probability, time and "as measured" dhkl for selected intrinsic dhkl. 
+  It can be useful e.g. for evaluation of smearing and pseudo-strain effects using another code (it can be faster than ray-tracing simulation, which can do it also, of course).<BR />
+  Relevant commands are saved in the script <code>SSPEC_Fe_1mm_gauge.inp</code>. 
+  </TD>
+  </TR>
+  </TABLE>
+   </P>   
+  </DIV>
+  

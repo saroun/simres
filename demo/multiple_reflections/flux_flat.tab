@@ -1,0 +1,12 @@
+LAMBDA dPhi/dLAMBDA  LOGSCALE=yes (wavelength [A], flux [1e12/s/cm^2/Ang])
+0.5	100.0
+1.5	100.0
+2.5	100.0
+3.5	100.0
+4.5	100.0
+5.5	100.0
+6.5	100.0
+7.5	100.0
+8.5	100.0
+
+

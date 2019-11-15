@@ -1,0 +1,35 @@
+#----------------------------------------------------
+# System dependent part of makefile for RESTRAX
+# Absoft Fortran on Linux, ver. 9.0
+#----------------------------------------------------
+# ====================  RESTRAX section ===============================
+
+# command calling Fortran compler
+FC= f95
+
+# Fortran options:
+FCFLAGS= -O2 -p bin -W132 -ffixed -s -safefp   -B108 -YEXT_NAMES=LCS -YCOM_NAMES=LCS -YCFRL=1 -YCOM_SFX=_ -YCOM_PFX=
+# alternative for debugging:
+# FCFLAGS= -g -W 132 -ffixed -s -B108 -YEXT_NAMES=LCS -YCOM_NAMES=LCS -YCFRL=1 -YCOM_SFX=_ -YCOM_PFX=  -m3  
+
+# command calling C compler
+CC= gcc
+
+# C options:
+CCFLAGS= -O
+
+# user static libraries to link with RESTRAX:
+USER_LIBS=
+
+# Path for include files required on some systems
+LPATHS=
+
+# other libraries to link with RESTRAX:
+restrax_LDADD= -lU77 -lf77math -L/usr/X11R6/lib -lX11 -ldl -lgfortran
+
+# Command for linking RESTRAX
+restrax_LD= $(FC) $(FCFLAGS) -X--unresolved-symbols=report-all
+
+# option passed to the linker
+# restrax_LDFLAGS=  -X --export-dynamic
+restrax_LDFLAGS=  

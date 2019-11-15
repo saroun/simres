@@ -1,0 +1,87 @@
+# Through surface-scan in ferrite sample, 10 mm thick plate
+# Scan each reflection separately,
+# To be used with configuration: engin-x-Fe.xml
+# ----------------------------------------------------------
+# adjust scan command parameters:
+
+# number of points
+cmd SCAN1D NS 31
+
+# use DET1D plot for peak evaluation (check other settings in the DET1D plot dialog)
+cmd SCAN1D TYPE 3
+
+# show peak position
+cmd SCAN1D IV 3
+
+# adjust sample data for 211 reflection at 90 deg
+set INST LAMBDA 1.6535
+set SAM SIGI 0.68
+set SAM DHKL 1.169
+set SAM JHKL 24
+
+# adjust d-range for the DET1D plot
+cmd DET1D X0 1.169
+cmd DET1D XAUTO 0
+XML UPDATE
+
+
+# set BANK1 (left) for transmission if SS=+1
+set SAM GON(1) 135
+set SAM GON(3) 90.0
+XML UPDATE
+
+#------------------------------------------------
+# adjust collimation, divergence slit 14 mm
+set S1 SIZE(1) 14.0
+XML S1
+set S2 SIZE(1) 7.2
+XML S2
+
+#-----------------------------------------------
+# simulate one peak and see the profile:
+DO MC
+DO DET1D
+# and ToF vs. 2 theta plot
+DO DET2D
+#  (see DET1D and DET2D dialog for other plot options)
+
+#--------------------------------------------------
+# Run the scans
+
+# scan in transmission geometry (BANK1), set SS = +1
+set INST SS 1
+XML UPDATE
+
+# front face
+cmd SCAN1D START -6
+cmd SCAN1D END 0
+cmd SCAN1D FILE S14-Fe211-T1.dat
+DO SCAN1D
+
+# back  face
+cmd SCAN1D START 0
+cmd SCAN1D END 6
+cmd SCAN1D FILE S14-Fe211-T2.dat
+DO SCAN1D
+
+# scan in reflection geometry (BANK2), set SS = -1
+set INST SS -1
+XML UPDATE
+
+# front face
+cmd SCAN1D START -6
+cmd SCAN1D END 0
+cmd SCAN1D FILE S14-Fe211-R1.dat
+DO SCAN1D
+
+# back  face
+cmd SCAN1D START 0
+cmd SCAN1D END 6
+cmd SCAN1D FILE S14-Fe211-R2.dat
+DO SCAN1D
+
+
+
+
+
+

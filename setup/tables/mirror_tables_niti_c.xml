@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MTABLE  version="1.0">
+New tables (2018) fitting SNAG average reflectivities.
+Experimental version using COH=1: reflectivity is reduced due to coherent scattering for wavelength below Ni and Ti Bragg edges.
+Use with care: not validated.
+	<MIRROR m="1.0">ref_Ni.dat</MIRROR>
+	<MIRROR m="1.5">ref_m1.5.dat</MIRROR>
+	<MIRROR m="2.0">niti_m2.0c.dat</MIRROR>
+	<MIRROR m="2.5">niti_m2.5c.dat</MIRROR>
+	<MIRROR m="3.0">niti_m3.0c.dat</MIRROR>
+	<MIRROR m="3.5">niti_m3.5c.dat</MIRROR>
+	<MIRROR m="4.0">niti_m4.0c.dat</MIRROR>
+	<MIRROR m="5.0">niti_m5.0c.dat</MIRROR>
+	<MIRROR m="6.0">niti_m6.0c.dat</MIRROR>
+</MTABLE>
