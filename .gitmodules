@@ -1,3 +1,6 @@
 [submodule "pgplot/jsdriv_server"]
 	path = pgplot/jsdriv_server
 	url = https://github.com/saroun/jsdriv_server
+[submodule "mcplio/mcpl"]
+	path = mcplio/mcpl
+	url = https://github.com/mctools/mcpl
