@@ -46,13 +46,13 @@ http://math.nist.gov/javanumerics/jama/
 
 `napack` - Numerical linear algebra and optimization
 embedded in src/napack.f
-http://www.netlib.org/napack/
+http://www.netlib.org/napack/  
 *License*: public domain
 
 `Mersenne-Twister` - The random number generator 
 Written by Makoto Matsumoto and Takuji Nishimura and coded to Fortran by Hiroshi Takano.  
 embedded in src/mtmod.f
-http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/VERSIONS/FORTRAN/mtfort90.f
+http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/VERSIONS/FORTRAN/mtfort90.f  
 *License*: LGPL 
 
 `MCPL` - Monte Carlo Particle Lists library   
@@ -66,6 +66,6 @@ http://www.astro.caltech.edu/~tjp/pgplot
 *License*: see licenses/pgplot.txt
 
 `Java3D` - 3D Graphics Package  
-http://www.java3d.org/  
+http://www.java3d.org  
 *License*: Sun Microsystems, see licenses/java3d.txt
 
