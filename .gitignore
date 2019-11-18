@@ -23,4 +23,13 @@ pgplot/src/*
 # Project specific excludes:
 pgplot/linux/pgxwin_server
 src/config.inc
+3rdparty
+
+# generated files
+variables.ini
+*.iss
+motd
+makefile
+*.bat
+Install.pl
 
