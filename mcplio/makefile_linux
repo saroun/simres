@@ -1,0 +1,20 @@
+BIN?=.
+MCPLSRC?=./mcpl/src/mcpl					
+MCLIB=libmcplio.so
+MCOPT= -std=c99 -fPIC -I$(MCPLSRC) 
+#LIBOPT=-shared -static-libgcc  -static-libgcc_s_dw2-1 
+LIBOPT=-shared
+default: $(BIN)/$(MCLIB)
+mcpl.o: $(MCPLSRC)/mcpl.c $(MCPLSRC)/mcpl.h 
+	gcc $(MCOPT) -c $(MCPLSRC)/mcpl.c -o mcpl.o 
+mcplio.o: mcplio.c mcplio.h 
+	gcc $(MCOPT) -DCOMPILE_DLL -c mcplio.c -o mcplio.o 
+$(BIN)/$(MCLIB): mcpl.o mcplio.o 
+	gcc $(LIBOPT) mcpl.o mcplio.o -o $(BIN)/$(MCLIB)
+ 
+clean:
+	rm -f mcpl.o mcplio.o
+	
+erase:
+	rm -f mcpl.o mcplio.o
+	rm -f $(BIN)/$(MCLIB)
