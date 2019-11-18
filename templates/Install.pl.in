@@ -38,8 +38,7 @@ $VARS{'HOMEPAGE'}="@HOMEPAGE@"; # home page URL
 $VARS{'PGMNAME'}="@PGMNAME@";   # program name (restrax)
 $VARS{'VERSION'}="@VERSION@";   # version string, e.g. 5.1.0
 $VARS{'BDATE'}="@BDATE@";       # build date stamp
-$VARS{'EXENAME'}="@EXENAME@";   # RESTRAX executable (wrestrax.exe on win32 !)
-$VARS{'DLLNAME'}="@DLLNAME@";   # RESTRAX dll name (for win32)
+$VARS{'EXENAME'}="@EXEC@";      # executable name 
 $VARS{'SHEXT'}="@SHEXT@";       # extension for shared libraries (so or dll)
 $VARS{'JRE'}="/usr/bin/java";   #  Java VM launcehr for Linux
 $VARS{'PGPLOT_DEV'}="@PGPLOT_DEV@";  # default device for PGPLOT
@@ -49,10 +48,6 @@ my $PGPLOT_SRC="lib/pgplot"; # pgplot directory with grfont.dat etc. in the sour
 # define hash table for substitution (direct)
 $VARS{'SYSNAME'}="$SYSNAME";    # OS name
 $VARS{'CONSOLE'}="-cons"; # option for GUI: enable console (for Linux)
-# set -nocons option for win32
-if ($SYSNAME eq 'win32') {
-  $VARS{'CONSOLE'}="-nocons"; # option for GUI: disable console (for win32)
-};
 $VARS{'J3DLIB'}="@J3DLIB@"; 
 $VARS{'J3DCLS'}="@J3DCLS@"; 
 
@@ -106,12 +101,11 @@ if ($SYSNAME eq "win32") {
 my @BINARIES=("bin/$VARS{'EXENAME'}");
 push @BINARIES,glob("lib/*.$VARS{'SHEXT'}"); # shared libraries
 if ($SYSNAME eq "win32") {
-	push @BINARIES,("bin/jsdrivlib.dll","bin/libmcplio.dll","bin/$VARS{'DLLNAME'}");
+	push @BINARIES,("bin/jsdrivlib.dll","bin/libmcplio.dll","bin/libpgplot.dll");
 	push @BINARIES,glob("GUI/$VARS{'J3DLIB'}/*.dll");  # Java 3D libraries
 } else {
 	push @BINARIES,glob("GUI/$VARS{'J3DLIB'}/*.so");  # Java 3D libraries
 	push @BINARIES,glob("lib/*.so");
-	push @BINARIES,glob("lib/pgplot/*.so");
 	push @BINARIES,glob("lib/pgplot/pgxwin_server");
 };
 

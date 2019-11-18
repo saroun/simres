@@ -500,6 +500,7 @@ sub FindDependences {
 # Substitutes for @var@ in a *.in file, using given hash table
 # Saves the file with .in stripped off to a given target directory
 # call as SubstituteInFile($inp,$TD,\%VAR)
+# Update 11/2019: handle templates directory: ignore "templates" parent on targets
 sub SubstituteInFile {
   my $inp= shift  @_;  # input file
   my $TD=  shift  @_;  # target directory
@@ -519,8 +520,16 @@ sub SubstituteInFile {
 # construct source and target names
       my $source = "$file";
       if ($subpath ne "") {$source = UX2DOS("$subpath/$file")};
+	  my $tsubpath = $subpath;
+	  # in templates subdirectory: exclude "templaes/" from target file name 
+	  if ( $subpath =~ m/^templates[\/\\](.*)/) {
+		 $tsubpath = "$1";
+	  };
+	  if ( $subpath =~ m/^templates/) {
+		 $tsubpath = "";
+	  };
       my $target=UX2DOS("$TD/$fname");
-      if ($subpath ne "") {$target=UX2DOS("$TD/$subpath/$fname")};
+      if ($tsubpath ne "") {$target=UX2DOS("$TD/$tsubpath/$fname")};
 # do parsing
       if ($dbg != 2) {printf("    %s\n",$target)};
       if ($dbg == 0) {
@@ -528,9 +537,13 @@ sub SubstituteInFile {
         open(OUTFILE,">$target") or die "Cannot create output file $target:\n $!\n";
         while (<INFILE>) {
           if ($doUX2DOS eq "no") { $lin=$_;} else { $lin=UX2DOS($_);};
+		  #printf("line: [%s]\n",$lin);
           for my $key (%VAR) {
-						$lin =~ s/[@]$key[@]/$VAR{$key}/g;
-					};
+		  if ( $lin =~ m/^.*[@]$key[@].*/ ) {
+		     #printf("substitute: [%s] for [%s]\n",$key,$VAR{$key});
+			 $lin =~ s/[@]$key[@]/$VAR{$key}/g;
+		  };
+		  };
           # $lin =~ s/\@[\w]*\@//g; # undefined variables replace with ""
           printf(OUTFILE "%s",$lin);
         };

@@ -3,8 +3,7 @@
 # GCC with gfortran, mingw-w64
 #----------------------------------------------------
 
-# extension for shared libraries (if different from *.so)
-SHEXT= exe
+MAKE=mingw32-make
 
 # ====================  RESTRAX section ===============================
 
@@ -16,7 +15,7 @@ FC= gfortran
 # debugging:
 DBGFLAGS=  -Og -fcheck=all -Waliasing -Wampersand  -Wsurprising  -Wc-binding-type  -Wintrinsics-std   -Wintrinsic-shadow  -Wline-truncation  -Wtarget-lifetime  -Winteger-division  -Wreal-q-constant -Wundefined-do-loop  -Wmaybe-uninitialized -Werror
 # optimized for release:
-# DBGFLAGS= -O
+# DBGFLAGS= -O2
 #--------------------------------------------------
 
 # Fortran options:

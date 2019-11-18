@@ -1,8 +1,6 @@
 #--------------------------------------------------------------
 # System dependent part of makefile for RESTRAX 
-# Absoft Fortran on Linux, ver. 9.0 , 32 bit version
-# EXCI is compiled with gfortran !
-# Assumes PGPLOT as static archive compiled with gfortran => link with libgfortran
+# GCC with gfortran
 #--------------------------------------------------------------
 # ====================  RESTRAX section ===============================
 
@@ -20,7 +18,7 @@ CCFLAGS= -O
 # debugging:
 # DBGFLAGS=  -Og -fcheck=all -Waliasing -Wampersand  -Wsurprising  -Wc-binding-type  -Wintrinsics-std   -Wintrinsic-shadow  -Wline-truncation  -Wtarget-lifetime  -Winteger-division  -Wreal-q-constant -Wundefined-do-loop  -Wmaybe-uninitialized -Werror
 # optimized for release:
-DBGFLAGS= -O
+DBGFLAGS= -O2
 #--------------------------------------------------
 
 # Fortran options:
