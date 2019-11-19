@@ -25,6 +25,18 @@ C///////////////////////////////////////////////////////////////////////////
       end SUBROUTINE DELNUL
 
 !-----------------------------------------------------------------
+      SUBROUTINE STRIM(LINE, SOUT)
+! save string trimmiing
+!-----------------------------------------------------------------
+      IMPLICIT NONE
+      CHARACTER*(*),intent(in) :: LINE
+      CHARACTER*(*),intent(out) :: SOUT
+      integer :: L
+      L = min(len_trim(LINE),LEN(SOUT))
+      SOUT=LINE(1:L)
+      end SUBROUTINE STRIM
+
+!-----------------------------------------------------------------
       SUBROUTINE READ_ID_R8(LINE, ID, PARAM, MA, NA,IERR)
 ! Read REAL*8 number and its identifier from the LINE
 ! suppose format "NAME=number " or "NAME number "
@@ -188,7 +200,7 @@ C     -----------------------------------------------------------------
       IS=1
 10    i=INDEX(LINE(IS:L),NAME(INAME:INAME+LNAME-1)//'=')
  ! space delimiter must precede the name
-      if (i.gt.1) THEN 
+      if (i.gt.1) THEN
             if (LINE(is+i-2:is+i-2).NE.' ') then
                   IS=IS+i-1+LNAME ! try other occurences after this one
                   GOTO 10
@@ -253,17 +265,25 @@ C     ---------------------------------------------------
       ENDIF
       END
 
-C     ---------------------------------------------------
-      CHARACTER*(*) FUNCTION CONCAT(str1,str2)
-C     connects 2 strings without spaces in between
-C     ---------------------------------------------------
+!    ---------------------------------------------------
+      SUBROUTINE CONCAT(str1,str2, strout)
+!     connects 2 strings without spaces in between
+!     ---------------------------------------------------
       IMPLICIT NONE
-      CHARACTER*(*) str1,str2
-      INTEGER*4 I1,I2,J1,J2
+      CHARACTER(LEN=*), intent(in) :: str1,str2
+      CHARACTER(LEN=*),intent(out) :: strout
+      INTEGER :: I1,I2,J1,J2, L
       CALL BOUNDS(str1,I1,J1)
       CALL BOUNDS(str2,I2,J2)
-      CONCAT=str1(I1:I1+J1-1)//str2(I2:I2+J2-1)
-      END
+      L = LEN(strout)
+
+      if (J1>=L) then
+        strout = str1(I1:I1+L-1)
+      else
+        J2 = min(J2,L-J1)
+        strout = str1(I1:I1+J1-1)//str2(I2:I2+J2-1)
+      endif
+      END SUBROUTINE CONCAT
 
 C     ---------------------------------------------------
       SUBROUTINE SCPY(str1,is,il,str2)
@@ -783,7 +803,7 @@ C-----------------------------------------------------------------
       CHARACTER*(*) LINE
       CHARACTER*1 DLM
       INTEGER*4 L,i1,i2,IPAR,ISTART,ILEN,K
-      
+
       call BOUNDS(LINE,i1,L)
 
       ! L=LEN_TRIM(LINE)

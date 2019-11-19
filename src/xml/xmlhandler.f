@@ -237,7 +237,8 @@
         ! warning if value attribute is given, but does not agree with string value
           if (ENUM_VALUE.ge.0) then
             call INT2STR(ENUM_VALUE,CNUM)
-            LINE=trim(XHND_ENUM%ID)//' index='//trim(CNUM)//' value='//trim(strval)
+            call STRIM(trim(XHND_ENUM%ID)//' index='//trim(CNUM)//' value='//trim(strval),LINE)
+            !LINE=trim(XHND_ENUM%ID)//' index='//trim(CNUM)//' value='//trim(strval)
             call MSG_WARN('XMLHANDLER: incompatible enumerator index and value: '//trim(LINE),1)
             call MSG_INFO('Assumed value is ['//trim(strval)//']',1)
           endif

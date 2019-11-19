@@ -5,7 +5,7 @@
 #define HOMEPAGE "@HOMEPAGE@"
 #define PGMNAME "@PGMNAME@"
 #define VERSION "@VERSION@"
-#define DLLNAME "@DLLNAME@"
+#define EXENAME "@EXENAME@"
 #define DEMO "crystals,DCSANS,guides,PWD,PWD-TOF,multichannel_guides,TAS"
 #define MyAppName "Simres"
 #define MyAppPublisher "Nuclear Physics Institute, ASCR, Øež"
@@ -29,8 +29,8 @@ AppSupportURL={#HOMEPAGE}
 AppUpdatesURL={#HOMEPAGE}
 DefaultDirName={pf32}\Restrax\Simres
 DefaultGroupName={#MyAppName}
-LicenseFile={#MyAppSrc}\COPYING
-InfoBeforeFile={#MyAppSrc}\README
+LicenseFile={#MyAppSrc}\COPYING.md
+InfoBeforeFile={#MyAppSrc}\README.md
 OutputDir=.
 OutputBaseFilename={#PGMNAME}-{#VERSION}-install
 SetupIconFile={#MyAppSrc}\simres.ico
@@ -49,22 +49,22 @@ Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 ; root files
 Source: {#MyAppSrc}\simres.ico; DestDir: {app}; Flags: ignoreversion
-Source: {#MyAppSrc}\motd.in; DestDir: {app}; Flags: ignoreversion
+Source: {#MyAppSrc}\motd; DestDir: {app}; Flags: ignoreversion
 Source: {#MyAppSrc}\startGUI_win32.bat.in; DestDir: {app}; Flags: ignoreversion
 Source: {#MyAppSrc}\startCON_win32.bat.in; DestDir: {app}; Flags: ignoreversion
-Source: {#MyAppSrc}\README; DestDir: {app}; Flags: ignoreversion
-Source: {#MyAppSrc}\COPYING; DestDir: {app}; Flags: ignoreversion
-Source: {#MyAppSrc}\COPYING.LIB; DestDir: {app}; Flags: ignoreversion
+Source: {#MyAppSrc}\README.md; DestDir: {app}; Flags: ignoreversion
+Source: {#MyAppSrc}\COPYING.md; DestDir: {app}; Flags: ignoreversion
+Source: {#MyAppSrc}\LICENSE; DestDir: {app}; Flags: ignoreversion
 Source: {#MyAppSrc}\variables.ini; DestDir: {app}; Flags: deleteafterinstall ignoreversion
 Source: {#MyAppSrc}\Install.pl; DestDir: {app}; Flags: ignoreversion
 Source: {#MyAppSrc}\doc\{#MyAppNotes}; DestDir: {app}\doc; Flags: ignoreversion
 Source: {#MyAppSrc}\doc\{#MyAppGuide}; DestDir: {app}\doc; Flags: ignoreversion
 ; binary files
-Source: {#MyAppSrc}\bin\wrestrax.exe; DestDir: {app}\bin; Flags: ignoreversion
+Source: {#MyAppSrc}\bin\{#EXENAME}; DestDir: {app}\bin; Flags: ignoreversion
 Source: {#MyAppSrc}\bin\jsdrivlib.dll; DestDir: {app}\bin; Flags: ignoreversion
+Source: {#MyAppSrc}\lib\pgplot\jsdriv_server.exe; DestDir: {app}\bin; Flags: ignoreversion
 Source: {#MyAppSrc}\bin\libmcplio.dll; DestDir: {app}\bin; Flags: ignoreversion
 Source: {#MyAppSrc}\bin\libgcc_s_dw2-1.dll; DestDir: {app}\bin; Flags: ignoreversion
-Source: {#MyAppSrc}\bin\{#DLLNAME}; DestDir: {app}\bin; Flags: ignoreversion
 ;Source: {#MyAppSrc}\GUI\Simres.exe; DestDir: {app}\GUI; Flags: ignoreversion
 ; other directories
 Source: {#MyAppSrc}\setup\*; Excludes: CVS\*; DestDir: {app}\setup; Flags: ignoreversion recursesubdirs
@@ -89,6 +89,7 @@ Source: {#MyAppSrc}\demo\MAUD\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; DestDir: {a
 Source: {#MyAppSrc}\demo\TAS\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; DestDir: {app}\demo\TAS; Flags: ignoreversion recursesubdirs
 Source: {#MyAppSrc}\demo\crystal_reflectivity\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; DestDir: {app}\demo\crystal_reflectivity; Flags: ignoreversion recursesubdirs
 Source: {#MyAppSrc}\demo\multiple_reflections\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; DestDir: {app}\demo\multiple_reflections; Flags: ignoreversion recursesubdirs
+Source: {#MyAppSrc}\demo\simres_mcstas\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; DestDir: {app}\demo\multiple_reflections; Flags: ignoreversion recursesubdirs
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; WorkingDir: {app}; IconFilename: {app}\simres.ico
 Name: {group}\Release notes; Filename: {app}\doc\{#MyAppNotes}
@@ -97,7 +98,6 @@ Name: {group}\{cm:ProgramOnTheWeb,{#MyAppName}}; Filename: {#HOMEPAGE}
 Name: {group}\{cm:UninstallProgram,{#MyAppName}}; Filename: {uninstallexe}
 Name: {commondesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: desktopicon; WorkingDir: {app}; IconFilename: {app}\simres.ico
 Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: quicklaunchicon; WorkingDir: {app}; IconFilename: {app}\simres.ico
-
 
 [UninstallDelete]
 Name: {app}; Type: filesandordirs

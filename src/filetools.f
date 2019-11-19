@@ -324,8 +324,9 @@
 !-------------------------------------------------------------------------
       character*(*) :: FNAME,SFX
       character*256 :: fout,fdir,fn
+      character*512 :: S
       character*32 :: fe
-      integer :: is,il,IO
+      integer :: is,il,IO, LSTR
 call bounds(fname,is,il)
       if (trim(FNAME).eq.'STDOUT') then
         IO=6
@@ -333,7 +334,9 @@ call bounds(fname,is,il)
         call bounds(fname,is,il)
         call SplitPathName(fname(is:is+il-1),fdir,fn,fe)
         if (len_trim(fdir).eq.0) fdir=trim(OUTPATH)
-        fout=trim(fdir)//'/'//trim(fn)
+        S=trim(fdir)//'/'//trim(fn)
+        LSTR=min(256,len_trim(S))
+        fout=S(1:LSTR)
         if (len_trim(sfx).gt.0) fout=trim(fout)//'_'//trim(sfx)
         if (len_trim(fe).gt.0) fout=trim(fout)//'.'//trim(fe)
         IO=OPENFILEUNIT(trim(fout),.false.)
@@ -408,10 +411,13 @@ C-------------------------------------------------------------------
       CHARACTER(*),intent(in) :: FNAME,FPATH,FEXT
       INTEGER,intent(in) :: IPROMPT,IWRITE
       INTEGER,intent(out) :: IRES
+      integer, parameter :: MAXSTR=2*MAX_FNAME_LENGTH+1
       CHARACTER(*),intent(out) :: FRES
-      CHARACTER(MAX_FNAME_LENGTH) :: FD,FN,FE,FSEARCH,S,AUX,LINE
-      INTEGER :: ILD,ILN,ILE,LEXT,LS,LP,LL,LRES
-      LOGICAL :: APEXT,ASKNAME,LOG1
+      CHARACTER(MAX_FNAME_LENGTH) :: FD,FN,FE,FSEARCH,AUX
+      CHARACTER(MAXSTR) :: S
+      CHARACTER(1024) :: LINE
+      INTEGER :: ILD,ILN,ILE,LEXT,LS,LP,LL,LRES,LSTR
+      LOGICAL :: APEXT, ASKNAME, LOG1
 1     FORMAT(' Open file [',a,'] : ',$)
 2     FORMAT(' Open file : ',$)
 3     FORMAT(' Save to file [',a,'] : ',$)
@@ -444,7 +450,11 @@ c if not, use FD/FN as the file name appended to a search path
       if (isFullPathName(FD)) then
         FSEARCH=trim(FD)
       else
-        if (len_trim(FD).gt.0) FN=trim(FD)//'/'//trim(FN)
+        if (len_trim(FD).gt.0) then
+          S=trim(FD)//'/'//trim(FN)
+          LSTR=min(MAX_FNAME_LENGTH,len_trim(S))
+          FN=S(1:LSTR)
+        endif
       endif
       LEXT=len_trim(FEXT)
       ILN=len_trim(FN)
@@ -506,7 +516,11 @@ C ask for filename
         if (isFullPathName(FD)) then
           FSEARCH=trim(FD)
         else
-          if (len_trim(FD).gt.0) FN=trim(FD)//'/'//trim(FN)
+          if (len_trim(FD).gt.0) then
+            S=trim(FD)//'/'//trim(FN)
+            LSTR=min(MAX_FNAME_LENGTH,len_trim(S))
+            FN=S(1:LSTR)
+          endif
         endif
         ILN=len_trim(FN)
         ILE=len_trim(FE)
@@ -516,12 +530,14 @@ C ask for filename
 c construct filename with extension (excl. full path)
 c append extension when required
       if (APEXT) then
-        AUX=trim(FN)//'.'//trim(FEXT)
+        S=trim(FN)//'.'//trim(FEXT)
       else if (ILE.GT.0) THEN
-        AUX=trim(FN)//'.'//trim(FE)
+        S=trim(FN)//'.'//trim(FE)
       else
-        AUX=trim(FN)
+        S=trim(FN)
       endif
+      LSTR=min(MAX_FNAME_LENGTH,len_trim(AUX))
+      AUX=S(1:LSTR)
 
       select case(IWRITE)
   ! open for read
@@ -535,12 +551,14 @@ c append extension when required
         IRES=1
         LP=len_trim(FSEARCH)
         IF ((LP.GT.0).AND.(FSEARCH(LP:LP).NE.'/')) THEN
-          FN=trim(FSEARCH)//'/'//trim(AUX)
+          S=trim(FSEARCH)//'/'//trim(AUX)
         ELSE IF (LP.GT.0) THEN
-          FN=trim(FSEARCH)//trim(AUX)
+          S=trim(FSEARCH)//trim(AUX)
         ELSE
-          FN=trim(AUX)
+          S=trim(AUX)
         ENDIF
+        call STRIM(S,FN)
+
         LL=min(LRES,len_trim(FN))
         FRES=FN(1:LL)
 C Overwrite confirmation only for IOVER>0

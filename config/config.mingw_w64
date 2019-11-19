@@ -39,5 +39,5 @@ restrax_LDADD=
 restrax_LD= $(FC)
 
 # option passed to the linker
-restrax_LDFLAGS= -static-libgfortran   
-
+# restrax_LDFLAGS= -static-libgfortran   
+restrax_LDFLAGS= -static-libgfortran  

@@ -23,16 +23,17 @@ use vars qw/*dbg *SYSNAME *PROMPT *HOST/;
 # Note that *.in files are added automatically
 my @SOURCES=(
 # complete directories
-    "config","doc","pgplot","setup","src","mcplio",
+    "config","doc","pgplot","setup","src","mcplio","templates","licenses",
 # demos (add GUI binary also to sources)
     "demo/STRESSSPEC","demo/BEER","demo/ENGINX","demo/MEREDIT","demo/TAS","demo/simres_mcstas","demo/multiple_reflections",
     "demo/crystal_reflectivity","demo/MAUD",	
 # some alias and def files for binding with dll
 
-# templates
-    "*.in",
 # information files
-    "AUTHORS","README","COPYING","COPYING.LIB","simres.ico","lib/pgplot/copyright.notice","lib/pgplot/README.txt",
+   "README.md", "COPYING.md", "LICENSE", 
+   "simres.ico","simres.svg",
+# 3rd party SW
+   "3rdparty/mcpl", "3rdparty/pgplot", 
 # Java GUI
     "GUI/lib/*.jar","GUI/simresCON.jar","GUI/simresGUI.jar","GUI/JSUtils.jar"
   );
@@ -46,8 +47,7 @@ my @EXTRAS=(
 # executable scripts:
 my @EXECS=(
 # perl script system for configuration, installation and packaging
-    "Restrax.pm","configure.pl",
-    "res2html","fsym",
+    "Restrax.pm", "configure.pl", "fsym",
 # batch files useful in win32
   );
 
@@ -55,18 +55,13 @@ my @EXECS=(
 my @UTILS=(
 # Java 3D files:
     "GUI/j3d-jre",
-# PGPLOT files with import libs
+	# information files
+   "README.md", "COPYING.md", "LICENSE", "licenses"
 ); 
-  
 if ($SYSNAME eq 'win32') {
-	push @UTILS,("bin/wrestrax.exe", "bin/jsdrivlib.dll");
+	push @UTILS,("bin/libpgplot.dll", "bin/jsdrivlib.dll", "lib/pgplot/jsdriv_server.exe", "lib/pgplot/grfont.dat");
 } else {
-	if ($HOST eq 'x86_64') { 
-	# on Linux, distribute also PGPLOT sources
-		push @SOURCES,("pgplot/src", "pgplot/tgt");
-	} else {
-		# TODO
-	} 
+    push @UTILS,("lib/libpgplot.so", "lib/pgplot/pgxwin_server", "lib/pgplot/grfont.dat");
 };
 
 

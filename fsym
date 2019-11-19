@@ -1,19 +1,19 @@
 #!/usr/bin/perl
-# $Id: fsym,v 1.15 2016/03/17 15:48:24 saroun Exp $
+# Search for references in source files.
+# Usage: perl fsym [symbol]
   $SS=@ARGV[0];
   @FNAMES=<src/*.inc include/*.inc src/ness/*.inc >;
   push @FNAMES,glob("src/*.f");
-  push @FNAMES,glob("src/ness/*.f");
-	push @FNAMES,glob("src/matrix/*.f");
-	push @FNAMES,glob("src/primitives/*.f");
   push @FNAMES,glob("src/components/*.f");
-	push @FNAMES,glob("src/components/tof/*.f");
+  push @FNAMES,glob("src/components/tof/*.f");
+  push @FNAMES,glob("src/graphics/*.f");
   push @FNAMES,glob("src/instruments/*.f");
+  push @FNAMES,glob("src/matrix/*.f");
+  push @FNAMES,glob("src/ness/*.f");
+  push @FNAMES,glob("src/primitives/*.f");
   push @FNAMES,glob("src/tables/*.f");
   push @FNAMES,glob("src/xml/*.f");
-  push @FNAMES,glob("src/graphics/*.f");
-   push @FNAMES,glob("src/sys/linux/*.f");
-   push @FNAMES,glob("src/sys/win/*.f");
+
   
   shift @ARGV;
   if (@ARGV < 1) {@ARGVAL=@FNAMES; } else { @ARGVAL=@ARGV};

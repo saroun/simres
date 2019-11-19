@@ -8,13 +8,15 @@ package Restrax;
 ###########################################################
 use base 'Exporter';
 use Cwd;
+use Config;
 
 our @EXPORT = ('UX2DOS','SplitFileName','MkSubDirCmd','FileCopyCmd','getFileCopyCmd',
     'dosystem','CollectResources','RmFileCmd','RmDirCmd','StripPath','getTUGZip',
     'ZipDirCmd','FindDependences','SubstituteInFile');
 
 our $dbg=0;
-our $SYSNAME="";
+our $SYSNAME= "$Config{'osname'}";
+our $ARCHNAME="$Config{'archname'}";
 our $PROMPT="yes";   # set to no if you dont want any user confirmation on file delete
 our $PATHDEL="\\";
 our $HOST="i586";
@@ -35,15 +37,22 @@ my @SRCFILES=();    # array with files to install
 my @SRCDIRS=();     # array with directories to install
 
 
-# Get OS name
+# Get unified OS name
 $SYSNAME=$^O;   # system name
 if ($SYSNAME =~ m/MSWin32/i) {
   $SYSNAME='win32';
+  if ($ARCHNAME =~ m/.*x64.*/ or $ARCHNAME =~ m/.*x86_64.*/) {
+    $HOST='x86_64';
+  } else {    
+    $HOST='x86_32';
+  }
 } else {
-  $SYSNAME=`uname -s`;
-  $HOST=`uname -m`;
-  $SYSNAME =~ s/\n//;
-  $HOST =~ s/\n//;
+  if ($ARCHNAME =~ m/.*x86_64.*/) {
+    $HOST='x86_64';
+  } else {
+    $HOST=`uname -m`;
+	$HOST =~ s/\n//;
+  }
 };
 
 # get TUGZip executable for win32
@@ -524,10 +533,10 @@ sub SubstituteInFile {
 	  # in templates subdirectory: exclude "templaes/" from target file name 
 	  if ( $subpath =~ m/^templates[\/\\](.*)/) {
 		 $tsubpath = "$1";
-	  };
-	  if ( $subpath =~ m/^templates/) {
+	  } elsif ( $subpath =~ m/^templates/) {
 		 $tsubpath = "";
 	  };
+	  #printf("subpath=%s, tsubpath=%s\n",$subpath,$tsubpath);
       my $target=UX2DOS("$TD/$fname");
       if ($tsubpath ne "") {$target=UX2DOS("$TD/$tsubpath/$fname")};
 # do parsing
@@ -537,7 +546,7 @@ sub SubstituteInFile {
         open(OUTFILE,">$target") or die "Cannot create output file $target:\n $!\n";
         while (<INFILE>) {
           if ($doUX2DOS eq "no") { $lin=$_;} else { $lin=UX2DOS($_);};
-		  #printf("line: [%s]\n",$lin);
+		  # printf("line: [%s]\n",$lin);
           for my $key (%VAR) {
 		  if ( $lin =~ m/^.*[@]$key[@].*/ ) {
 		     #printf("substitute: [%s] for [%s]\n",$key,$VAR{$key});

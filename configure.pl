@@ -19,11 +19,13 @@ use Restrax;
 use strict;
 use Cwd;
 
-use vars qw/*dbg *SYSNAME *HOST/;
+use vars qw/*dbg *SYSNAME *ARCHNAME *HOST/;
 *dbg      = *Restrax::dbg;
 *SYSNAME  = *Restrax::SYSNAME;
+*ARCHNAME  = *Restrax::ARCHNAME;
 *HOST     = *Restrax::HOST;
 printf("System: %s\n",$SYSNAME);
+printf("Architecture: %s\n",$ARCHNAME);
 
 my $CD=cwd();       # current directory
 $dbg=0;          # set 1 for debug: no system commands will be executed
@@ -66,8 +68,8 @@ my $MCPLIMP="";
 
 # Windows:
 if ($SYSNAME eq 'win32') {
-  $rm="ERASE ";       #  remove command
-  $cp="COPY /Y ";     # copy command  
+  $rm="erase ";       #  remove command
+  $cp="copy /Y ";     # copy command  
   $ext=".exe"; # we are using restrax as DLL in win32
   $SHEXT="dll"; # shared library extension
   $PGLIB="libpgplot.dll"; # PGPLOT library name
@@ -87,7 +89,6 @@ $BUILDNUM =~ s/(\d*)[.](\d*)[.](\d*)/$1.$2$3/;
 
 # get VARS hash table
 # $VARS{'CD'}=UX2DOS($CD);   # current directory
-$VARS{'BITS'}=32;
 $VARS{'HOMEPAGE'}="http://neutron.ujf.cas.cz/restrax";  # RESTRAX hommepage
 $VARS{'PGMNAME'}=$PGMNAME;        # program name
 $VARS{'VERSION'}=$VERSION;        # version number
@@ -96,20 +97,23 @@ $VARS{'PACKNUM'}=$PACKNUM;        # package number (derived from version number)
 $VARS{'CFGDIR'}="./config";       # Path to the 'config.<sys> files
 $VARS{'BDATE'}=localtime();       # build time stamp
 $VARS{'EXEC'}="$PGMNAME$PACKNUM$ext"; # Name of the executable
-$VARS{'SRC'}="src";               # Path to the source files
-$VARS{'BIN'}="bin";               # Path to executable files
-$VARS{'LIB'}="lib";               # Path to library files
-$VARS{'MKFILE'}="makefile";            # makefile with full path
-$VARS{'INSTDIR'}=".";             # default installation directory
-$VARS{'SHEXT'}="$SHEXT";          # shared library extension, definned above
+$VARS{'SRC'}="src";                # Path to the source files
+$VARS{'BIN'}="bin";                # Path to executable files
+$VARS{'LIB'}="lib";                # Path to library files
+$VARS{'MKFILE'}="makefile";        # makefile with full path
+$VARS{'INSTDIR'}=".";              # default installation directory
+$VARS{'SHEXT'}="$SHEXT";           # shared library extension, definned above
 $VARS{'J3DCLS'}="j3d-jre/lib/ext"; # location of J3D jar classes (relative to ./GUI)
-$VARS{'PGSRC'}="3rdparty/pgplot";        # location of PGPPLOT source files 
 $VARS{'MCPLIO'}="mcplio";          # location of MCPLIO source files - binding of MCPL to SIMRES
+$VARS{'PGSRC'}="3rdparty/pgplot";        # location of PGPPLOT source files 
 $VARS{'MCPLSRC'}="3rdparty/mcpl/src/mcpl";        # location of MCPL source files 
 $VARS{'SYSNAME'}="$SYSNAME";       # OS name
+$VARS{'ARCHNAME'}="$ARCHNAME";     # architecture name
+$VARS{'HOST'}="$HOST";             # short architecture name
+$VARS{'EXENAME'}=$VARS{'EXEC'};    # for compatibility with older scripts
 
 # Add some system-dependent items
-if ($HOST eq 'x86_64') {           # location of J3D shared libraries (relative to ./GUI)
+if ($HOST eq 'x86_64') {
   $VARS{'BITS'}=64; 
 } else {
   $VARS{'BITS'}=32;
@@ -573,9 +577,10 @@ sub CreateMakefile {
   printf(OUTFILE "\n");
 
 # cleandist
-  $f="$VARS{'BIN'}/*.o $VARS{'BIN'}/*.dll $VARS{'BIN'}/*.lib $VARS{'BIN'}/*.mod ./*.mod \$(BIN)/\$(EXEC) ZipBin.pl ZipSrc.pl ZipDoc.pl ";
-  $f=$f." $VARS{'LIB'}/pgplot/grfont.dat";
-  $f=$f." $VARS{'LIB'}/*.so";
+  $f="$VARS{'BIN'}/*.o  $VARS{'BIN'}/*.mod $VARS{'BIN'}/*.def ";
+  $f=$f." $VARS{'BIN'}/*.dll $VARS{'BIN'}/*.lib \$(BIN)/\$(EXEC) ";
+  $f=$f." $VARS{'LIB'}/pgplot/grfont.dat ";
+  $f=$f." startCON  startGUI  startCON*.bat  startGUI*.bat  simres.iss  motd ";
   if ($SYSNAME eq "win32") {
 	$f=$f." $VARS{'BIN'}/$MCPLIMP $VARS{'BIN'}/$MCPLLIB";
 	$f=$f." $VARS{'BIN'}/$PGIMP $VARS{'BIN'}/$PGLIB";
@@ -587,7 +592,7 @@ sub CreateMakefile {
   };
   printf(OUTFILE "cleandist: \n");
   printf(OUTFILE "\t$rm %s \n",$f);
-  printf(OUTFILE "\t\$(MAKE) -C \$VARS{'PGTGT'} -f makefile_gfortran  erase \n");
+  printf(OUTFILE "\t\$(MAKE) -C \$(PGTGT) -f makefile_gfortran  erase \n");
   printf(OUTFILE "\n");
 
 # install
@@ -750,7 +755,7 @@ CheckDirectories;
 ProcessConfig;
 
 # ---------------  create config.inc ----------------------
-CreateConfigHdr;
+# CreateConfigHdr;
 
 # ---------------  Collect source files ----------------------
 CollectSources;
