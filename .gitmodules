@@ -4,3 +4,9 @@
 [submodule "mcplio/mcpl"]
 	path = mcplio/mcpl
 	url = https://github.com/mctools/mcpl
+[submodule "3rdparty/mcpl"]
+	path = 3rdparty/mcpl
+	url = https://github.com/mctools/mcpl
+[submodule "jsdriv_server"]
+	path = jsdriv_server
+	url = https://github.com/saroun/jsdriv_server

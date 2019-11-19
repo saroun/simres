@@ -758,7 +758,7 @@ pgdemo12.exe: $(DEMDIR)/pgdemo12.f
 	$(FCOMPL) $(FFLAGD) -o pgdemo12.exe $(DEMDIR)/pgdemo12.f $(PGPLOT_LIB) $(LIBS)
 pgdemo13.exe: $(DEMDIR)/pgdemo13.f 
 	$(FCOMPL) $(FFLAGD) -o pgdemo13.exe $(DEMDIR)/pgdemo13.f $(PGPLOT_LIB) $(LIBS)
-pgdemo14: $(DEMDIR)/pgdemo14.f 
+pgdemo14.exe: $(DEMDIR)/pgdemo14.f 
 	$(FCOMPL) $(FFLAGD) -o pgdemo14.exe $(DEMDIR)/pgdemo14.f $(PGPLOT_LIB) $(LIBS)
 pgdemo15.exe: $(DEMDIR)/pgdemo15.f 
 	$(FCOMPL) $(FFLAGD) -o pgdemo15.exe $(DEMDIR)/pgdemo15.f $(PGPLOT_LIB) $(LIBS)
