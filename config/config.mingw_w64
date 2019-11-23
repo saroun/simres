@@ -7,7 +7,13 @@ MAKE=mingw32-make
 
 # ====================  RESTRAX section ===============================
 
-# command calling Fortran compler
+# C compler
+CC= gcc
+
+# C options:
+CCFLAGS= -O -DLINK_DYNAMIC 
+
+# Fortran compler 
 FC= gfortran
 
 # -----------------------------------------
@@ -21,15 +27,8 @@ DBGFLAGS=  -Og -fcheck=all -Waliasing -Wampersand  -Wsurprising  -Wc-binding-typ
 # Fortran options:
 FCFLAGS= $(DBGFLAGS)  -funderscoring -ffixed-form -ffixed-line-length-132 -Jbin
 
-# command calling C compler
-CC= gcc
-
-# C options:
-CCFLAGS= -O -DCOMPILE_DLL
-
-# user static libraries to link with RESTRAX:
-# USER_LIBS=.\lib\pgplot\jsdrivlib.lib 
-USER_LIBS=
+# user libraries to link with RESTRAX:
+USER_LIBS= -L.\bin -lpgplot
 
 # other libraries to link with RESTRAX:
 #restrax_LDADD= -lgfortran -lX11
@@ -40,4 +39,4 @@ restrax_LD= $(FC)
 
 # option passed to the linker
 # restrax_LDFLAGS= -static-libgfortran   
-restrax_LDFLAGS= -static-libgfortran  
+restrax_LDFLAGS=

@@ -11,7 +11,7 @@ use Cwd;
 use Config;
 
 our @EXPORT = ('UX2DOS','SplitFileName','MkSubDirCmd','FileCopyCmd','getFileCopyCmd',
-    'dosystem','CollectResources','RmFileCmd','RmDirCmd','StripPath','getTUGZip',
+    'dosystem','CollectResources','CollectResourcesEx','RmFileCmd','RmDirCmd','StripPath','getTUGZip',
     'ZipDirCmd','FindDependences','SubstituteInFile');
 
 our $dbg=0;
@@ -303,11 +303,13 @@ sub RmFileCmd {
 # Both files and subdirectories remain listed in the global
 # arrays @SRCFILES and @SRCDIRS, respectively.
 
-sub CollectResources {
+sub CollectResourcesEx {
   my $incl= shift @_; # include extensions
   my $excl= shift @_; # exclude extensions
+  my $prefix= shift @_; # path prefix for all items
   my @SRCLIST= @_; # list of sources (files or directories)
   my @lst=();
+  # Empty SRCFILES and SRCDIRS first
   while ($#SRCFILES > -1) {shift @SRCFILES;};
   while ($#SRCDIRS > -1) {shift @SRCDIRS;};
   my $CD=cwd();       # current directory
@@ -316,6 +318,9 @@ sub CollectResources {
 
 # scan input list and separate files from directories
   foreach my $D (@SRCLIST) {
+    if (! $prefix eq "") {
+		$D = $prefix."/".$D;
+	};
 # list directory + subdirectories
     my $DD=UX2DOS("$D");
 #  printf("%s    \n",$DD);
@@ -346,6 +351,15 @@ sub CollectResources {
     };
   };
   return @SRCFILES;
+};
+
+
+# For backward compatibility: call CollectResourcesEx without prefix 
+sub CollectResources {
+  my $incl= shift @_; # include extensions
+  my $excl= shift @_; # exclude extensions
+  my @SRCLIST= @_; # list of sources (files or directories)
+  return CollectResourcesEx($incl,$excl,"",@SRCLIST);
 };
 
 # Collect directories to be installed
@@ -433,9 +447,7 @@ sub ZipDirCmd {
 
 # in other systems, use GNU tar, gzip
     } else {
-      @cmd=("tar","-cf","$SD.tar","$SD");
-      dosystem(@cmd);
-      @cmd=("gzip","$SD.tar");
+      @cmd=("tar","-czf","$SD.tar.gz","$SD");
       dosystem(@cmd);
     };
   } else {
@@ -541,24 +553,22 @@ sub SubstituteInFile {
       if ($tsubpath ne "") {$target=UX2DOS("$TD/$tsubpath/$fname")};
 # do parsing
       if ($dbg != 2) {printf("    %s\n",$target)};
-      if ($dbg == 0) {
-        open(INFILE,"<$source") or die "Cannot open input file $source:\n $!\n";
-        open(OUTFILE,">$target") or die "Cannot create output file $target:\n $!\n";
-        while (<INFILE>) {
+      open(INFILE,"<$source") or die "Cannot open input file $source:\n $!\n";
+      open(OUTFILE,">$target") or die "Cannot create output file $target:\n $!\n" if ($dbg == 0);
+      while (<INFILE>) {
           if ($doUX2DOS eq "no") { $lin=$_;} else { $lin=UX2DOS($_);};
-		  # printf("line: [%s]\n",$lin);
-          for my $key (%VAR) {
-		  if ( $lin =~ m/^.*[@]$key[@].*/ ) {
-		     #printf("substitute: [%s] for [%s]\n",$key,$VAR{$key});
-			 $lin =~ s/[@]$key[@]/$VAR{$key}/g;
-		  };
+		  #printf("line: [%s]\n",$lin);
+          foreach my $key (keys %VAR) {
+		      #printf("key [%s], var [%s]\n",$key,$VAR{$key});
+			  if ( $lin =~ m/^.*[@]$key[@].*/ ) {
+				 $lin =~ s/[@]$key[@]/$VAR{$key}/g;
+			  };
 		  };
           # $lin =~ s/\@[\w]*\@//g; # undefined variables replace with ""
-          printf(OUTFILE "%s",$lin);
-        };
-        close(OUTFILE);
-        close(INFILE);
-      };
+          printf(OUTFILE "%s",$lin) if ($dbg == 0);
+       };
+       close(OUTFILE) if ($dbg == 0);
+       close(INFILE);
     };
   };
 };

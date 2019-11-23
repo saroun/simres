@@ -609,7 +609,7 @@
   ! comment
       call getCmdParamS(TYP,1,'COM',COMM)
   ! debug option: dump file name is given as a comment
-      if (INDEX(COMM,"dump=")>0) then
+      if ((INDEX(COMM,"dump=")>0).and.(len_trim(COMM)>5)) then
         FN=trim(OUTPATH)//'/'//trim(COMM(6:))
         IU=OPENFILEUNIT(trim(FN),.false.)
         if (IU>0) then

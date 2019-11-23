@@ -877,6 +877,11 @@ erase:
 	rm -f  grfont.dat
 	rm -f  pgdemo*
 	
+uninstall:
+	rm -f  $(BIN)/$(SHARED_LIB)
+	rm -f  $(BIN)/libpgplot.a
+	rm -f  $(PGD)/pgxwin_server
+	rm -f  $(PGD)/grfont.dat
 	
 #-----------------------------------------------------------------------
 # Include file dependencies

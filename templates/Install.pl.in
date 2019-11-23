@@ -1,6 +1,6 @@
 #! /usr/bin/perl
 ##################################################################
-#  $Id: Install.pl.in,v 1.43 2019/09/06 19:32:11 saroun Exp $
+#  $Id$
 #  *****  Installation script for SIMRES  *****
 #  Usage: perl Install.pl <installation directory>
 # Edit the "PROJECT DEFINITIONS" section below to modify the contents
@@ -16,10 +16,9 @@ use Restrax;
 use strict;
 use Cwd;
 
-use vars qw/*dbg /;
+use vars qw/*dbg *SYSNAME *HOST/;
 
 # Global declarations
-#Restrax -> {SYSNAME} = 'win32';
 $dbg=0;          # set 1 for debug: no system commands will be executed
 my $ThisScript=$0;  # name of this script
 my %VARS;           # hash table for substitutions
@@ -27,8 +26,6 @@ my $CD=cwd();       # current directory
 my @INFILES=();     # array with *.in files
 my @SRCFILES=();    # array with files to install
 my @EXECS=();       # executables cripts
-my @PGFILES=();
-my $PARSE="yes";      # parse *.in files by default (change via cmd options)
 my $BITS=@BITS@; # 32 or 64
 my $SYSNAME="@SYSNAME@";
 
@@ -37,53 +34,64 @@ $VARS{'HOMEPAGE'}="@HOMEPAGE@"; # home page URL
 $VARS{'PGMNAME'}="@PGMNAME@";   # program name (restrax)
 $VARS{'VERSION'}="@VERSION@";   # version string, e.g. 5.1.0
 $VARS{'BDATE'}="@BDATE@";       # build date stamp
-$VARS{'EXENAME'}="@EXENAME@";      # executable name 
+$VARS{'EXENAME'}="@EXENAME@";   # executable name 
 $VARS{'SHEXT'}="@SHEXT@";       # extension for shared libraries (so or dll)
 $VARS{'JRE'}="/usr/bin/java";   #  Java VM launcehr for Linux
 $VARS{'PGPLOT_DEV'}="@PGPLOT_DEV@";  # default device for PGPLOT
 $VARS{'PGPLOT_DIR'}="lib/pgplot";  # pgplot directory with grfont.dat etc. in the target folder
-my $PGPLOT_SRC="lib/pgplot"; # pgplot directory with grfont.dat etc. in the source folder
 
 # define hash table for substitution (direct)
 $VARS{'SYSNAME'}="$SYSNAME";    # OS name
+$VARS{'HOST'}="@HOST@"; # short host name 
 $VARS{'CONSOLE'}="-cons"; # option for GUI: enable console (for Linux)
 $VARS{'J3DLIB'}="@J3DLIB@"; 
 $VARS{'J3DCLS'}="@J3DCLS@"; 
+$VARS{'PWD'}=UX2DOS($CD);          # current directory 
 
-# process command line options
-sub CmdParam;
-CmdParam;
 
-# copy target directory to $TD
-my $TD=$VARS{'INSTDIR'};
+
+# check system compatibility
+sub CheckSystem;
+if (CheckSystem != 0) {
+ printf("If you still want to continue, edit SYSNAME and HOST variables in $0 ");
+ printf("to match your system and repeat the command.\n");
+ exit 1;
+};
+
+
+# Define target directory as $TD, full path
+my $TD=UX2DOS($VARS{'INSTDIR'});
 # installation in a subdirectory: INSTDIR in substitutions must be "."
-if ($TD !~ m/^(\/.*|[a-zA-Z]:.*)/) {$VARS{'INSTDIR'}="."};
+# if ($TD !~ m/^(\/.*|[a-zA-Z]:.*)/) {$VARS{'INSTDIR'}="$VARS{'PWD'}/$VARS{'INSTDIR'}"};
+if ($VARS{'INSTDIR'} =~ m/^[.].*/) {
+	$TD=UX2DOS("$VARS{'PWD'}/$VARS{'INSTDIR'}");
+}
 
 
 # -------------------  PROJECT DEFINITIONS (edit to your convenience)------------
 
 # source files/directories
-my @SOURCES=("setup","config","licenses",
-  "README.md","COPYING.md","LICENSE",
-  "INSTALL.md","doc/simres-guide.pdf","doc/simres-release-notes.pdf");
+my @SOURCES=("setup", "licenses",
+  "README.md", "COPYING.md", "LICENSE", "INSTALL.md", "doc/simres-guide.pdf", "doc/simres-release-notes.pdf");
 # GUI
 push @SOURCES,("GUI/@PGMNAME@GUI.jar","GUI/@PGMNAME@CON.jar", "GUI/JSUtils.jar");
-push @SOURCES,glob("GUI/restraxGUI.ini.in, GUI/restraxCON.ini.in");
-# PGPLOT dist or 
-push @SOURCES,glob("lib/pgplot/grfont.dat");
+# PGPLOT grfont
+push @SOURCES,("lib/pgplot/grfont.dat");
 
 # add demo projects
-my @DEMOS = ("demo/STRESSSPEC","demo/BEER","demo/ENGINX","demo/MEREDIT","demo/TAS","demo/simres_mcstas","demo/multiple_reflections",
+my @DEMOS = ("demo/STRESSSPEC","demo/BEER","demo/ENGINX",
+     "demo/MEREDIT","demo/TAS","demo/simres_mcstas","demo/multiple_reflections",
     "demo/crystal_reflectivity","demo/MAUD");
 push @SOURCES,@DEMOS;
 
 # template *.in files, if not already included in the directories above
 # (they won't be copied, but parsed)
-push @SOURCES,("motd.in");
+my @TEMPLATES = glob("GUI/*.in");
+push @TEMPLATES, ("motd.in");
 if ($SYSNAME eq "win32") {
-  push @SOURCES,("startGUI_win32.bat.in","startCON_win32.bat.in");
+  push @TEMPLATES,("startGUI_win32.bat.in","startCON_win32.bat.in");
 } else {
-  push @SOURCES,("startGUI.in","startCON.in");
+  push @TEMPLATES,("startGUI.in","startCON.in");
 };
 
 # executable scripts
@@ -113,25 +121,40 @@ push @SOURCES,glob("GUI/$VARS{'J3DCLS'}/*.jar");
 push @SOURCES,glob("GUI/lib/*.jar");
 
 
+
 # ------------------------------ SUBROUTINES ----------------------------------
+
+sub CheckSystem {
+    my $res = 0;
+	if ( ! ($VARS{'SYSNAME'} eq $SYSNAME)) {
+	  printf("Incompatible system %s, required %s\n",$SYSNAME,$VARS{'SYSNAME'});
+	  $res = 1;
+	};
+	if ( ! ($VARS{'HOST'} eq $HOST)) {
+	  printf("Incompatible platform %s, required %s\n",$HOST,$VARS{'HOST'});
+	  $res = 1;
+	};
+	return $res;
+};
 
 # handle command line parameters
 sub CmdParam {
   if ($#ARGV > -1) {
     $VARS{'INSTDIR'} = shift @ARGV;
-    foreach my $a (@ARGV) {
-      if ($a =~ m/[-]*noparse\z/) {$PARSE="no";};
-    };
+  #  foreach my $a (@ARGV) {
+  #    if ($a =~ m/[-]*noparse\z/) {$PARSE="no";};
+  #  };
    } else {
     print "\n";
     print "Usage:\n";
-    print "perl $0 <target directory> [options] \n";
+ #   print "perl $0 <target directory> [options] \n";
+    print "perl $0 <target directory> \n";
     print "Arguments:\n";
     print "     <target directory> ... where you want to install the package (must exist)\n";    
-    print "Options:\n";
-    print "    -noparse        ... does not parse *.in files \n";
+ #   print "Options:\n";
+ #   print "    -noparse        ... does not parse *.in files \n";
     print "\n";
-    die;
+    exit 0;
   };
   if ($VARS{'INSTDIR'} eq "") {$VARS{'INSTDIR'}=".";};
   # check the target directory
@@ -141,28 +164,16 @@ sub CmdParam {
   };
 };
 
-# find PGPLOT source files (grfont.dat, pgxwin_server etc.)
-sub FindPGPLOT {
-  my $f="";
-  my $dir="";
-  my @PGPATH=();
-  @PGFILES=("grfont.dat");
-  if ($SYSNAME =~  m/Linux/i ) {
-      push @PGFILES,("pgxwin_server", "libpgplot.so");
-  };
-};
 
 # Scan *.in files in directories defined in @_ and substitute for
 # variables marked as , using the %VARS hash table
 sub ProcessInFiles {
-  if ($PARSE ne "no") {
     printf("Processing templates: \n");
     foreach my $F (@INFILES) {
-      if ($F !~ m/^[.\/\\]*$ThisScript\.in/) { # don't process Install.pl.in
+      if ($F !~ m/^.*$ThisScript\.in/) { # don't process Install.pl.in
         SubstituteInFile($F,$TD,\%VARS);
       };
     };
-  };
 };
 
 # message at the end
@@ -187,62 +198,62 @@ sub EndTasks {
 # find Java VM launcher on Linux
 #-----------------------------------------------------
 sub findJRE {
-my $ver=32; # 32 or 64
-if ($BITS == 64) {$ver=64;}; 
-my @DIRS = glob("/usr/lib/jvm/*"); # search directories
-my @javas = ();
-my %goodJRE;
-printf("Searching for Java VM:\n");
-$VARS{'JRE'}="";
-foreach my $d (@DIRS) {
-    if ( -d $d ) {
-        my $jre=$d."/jre/bin/java";
-        if ( -f $jre) {
-          push @javas ,$jre;
-        };
-    };
-};
-
-foreach my $f (@javas) {
-    	# printf("jre=%s\n",$f);
-    	my $out=`$f -d$ver -version 2>&1`;
-	if ( $out =~ m/version[\s\t]*"([0-9_.]+)"/) {
-		printf("matched %s\n",$1);
-		$goodJRE{$1}=$f;
-	};	
-};
-
-# min. version > 1.7
-my $minver="1.7"; 
-$ver="0.0";
-for my $key (sort keys %goodJRE) {
-   	if ($key > $ver) {
-		$VARS{'JRE'}=$goodJRE{$key};
-		$ver=$key;
+	my $ver=32; # 32 or 64
+	if ($BITS == 64) {$ver=64;}; 
+	my @DIRS = glob("/usr/lib/jvm/*"); # search directories
+	my @javas = ();
+	my %goodJRE;
+	printf("Searching for Java VM:\n");
+	$VARS{'JRE'}="";
+	foreach my $d (@DIRS) {
+		if ( -d $d ) {
+			my $jre=$d."/jre/bin/java";
+			if ( -f $jre) {
+			  push @javas ,$jre;
+			};
+		};
 	};
-};
 
-if ($ver > $minver) {
-	printf("Found Java VM version=%s\n%s\n\n",$ver,$VARS{'JRE'});
-	printf("You can change this choice in %s/startGUI.\n",$TD);
-	printf("Press any key to continue ...",$TD);
-	<STDIN>;
-} else {
-	printf("No suitable Java VM found for %s\n",$SYSNAME);
-	printf("You will need to define JRE maually in %s/startGUI.\n",$TD);
-	printf("Press any key to continue ...",$TD);
-	<STDIN>;
-	# die "Installation failed.";
+	foreach my $f (@javas) {
+			# printf("jre=%s\n",$f);
+			my $out=`$f -d$ver -version 2>&1`;
+		if ( $out =~ m/version[\s\t]*"([0-9_.]+)"/) {
+			printf("matched %s\n",$1);
+			$goodJRE{$1}=$f;
+		};	
+	};
+
+	# min. version > 1.7
+	my $minver="1.7"; 
+	$ver="0.0";
+	for my $key (sort keys %goodJRE) {
+		if ($key > $ver) {
+			$VARS{'JRE'}=$goodJRE{$key};
+			$ver=$key;
+		};
+	};
+
+	if ($ver > $minver) {
+		printf("Found Java VM version=%s\n%s\n\n",$ver,$VARS{'JRE'});
+		printf("You can change this choice in %s/startGUI.\n",$TD);
+		printf("Press any key to continue ...",$TD);
+		<STDIN>;
+	} else {
+		printf("No suitable Java VM found for %s\n",$SYSNAME);
+		printf("You will need to define JRE maually in %s/startGUI.\n",$TD);
+		printf("Press any key to continue ...",$TD);
+		<STDIN>;
+		# die "Installation failed.";
 	};
 };
 
 # ------------------------------ MAIN SECTION ----------------------------------
 
 # collect all *.in files
-@INFILES = CollectResources("in","",@SOURCES);
+@INFILES = CollectResourcesEx("in","","templates",@TEMPLATES);
 
 # collect all except *.in and *.obj files
-@SRCFILES = CollectResources("","in|obj",@SOURCES);
+@SRCFILES = CollectResources("","in|obj|o|exe|mcpl",@SOURCES);
 
 
 # installing to the current directory - no copying
@@ -279,27 +290,9 @@ foreach my $F (@BINARIES) {
   };
 };
 
-# install PGPLOT files
-FindPGPLOT;
-printf("Installs PGPLOT distributable files \n");
-MkSubDirCmd("$TD/$VARS{'PGPLOT_DIR'}/"); # create directories if necessary
-foreach my $F (@PGFILES) {
-  if (! -f "$PGPLOT_SRC/$F") {
-    push @notfound,("$PGPLOT_SRC/$F");
-  } else {
-	  my @cmd=getFileCopyCmd("$PGPLOT_SRC/$F","$TD/$VARS{'PGPLOT_DIR'}");
-		printf("copy %s => %s\n","$PGPLOT_SRC/$F","$TD/$VARS{'PGPLOT_DIR'}");
-		printf("command:  %s \n",@cmd);
-		dosystem(@cmd);
-		chmod oct("0755"),"$TD/$VARS{'PGPLOT_DIR'}/$F";
-	};
-};
-printf("\n\n");
-
 findJRE;
 # Substitute for variables in *.in files
 ProcessInFiles;
-
 EndTasks;
 
 # report uninstalled files:

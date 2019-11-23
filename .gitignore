@@ -25,6 +25,8 @@ pgplot/src/*
 pgplot/linux/pgxwin_server
 src/config.inc
 3rdparty/pgplot/*
+GUI
+distr
 
 # generated files
 variables.ini

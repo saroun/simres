@@ -135,7 +135,10 @@
 ! clear bounce logger
 !---------------------------------------------------------
       integer,intent(in) :: IREC
-      MLOGS_isValid=((IREC>0).and.(IREC<=MLOGS_NC).and.(allocated(MLOGS(IREC)%BNC)))
+      logical :: res
+      res = ((IREC>0).and.(IREC<=MLOGS_NC))
+      if (res) res = allocated(MLOGS(IREC)%BNC)
+      MLOGS_isValid=res
       end function MLOGS_isValid
 
 !---------------------------------------------------------

@@ -806,7 +806,10 @@ erase:
 	$(RM) $(DEF_LIB)
 	$(RM) grfont.dat
 	
-
+uninstall:
+	$(RM) $(BIN)\$(SHARED_LIB) 
+	$(RM) $(BIN)\$(IMP_LIB) 
+	$(RM) $(PGD)\grfont.dat 
 
 #-----------------------------------------------------------------------
 # Include file dependencies

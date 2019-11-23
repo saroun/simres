@@ -75,7 +75,7 @@
 		<APPEND name="append" value="0">no</APPEND>
 		<COORD name="reference frame" value="0">incident axis</COORD>
 		<FILT name="filter events">-1</FILT>
-		<COM name="comment">comment</COM>
+		<COM name="comment">x,y profile for z-scan</COM>
 	</COMMAND>
 	<COMMAND class="GAUGE2D" id="GAUGE2D" name="gauge map 2D">
 		<X name="x-variable" value="0">x</X>
@@ -93,7 +93,7 @@
 		<APPEND name="append" value="0">no</APPEND>
 		<COORD name="reference frame" value="0">incident axis</COORD>
 		<FILT name="filter events">-1</FILT>
-		<COM name="comment">comment</COM>
+		<COM name="comment">dump=events_25mm_1x5x1.dat</COM>
 	</COMMAND>
 	<COMMAND class="DET2D" id="DET2D" name="detector data 2D">
 		<X name="x-variable" value="0">scattering angle</X>
@@ -108,7 +108,7 @@
 		<ZLOG name="z-logscale" value="0">no</ZLOG>
 		<APPEND name="append" value="0">no</APPEND>
 		<FILT name="filter events">-1</FILT>
-		<COM name="comment">comment</COM>
+		<COM name="comment">x,y profile for z-scan</COM>
 	</COMMAND>
 	<COMMAND class="RES1D" id="RES1D" name="resolution profile 1D">
 		<X name="x-variable" value="0">dQ/Q</X>
@@ -147,7 +147,7 @@
 		<IX name="x-coord">1</IX>
 		<IV name="value index">3</IV>
 		<TYPE name="result set" value="3">DETECTOR 1D</TYPE>
-		<FILE name="file name">comment</FILE>
+		<FILE name="file name">stressfree_T.dat</FILE>
 	</COMMAND>
 	<COMMAND class="SCAN2D" id="SCAN2D" name="2D scan">
 		<XVAR name="x-variable">mon size(2)</XVAR>
@@ -198,10 +198,6 @@
 		<PLIMIT name="precision limit" units=" ">1.0E-3</PLIMIT>
 		<DBC name="double cycle" value="0">no</DBC>
 		<MODE name="tracing mode" value="2">all</MODE>
-		<MCSTAS name="run McStas" value="0">no</MCSTAS>
-		<PATHIN name="path to sample" units="mm">0.0</PATHIN>
-		<PATHOUT name="path from sample" units="mm">0.0</PATHOUT>			
-		<SPLIT name="split factor">1</SPLIT>
 		<STORE name="storage mode" value="0">detector</STORE>
 		<GRAVITY name="gravity" units="G">0.0</GRAVITY>
 		<PSMODE name="sampling space" value="0">k-space</PSMODE>
@@ -221,7 +217,7 @@
 	</OPTION>
 </OPTIONS>
 <INSTRUMENT>
-	<CFGTITLE>Default setup</CFGTITLE>
+	<CFGTITLE>Stresspec</CFGTITLE>
 	<MONOCHROMATORS>MON</MONOCHROMATORS>
 	<INTERFACE>
 		<SPECTROMETER class="SPECTROMETER" id="INST" name="basic instrument interface">

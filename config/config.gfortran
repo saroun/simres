@@ -4,34 +4,36 @@
 #--------------------------------------------------------------
 # ====================  RESTRAX section ===============================
 
-# command calling Fortran compler 
-FC= gfortran
-
-# command calling C compler
+# C compler
 CC= gcc
 
 # C options:
-CCFLAGS= -O
+CCFLAGS= -O -O -DLINK_DYNAMIC 
+
+# Fortran compler 
+FC= gfortran
 
 # -----------------------------------------
 # Fortran flags for warnings and debugging, choose one of following
 # debugging:
-# DBGFLAGS=  -Og -fcheck=all -Waliasing -Wampersand  -Wsurprising  -Wc-binding-type  -Wintrinsics-std   -Wintrinsic-shadow  -Wline-truncation  -Wtarget-lifetime  -Winteger-division  -Wreal-q-constant -Wundefined-do-loop  -Wmaybe-uninitialized -Werror
+DBGFLAGS=  -Og -fcheck=all -Waliasing -Wampersand  -Wsurprising  -Wc-binding-type  -Wintrinsics-std   -Wintrinsic-shadow  -Wline-truncation  -Wtarget-lifetime  -Winteger-division  -Wreal-q-constant -Wundefined-do-loop  -Wmaybe-uninitialized -Werror
 # optimized for release:
-DBGFLAGS= -O2
+# DBGFLAGS= -O2
 #--------------------------------------------------
 
 # Fortran options:
 FCFLAGS= $(DBGFLAGS)  -funderscoring -ffixed-form -ffixed-line-length-132 -Jbin
 
+# user libraries to link with RESTRAX:
+USER_LIBS= -L./bin -lpgplot -lmcplio
+
 # other libraries to link with RESTRAX:
-#restrax_LDADD= 
 restrax_LDADD= -lX11
 
 # Command for linking RESTRAX
-restrax_LD= $(FC) 
+restrax_LD= $(FC)
 
 # option passed to the linker
-# restrax_LDFLAGS=  -X --export-dynamic
-restrax_LDFLAGS= -static-libgfortran   
+# restrax_LDFLAGS= -static-libgfortran   
+restrax_LDFLAGS=
 
