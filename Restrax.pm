@@ -12,7 +12,7 @@ use Config;
 
 our @EXPORT = ('UX2DOS','SplitFileName','MkSubDirCmd','FileCopyCmd','getFileCopyCmd',
     'dosystem','CollectResources','CollectResourcesEx','RmFileCmd','RmDirCmd','StripPath','getTUGZip',
-    'ZipDirCmd','FindDependences','SubstituteInFile');
+    'ZipDirCmd','FindDependences','SubstituteInFile','SetChmod');
 
 our $dbg=0;
 our $SYSNAME= "$Config{'osname'}";
@@ -217,15 +217,11 @@ sub getFileCopyCmd {
   return @cmd;
 };
 
-# Copy file $_[0] to another directory, $_[1]
-# Set access permissions to $_[2]
-# $_[0] may start with a path
-# $_[1] may end with a filename (would be ignored)
-sub FileCopyCmd {
+
+sub GetTargetName {
   my $source="$_[0]"; # source file
   my $target="$_[1]"; # target directory
 #                           printf("FileCopyCmd:  %s --> %s\n",$source,$target);
-  my $mode=oct("$_[2]"); # permissions
 # split source file to drive, path, filename and extension
   my @input=SplitFileName("$source");
 #          printf("input  :");foreach my $f (@input) {printf("%s:",$f)};printf("\n");
@@ -239,17 +235,46 @@ sub FileCopyCmd {
   my $prefix="$output[0]$output[1]/";
   if ($prefix eq "") {$prefix="./"};
   $target="$prefix$path$input[2]$input[3]";
-#          printf("target: %s\n",$target);
+  return $target;
+}
+
+
+# Copy file $_[0] to another directory, $_[1]
+# Set access permissions to $_[2]
+# $_[0] may start with a path
+# $_[1] may end with a filename (would be ignored)
+sub FileCopyCmd {
+  my $source="$_[0]"; # source file
+  my $tgt="$_[1]"; # target directory
+#                           printf("FileCopyCmd:  %s --> %s\n",$source,$target);
+  my $mode=oct("$_[2]"); # permissions
+  my $target = GetTargetName($source,$tgt);
 # copy the file using a command appropriate for given system
   my $result="";
-  printf("Restrax.pm: [%s] [%s]\n",$source, $target);
+ # printf("Restrax.pm: [%s] [%s]\n",$source, $target);
   if ( -f "$source") {
     MkSubDirCmd("$target"); # create directories if necessary
     my @cmd=getFileCopyCmd("$source","$target");
     dosystem(@cmd);
     if ($dbg == 0) {chmod $mode,"$target";};
-  } else {$result="$source"};
+	$result = $target;
+  };
   return $result;
+};
+
+# Set privileges on target 
+# Set access permissions to $_[2]
+# $_[0] may start with a path
+# $_[1] may end with a filename (would be ignored)
+sub SetChmod {
+  my $source="$_[0]"; # source file
+  my $tgt="$_[1]"; # target directory
+#                           printf("FileCopyCmd:  %s --> %s\n",$source,$target);
+  my $mode=oct("$_[2]"); # permissions
+  my $target = GetTargetName($source,$tgt);
+  if ( -f "$target") {
+    if ($dbg == 0) {chmod $mode,"$target";};
+  };
 };
 
 
@@ -521,7 +546,8 @@ sub FindDependences {
 # Substitutes for @var@ in a *.in file, using given hash table
 # Saves the file with .in stripped off to a given target directory
 # call as SubstituteInFile($inp,$TD,\%VAR)
-# Update 11/2019: handle templates directory: ignore "templates" parent on targets
+# Update 11/2019: handle templates directory: ignore "templates" parent on target
+# Return full name of the target file if successful
 sub SubstituteInFile {
   my $inp= shift  @_;  # input file
   my $TD=  shift  @_;  # target directory
@@ -532,6 +558,7 @@ sub SubstituteInFile {
   my $file="$path[2]$path[3]";
   my $subpath="$path[1]"; # no drive nor leading /
   my $doUX2DOS= "no";
+  my $res="";
   if ($file =~ m/([\w.]*)([.]in)\z/) {
     my $fname="$1";
 # in *.ini files, set correct path delimiters for filename entries
@@ -553,22 +580,26 @@ sub SubstituteInFile {
       if ($tsubpath ne "") {$target=UX2DOS("$TD/$tsubpath/$fname")};
 # do parsing
       if ($dbg != 2) {printf("    %s\n",$target)};
-      open(INFILE,"<$source") or die "Cannot open input file $source:\n $!\n";
-      open(OUTFILE,">$target") or die "Cannot create output file $target:\n $!\n" if ($dbg == 0);
-      while (<INFILE>) {
-          if ($doUX2DOS eq "no") { $lin=$_;} else { $lin=UX2DOS($_);};
-		  #printf("line: [%s]\n",$lin);
-          foreach my $key (keys %VAR) {
-		      #printf("key [%s], var [%s]\n",$key,$VAR{$key});
-			  if ( $lin =~ m/^.*[@]$key[@].*/ ) {
-				 $lin =~ s/[@]$key[@]/$VAR{$key}/g;
+	  if (-f $source) {
+		  open(INFILE,"<$source") or die "Cannot open input file $source:\n $!\n";
+		  open(OUTFILE,">$target") or die "Cannot create output file $target:\n $!\n" if ($dbg == 0);
+		  while (<INFILE>) {
+			  if ($doUX2DOS eq "no") { $lin=$_;} else { $lin=UX2DOS($_);};
+			  #printf("line: [%s]\n",$lin);
+			  foreach my $key (keys %VAR) {
+				  #printf("key [%s], var [%s]\n",$key,$VAR{$key});
+				  if ( $lin =~ m/^.*[@]$key[@].*/ ) {
+					 $lin =~ s/[@]$key[@]/$VAR{$key}/g;
+				  };
 			  };
-		  };
-          # $lin =~ s/\@[\w]*\@//g; # undefined variables replace with ""
-          printf(OUTFILE "%s",$lin) if ($dbg == 0);
-       };
-       close(OUTFILE) if ($dbg == 0);
-       close(INFILE);
+			  # $lin =~ s/\@[\w]*\@//g; # undefined variables replace with ""
+			  printf(OUTFILE "%s",$lin) if ($dbg == 0);
+		   };
+		   close(OUTFILE) if ($dbg == 0);
+		   close(INFILE);
+		   $res = $target;
+	   };
     };
   };
+  return $res;
 };

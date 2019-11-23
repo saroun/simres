@@ -272,7 +272,7 @@ push @SRCDIR,("$VARS{'SRC'}/cfiles");
 # Target directories - will be created if they do not exist
 my @TARDIR=("$VARS{'BIN'}/", "$VARS{'LIB'}/", "$VARS{'LIB'}/pgplot", "doc/",  "distr", "tools");
 # add distr subdirectories
-push @TARDIR,("distr/bin", "distr/lib", "distr/lib/pgplot", "distr/doc", "distr/demo", "distr/setup", "distr/GUI");
+#push @TARDIR,("distr/bin", "distr/lib", "distr/lib/pgplot", "distr/doc", "distr/demo", "distr/setup", "distr/GUI");
 
 # Directories with *.inc files
 my @INCDIR=("$VARS{'SRC'}");

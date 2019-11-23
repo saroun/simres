@@ -17,6 +17,8 @@ use strict;
 use Cwd;
 
 use vars qw/*dbg *SYSNAME *HOST/;
+*SYSNAME  = *Restrax::SYSNAME;
+*HOST     = *Restrax::HOST;
 
 # Global declarations
 $dbg=0;          # set 1 for debug: no system commands will be executed
@@ -27,7 +29,8 @@ my @INFILES=();     # array with *.in files
 my @SRCFILES=();    # array with files to install
 my @EXECS=();       # executables cripts
 my $BITS=@BITS@; # 32 or 64
-my $SYSNAME="@SYSNAME@";
+my @notfound=();  # files not found = not installed
+my @installed=();  # files installed
 
 # define hash table for substitution (from configure)
 $VARS{'HOMEPAGE'}="@HOMEPAGE@"; # home page URL
@@ -41,7 +44,7 @@ $VARS{'PGPLOT_DEV'}="@PGPLOT_DEV@";  # default device for PGPLOT
 $VARS{'PGPLOT_DIR'}="lib/pgplot";  # pgplot directory with grfont.dat etc. in the target folder
 
 # define hash table for substitution (direct)
-$VARS{'SYSNAME'}="$SYSNAME";    # OS name
+$VARS{'SYSNAME'}="@SYSNAME@";    # OS name
 $VARS{'HOST'}="@HOST@"; # short host name 
 $VARS{'CONSOLE'}="-cons"; # option for GUI: enable console (for Linux)
 $VARS{'J3DLIB'}="@J3DLIB@"; 
@@ -59,14 +62,17 @@ if (CheckSystem != 0) {
 };
 
 
+# process parameters
+sub CmdParam;
+CmdParam;
+
 # Define target directory as $TD, full path
 my $TD=UX2DOS($VARS{'INSTDIR'});
-# installation in a subdirectory: INSTDIR in substitutions must be "."
-# if ($TD !~ m/^(\/.*|[a-zA-Z]:.*)/) {$VARS{'INSTDIR'}="$VARS{'PWD'}/$VARS{'INSTDIR'}"};
-if ($VARS{'INSTDIR'} =~ m/^[.].*/) {
+# installation in a subdirectory: add current directory as parent
+if ($TD !~ m/^(\/.*|[a-zA-Z]:.*)/) {
 	$TD=UX2DOS("$VARS{'PWD'}/$VARS{'INSTDIR'}");
 }
-
+$VARS{'INSTDIR'}="$TD";
 
 # -------------------  PROJECT DEFINITIONS (edit to your convenience)------------
 
@@ -99,8 +105,6 @@ if ($SYSNAME eq "win32") {
   push @EXECS,("startGUI_win32.bat","startCON_win32.bat");
 } else {
   push @EXECS,("startGUI","startCON");
-  # add compiled mcstas example ...
-  push @EXECS,glob("demo/simres_mcstas/mcstas/*.exe");
 };
 
 # executable binaries
@@ -109,6 +113,8 @@ if ($SYSNAME eq "win32") {
 	push @BINARIES,("bin/jsdrivlib.dll","bin/libmcplio.dll","bin/libpgplot.dll");
 	push @BINARIES,("lib/pgplot/jsdriv_server.exe");
 	push @BINARIES,glob("GUI/$VARS{'J3DLIB'}/*.dll");  # Java 3D libraries
+	# add compiled mcstas example ...
+	push @BINARIES,glob("demo/simres_mcstas/mcstas/*.exe");
 } else {
 	push @BINARIES,glob("GUI/$VARS{'J3DLIB'}/*.so");  # Java 3D libraries
 	push @BINARIES,glob("lib/*.so");
@@ -168,10 +174,16 @@ sub CmdParam {
 # Scan *.in files in directories defined in @_ and substitute for
 # variables marked as , using the %VARS hash table
 sub ProcessInFiles {
+    my $tgt;
     printf("Processing templates: \n");
     foreach my $F (@INFILES) {
       if ($F !~ m/^.*$ThisScript\.in/) { # don't process Install.pl.in
-        SubstituteInFile($F,$TD,\%VARS);
+        $tgt=SubstituteInFile($F,$TD,\%VARS);
+		if ($tgt eq "") {
+			push @notfound,("$F");
+		} else {
+			push @installed,("$tgt");
+		};
       };
     };
 };
@@ -194,6 +206,18 @@ sub EndTasks {
   };
   printf("Run it by calling the script '%s/%s' \n\n",$TD,$f);
 };
+
+
+sub WriteInstalledList {
+    my $target= shift  @_;  # input file
+	
+	open(OUTFILE,">$target") or die "Cannot create output file $target:\n $!\n";
+	foreach my $F (@installed) {
+		printf(OUTFILE "%s\n",UX2DOS($F));
+	};
+	close(OUTFILE);
+}
+
 
 # find Java VM launcher on Linux
 #-----------------------------------------------------
@@ -268,17 +292,17 @@ my @notfound=();
 printf("Installs resources: \n");
 foreach my $F (@SRCFILES) {
   if ((my $res = FileCopyCmd($F,$TD,"0644")) ne "") {
-    push @notfound,("$res");
+    push @installed,("$res");
+  } else {
+    push @notfound,("$F");
   };
 };
 printf("\n");
 
 # install executable scripts
-printf("Installs executable scripts: \n");
+printf("Set exec privileges on executable scripts: \n");
 foreach my $F (@EXECS) {
-  if ((my $res = FileCopyCmd($F,$TD,"0755")) ne "") {
-    push @notfound,("$res");
-  };
+  SetChmod($F,$TD,"0755");
 };
 printf("\n");
 
@@ -286,7 +310,9 @@ printf("\n");
 printf("Installs executable binary files \n");
 foreach my $F (@BINARIES) {
   if ((my $res = FileCopyCmd($F,$TD,"0755")) ne "") {
-    push @notfound,("$res");
+    push @installed,("$res");
+  } else {
+    push @notfound,("$F");
   };
 };
 
@@ -294,6 +320,7 @@ findJRE;
 # Substitute for variables in *.in files
 ProcessInFiles;
 EndTasks;
+WriteInstalledList("$TD/install.log");
 
 # report uninstalled files:
 if ($#notfound > -1) {
