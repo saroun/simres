@@ -31,6 +31,8 @@ my @EXECS=();       # executables cripts
 my $BITS=@BITS@; # 32 or 64
 my @notfound=();  # files not found = not installed
 my @installed=();  # files installed
+# option variable: set to PARSE="only" if you only want to parse templates, not to copy files
+my $PARSE="yes";  
 
 # define hash table for substitution (from configure)
 $VARS{'HOMEPAGE'}="@HOMEPAGE@"; # home page URL
@@ -92,7 +94,7 @@ push @SOURCES,@DEMOS;
 
 # template *.in files, if not already included in the directories above
 # (they won't be copied, but parsed)
-my @TEMPLATES = glob("GUI/*.in");
+my @TEMPLATES = ("GUI/restraxCON.ini.in", "GUI/restraxGUI.ini.in");
 push @TEMPLATES, ("motd.in");
 if ($SYSNAME eq "win32") {
   push @TEMPLATES,("startGUI_win32.bat.in","startCON_win32.bat.in");
@@ -145,24 +147,26 @@ sub CheckSystem {
 
 # handle command line parameters
 sub CmdParam {
-  if ($#ARGV > -1) {
-    $VARS{'INSTDIR'} = shift @ARGV;
-  #  foreach my $a (@ARGV) {
-  #    if ($a =~ m/[-]*noparse\z/) {$PARSE="no";};
-  #  };
-   } else {
+  if ($#ARGV <= -1) {
     print "\n";
     print "Usage:\n";
- #   print "perl $0 <target directory> [options] \n";
-    print "perl $0 <target directory> \n";
+    print "perl $0 <target directory> [options] \n";
     print "Arguments:\n";
     print "     <target directory> ... where you want to install the package (must exist)\n";    
- #   print "Options:\n";
- #   print "    -noparse        ... does not parse *.in files \n";
+    print "Options:\n";
+    print "    -parse        ... only parse *.in templates, no file copy \n";
     print "\n";
     exit 0;
   };
-  if ($VARS{'INSTDIR'} eq "") {$VARS{'INSTDIR'}=".";};
+  
+  foreach my $a (@ARGV) {
+	if ($a =~ m/[-].*/) {
+		if ($a =~ m/[-]parse\z/) {$PARSE="only";};
+	} else {
+	    $VARS{'INSTDIR'} = "$a";
+	};
+  };
+  if ($VARS{'INSTDIR'} eq "") {$VARS{'INSTDIR'}="distr";};
   # check the target directory
   if (! -e "$VARS{'INSTDIR'}") {
     printf("Target directory %s does not exist.\n",$VARS{'INSTDIR'});
@@ -281,7 +285,7 @@ sub findJRE {
 
 
 # installing to the current directory - no copying
-if (("$TD" eq "$CD") || ("$TD" eq ".")) { 
+if (("$TD" eq "$CD") || ("$TD" eq ".") || ($PARSE eq "only") ) { 
   ProcessInFiles;
   EndTasks;
   exit;
