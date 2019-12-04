@@ -6,19 +6,19 @@ rem  -s [Script]                      ; Script file to be executed on startup
 rem  -c [Instrument config. file]     ; Instrument config. file in XML format
 rem  -e [command]                     ; Command to be executed
 rem  -o [filename]                    ; Results output file in HTML format
-rem  -q                               ; quiet (no console output
+rem  -q                               ; quiet (no console output)
 rem  -log [filename]                  ; print console output to the given file
 rem
 rem edit following line to define the options
 set opt=-g @INSTDIR@\GUI -e MC
-rem set this variable to the full path to java launcher: java.exe (32 bit version)
+rem set this variable to the full path to java launcher: java.exe (@BITS@ bit version)
 set JRE=@JRE@
 if exist "%JRE%" (
   echo %0
   echo Starting Java launcher ...
   "%JRE%" -jar "@INSTDIR@\GUI\simresCON.jar" %opt%
 ) else (
-  echo Can't find java.exe for a 32 bit platform. 
+  echo Can't find java.exe for a @BITS@ bit platform. 
   echo Edit the JRE variable in the startup script:
   echo %0
 )
