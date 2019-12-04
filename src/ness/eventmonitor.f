@@ -398,7 +398,7 @@
 !---------------------------------------------------
       character(*) :: ID
       integer :: i
-        i=0
+        i=1
         do while (i<=BMONITORS_N)
           if (trim(BMONITORS(i)%OBJ%ID).eq.trim(ID)) then
             BMONITOR_REF=BMONITORS(i)%ISTORE

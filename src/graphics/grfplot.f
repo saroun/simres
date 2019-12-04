@@ -463,7 +463,6 @@ c            write(*,1) iport,igrf,GRFPORT(iport)%TGRF(igrf)
       REAL :: CX,DX,CY,DY,TR(6),AMIN,AMINP,AMAX,WC(4),DC(4)
       REAL :: AUX(MIMAX,MIMAX),L0,RANGE
 1     format('Z-scale: ',G12.4,', ',G12.4,', ',G12.4)
-
       DC=GRFPORT(iport)%DC
       WC=GRFPORT(iport)%WC
       DX=(WC(2)-WC(1))/NX
@@ -525,7 +524,7 @@ c            write(*,1) iport,igrf,GRFPORT(iport)%TGRF(igrf)
         CALL PGSWIN(WC(1),WC(2),WC(3),WC(4))
         CALL PGGRAY(AUX,MIMAX,MIMAX,1,NX,1,NY,RANGE,0.,TR)
       ENDIF
-      ! write(*,1) AMIN,AMINP,AMAX
+!      write(*,1) AMIN,AMINP,AMAX
       END SUBROUTINE PLOT2D
 
       end MODULE GRFPLOT
