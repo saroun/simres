@@ -635,11 +635,11 @@ sub CreateMakefile {
   printf(OUTFILE "$LMCPL: \n");
   if ($SYSNAME eq 'win32') {
    # windows
-    $options="-f makefile_windows BIN=\$VARS{'PWD'}/\$(BIN) MCPLSRC=\$VARS{'PWD'}/\$(MCPLSRC)";
+    $options="-f makefile_windows BIN=\$(PWD)/\$(BIN) MCPLSRC=\$(PWD)/\$(MCPLSRC)";
 	$options =~ s/\//\\/g;
   } else { 
    # linux
-    $options="-f makefile_linux  BIN=\$VARS{'PWD'}/\$(LIB) MCPLSRC=\$VARS{'PWD'}/\$(MCPLSRC)";
+    $options="-f makefile_linux  BIN=\$(PWD)/\$(LIB) MCPLSRC=\$(PWD)/\$(MCPLSRC)";
   };  
   printf(OUTFILE "\t\$(MAKE) -C \$(MCPLIO) %s\n", $options);
   printf(OUTFILE "\t\$(MAKE) -C \$(MCPLIO) %s  clean\n",$options);	  
@@ -652,12 +652,12 @@ sub CreateMakefile {
 #----------------
   printf(OUTFILE "# Compile %s\n",$PGLIB);
   printf(OUTFILE "$LPGPLOT:   \n");
-  my $opt1="SRC=\$VARS{'PWD'}/\$(PGSRC)";
-  $options="BIN=\$VARS{'PWD'}/\$(LIB)  PGD=\$VARS{'PWD'}/\$(LIB)/pgplot";	
+  my $opt1="SRC=\$(PWD)/\$(PGSRC)";
+  $options="BIN=\$(PWD)/\$(LIB)  PGD=\$(PWD)/\$(LIB)/pgplot";	
 # move result to the appropriate targets
   if ($SYSNAME eq 'win32') {
     # windows: install to ./bin, swap slashes
-	$options="BIN=\$VARS{'PWD'}/\$(BIN)  PGD=\$VARS{'PWD'}/\$(LIB)/pgplot";
+	$options="BIN=\$(PWD)/\$(BIN)  PGD=\$(PWD)/\$(LIB)/pgplot";
 	$opt1 =~ s/\//\\/g;	
 	$options =~ s/\//\\/g;	
   };
