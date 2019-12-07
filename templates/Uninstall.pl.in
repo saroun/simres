@@ -1,0 +1,96 @@
+#! /usr/bin/perl
+##################################################################
+#  $Id$
+#  *****  Installation script for SIMRES  *****
+#  Usage: perl Install.pl <installation directory>
+# Edit the "PROJECT DEFINITIONS" section below to modify the contents
+# of installation package.
+# The script is used to install SIMRES on Linux.
+# It also works on Windows, but the JRE variable in the startup script
+# startGUI_win32.bat has to be set manually.
+##################################################################
+BEGIN {
+	push @INC, '.';
+}
+use Restrax;
+use strict;
+use Cwd;
+use File::Path qw(remove_tree);
+
+# Set PURGE=yes if you want to erase the whole tree (CAUTION).
+# Set PURGE=no to only delete files logged in install.log (to be found in the target directory)
+my $PURGE="no";  
+# target directory
+my $TD="@INSTDIR@";
+
+# process parameters
+sub CmdParam;
+sub removeInstalled;
+sub removeAll;
+CmdParam;
+
+if ($PURGE eq "yes") {
+  removeAll;
+} else {
+  removeInstalled;	
+}
+
+# ------------------------------ SUBROUTINES ----------------------------------
+sub prnHelp {
+    print "\n";
+    print "Usage:\n";
+    print "perl $0 [options] \n";  
+    print "Options:\n";
+    print "    -purge    ... clean completely the instlllation directory - CAUTION!\n";
+    print "    -help     ... print this help\n";
+	print " \n";
+	print "By default, only files in listed in the file install.log are deleted.\n";
+    print "\n"
+}
+
+# handle command line parameters
+sub CmdParam {
+  $PURGE="no";
+  foreach my $a (@ARGV) {
+	if ($a =~ m/[-].*/) {
+		if ($a =~ m/[-]purge\z/) {$PURGE="yes";};
+		if ($a =~ m/[-]help\z/) {prnHelp;};
+	};
+  };
+  # check the target directory
+  if (! -e "$TD") {
+    printf("Target directory %s does not exist.\n",$TD);
+    exit 0;
+  };
+};
+
+
+/* Remove all files in the target directory. 
+Use with caution, no confirmation is requested!
+*/
+sub removeAll {
+    remove_tree( "$TD", {keep_root => 1, safe => 1,} );
+}
+
+/* Remove all files logged in the install.log file.
+*/
+sub removeInstalled {
+  my $rmpath = "$TD/install.log";
+  my @cont=(); 
+  if (! -e $rmpath) {
+     printf("No install log was found. Expected %s\n",$rmpath);
+     exit 0;
+  }
+  open(INFILE,  "<$rmpath") or die "Can't open $rmpath:\n $!\n";
+  while (<INFILE>) {
+	$lino = $lino + 1;
+	$LINE=$_;
+	if (-e $LINE) {
+	   push @cont,($LINE);
+    }
+  }
+  close(INFILE);
+  foreach my $file ( @cont ) {
+	 unlink($file) or warn "Could not delete $file: $!";
+  }
+}

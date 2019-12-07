@@ -15,6 +15,7 @@ Otherwise assume dlfnc and just wrap the dl functions.
 #include <stdio.h>
 #include <string.h>
 #include <windows.h>
+#include "dlapi.h"
 
 
 /* Simple replacement for dlerror() 
@@ -66,7 +67,7 @@ void *mydlsym(void *handle, const char *name, int *ires) {
 };
 
 /* Simple replacement for dlopen()  */
-void * mydlopen( const char *libname) {
+void *mydlopen( const char *libname) {
 	HMODULE hModule;
 	hModule =  LoadLibrary(libname);
 	return (void *) hModule;
@@ -74,6 +75,7 @@ void * mydlopen( const char *libname) {
 
 #else
 #include <dlfcn.h>	
+#include "dlapi.h"
 
 int mydlerror() {
   char *error;
@@ -102,7 +104,7 @@ void *mydlsym(void *handle, const char *name, int *ires) {
 };
 
 
-void * mydlopen( const char *libname) {
+void *mydlopen( const char *libname) {
 	return dlopen(libname, RTLD_LAZY);
 }
 

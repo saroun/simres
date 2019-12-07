@@ -270,7 +270,7 @@ push @SRCDIR,("$VARS{'SRC'}/cfiles");
 
 
 # Target directories - will be created if they do not exist
-my @TARDIR=("$VARS{'BIN'}/", "$VARS{'LIB'}/", "$VARS{'LIB'}/pgplot", "doc/",  "distr", "tools");
+my @TARDIR=("$VARS{'BIN'}/", "$VARS{'LIB'}/", "$VARS{'LIB'}/pgplot", "doc",  "distr", "tools");
 # add distr subdirectories
 #push @TARDIR,("distr/bin", "distr/lib", "distr/lib/pgplot", "distr/doc", "distr/demo", "distr/setup", "distr/GUI");
 
@@ -293,6 +293,19 @@ if ($SYSNAME eq 'win32') {
 # if ($SYSNAME eq 'win32') {$VARS{'LIB'}=$VARS{'BIN'};};
 
 #---------------------------------- SUBROUTINES  --------------------------------------------
+
+#-------------------------------------------------
+# Simplified version of UX2DOS from restrax.pm.
+# Just replace / with \ on windows 
+# Note: GNU make accepts unix paths, but Windows cmd does not :-(
+#-------------------------------------------------
+sub fpath {
+ my $f=$_[0];
+ if ($SYSNAME eq 'win32') {
+	$f =~ s/\//\\/g;
+ };
+ return $f;
+};
 
 #-------------------------------
 # handle command line parameters
@@ -562,9 +575,7 @@ sub CreateMakefile {
 
 # clean
   $f="$VARS{'BIN'}/*.o  $VARS{'BIN'}/*.mod $VARS{'BIN'}/*.def";
-  if ($SYSNAME eq "win32") {
-    $f =~ s/\//\\/g;
-  };
+  $f=fpath($f);
   printf(OUTFILE "clean: \n");
   printf(OUTFILE "\t$rm %s \n",$f);
   printf(OUTFILE "\n");
@@ -572,9 +583,7 @@ sub CreateMakefile {
 # cleandist
   $f="$VARS{'BIN'}/*.o  $VARS{'BIN'}/*.mod $VARS{'BIN'}/*.def \$(BIN)/\$(EXEC) ";
   $f=$f." startCON  startGUI  startCON*.bat  startGUI*.bat  simres.iss  motd ";
-  if ($SYSNAME eq "win32") {
-    $f =~ s/\//\\/g;
-  };
+  $f=fpath($f);
   printf(OUTFILE "cleandist: remove_pgplot remove_mcplio\n");
   printf(OUTFILE "\t$rm %s \n",$f);
   printf(OUTFILE "\n");
@@ -587,10 +596,7 @@ sub CreateMakefile {
   printf(OUTFILE "\n");
 
 # install to ./distr
-  $f = "\$VARS{'PWD'}/distr";
-  if ($SYSNAME eq "win32") {
-    $f =~ s/\//\\/g;
-  };
+  $f = fpath("\$(PWD)/distr");
   printf(OUTFILE "distr: Install.pl\n");
   printf(OUTFILE "\tperl Install.pl %s\n",$f);
   printf(OUTFILE "\n");
@@ -635,8 +641,7 @@ sub CreateMakefile {
   printf(OUTFILE "$LMCPL: \n");
   if ($SYSNAME eq 'win32') {
    # windows
-    $options="-f makefile_windows BIN=\$(PWD)/\$(BIN) MCPLSRC=\$(PWD)/\$(MCPLSRC)";
-	$options =~ s/\//\\/g;
+    $options=fpath("-f makefile_windows BIN=\$(PWD)/\$(BIN) MCPLSRC=\$(PWD)/\$(MCPLSRC)");
   } else { 
    # linux
     $options="-f makefile_linux  BIN=\$(PWD)/\$(LIB) MCPLSRC=\$(PWD)/\$(MCPLSRC)";
@@ -652,14 +657,13 @@ sub CreateMakefile {
 #----------------
   printf(OUTFILE "# Compile %s\n",$PGLIB);
   printf(OUTFILE "$LPGPLOT:   \n");
-  my $opt1="SRC=\$(PWD)/\$(PGSRC)";
-  $options="BIN=\$(PWD)/\$(LIB)  PGD=\$(PWD)/\$(LIB)/pgplot";	
+  my $opt1=fpath("SRC=\$(PWD)/\$(PGSRC)");
 # move result to the appropriate targets
   if ($SYSNAME eq 'win32') {
     # windows: install to ./bin, swap slashes
-	$options="BIN=\$(PWD)/\$(BIN)  PGD=\$(PWD)/\$(LIB)/pgplot";
-	$opt1 =~ s/\//\\/g;	
-	$options =~ s/\//\\/g;	
+	$options=fpath("BIN=\$(PWD)/\$(BIN)  PGD=\$(PWD)/\$(LIB)/pgplot");
+  } else {
+    $options=fpath("BIN=\$(PWD)/\$(LIB)  PGD=\$(PWD)/\$(LIB)/pgplot");
   };
   printf(OUTFILE "\t\$(MAKE) -C \$(PGTGT) -f makefile_gfortran  all %s\n",  $opt1);
   printf(OUTFILE "\t\$(MAKE) -C \$(PGTGT) -f makefile_gfortran  clean \n"); 	

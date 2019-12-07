@@ -32,7 +32,9 @@ my $BITS=@BITS@; # 32 or 64
 my @notfound=();  # files not found = not installed
 my @installed=();  # files installed
 # option variable: set to PARSE="only" if you only want to parse templates, not to copy files
-my $PARSE="yes";  
+my $PARSE="yes"; 
+# set TEST=yes to check that the package is complete and exit. 
+my $TEST="false"; 
 
 # define hash table for substitution (from configure)
 $VARS{'HOMEPAGE'}="@HOMEPAGE@"; # home page URL
@@ -54,28 +56,6 @@ $VARS{'J3DCLS'}="@J3DCLS@";
 $VARS{'PWD'}=UX2DOS($CD);          # current directory 
 
 
-
-# check system compatibility
-sub CheckSystem;
-if (CheckSystem != 0) {
- printf("If you still want to continue, edit SYSNAME and HOST variables in $0 ");
- printf("to match your system and repeat the command.\n");
- exit 1;
-};
-
-
-# process parameters
-sub CmdParam;
-CmdParam;
-
-# Define target directory as $TD, full path
-my $TD=UX2DOS($VARS{'INSTDIR'});
-# installation in a subdirectory: add current directory as parent
-if ($TD !~ m/^(\/.*|[a-zA-Z]:.*)/) {
-	$TD=UX2DOS("$VARS{'PWD'}/$VARS{'INSTDIR'}");
-}
-$VARS{'INSTDIR'}="$TD";
-
 # -------------------  PROJECT DEFINITIONS (edit to your convenience)------------
 
 # source files/directories
@@ -84,7 +64,7 @@ my @SOURCES=("setup", "licenses",
 # GUI
 push @SOURCES,("GUI/@PGMNAME@GUI.jar","GUI/@PGMNAME@CON.jar", "GUI/JSUtils.jar");
 # PGPLOT grfont
-push @SOURCES,("lib/pgplot/grfont.dat");
+push @SOURCES,("lib/pgplot/grfont.dat", "lib/pgplot/rgb.txt");
 
 # add demo projects
 my @DEMOS = ("demo/STRESSSPEC","demo/BEER","demo/ENGINX",
@@ -95,7 +75,7 @@ push @SOURCES,@DEMOS;
 # template *.in files, if not already included in the directories above
 # (they won't be copied, but parsed)
 my @TEMPLATES = ("GUI/restraxCON.ini.in", "GUI/restraxGUI.ini.in");
-push @TEMPLATES, ("motd.in");
+push @TEMPLATES, ("motd.in, Uninstall.pl.in");
 if ($SYSNAME eq "win32") {
   push @TEMPLATES,("startGUI_win32.bat.in","startCON_win32.bat.in");
 } else {
@@ -115,13 +95,13 @@ if ($SYSNAME eq "win32") {
 	push @BINARIES,("bin/jsdrivlib.dll","bin/libmcplio.dll","bin/libpgplot.dll");
 	push @BINARIES,("lib/pgplot/jsdriv_server.exe");
 	push @BINARIES,glob("GUI/$VARS{'J3DLIB'}/*.dll");  # Java 3D libraries
-	# add compiled mcstas example ...
-	push @BINARIES,glob("demo/simres_mcstas/mcstas/*.exe");
 } else {
-	push @BINARIES,glob("GUI/$VARS{'J3DLIB'}/*.so");  # Java 3D libraries
-	push @BINARIES,glob("lib/*.so");
+	push @BINARIES,glob("lib/libmcplio.so", "lib/libpgplot.so");
 	push @BINARIES,glob("lib/pgplot/pgxwin_server");
+	push @BINARIES,glob("GUI/$VARS{'J3DLIB'}/*.so");  # Java 3D libraries
 };
+# add compiled mcstas example ...
+push @BINARIES,glob("demo/simres_mcstas/mcstas/*.exe");
 
 # Java 3D library, jar files
 push @SOURCES,glob("GUI/$VARS{'J3DCLS'}/*.jar");
@@ -132,6 +112,7 @@ push @SOURCES,glob("GUI/lib/*.jar");
 
 # ------------------------------ SUBROUTINES ----------------------------------
 
+/* Check that the machine type and OS macthes*/
 sub CheckSystem {
     my $res = 0;
 	if ( ! ($VARS{'SYSNAME'} eq $SYSNAME)) {
@@ -143,10 +124,36 @@ sub CheckSystem {
 	  $res = 1;
 	};
 	return $res;
+}
+
+/* Check that the package is complete */
+sub CheckPackage {
+    my $res = 0;
+	my @notfound=();
+	my @package=();
+	push @package,@SRCFILES;
+	push @package,@INFILES;
+	push @package,@BINARIES;
+	foreach my $f (@package) {
+		if (! -e $f) {
+		  push @notfound,($f);
+		}
+	};
+	# report uninstalled files:
+	if ($#notfound > -1) {
+	    $res=1;
+		printf("WARNING! Some installer files are missing: \n");
+		foreach my $f (@notfound) {
+			printf("     %s \n",$f);
+		};
+	};
+	return $res;
 };
+
 
 # handle command line parameters
 sub CmdParam {
+  $VARS{'INSTDIR'} = ".";
   if ($#ARGV <= -1) {
     print "\n";
     print "Usage:\n";
@@ -154,24 +161,27 @@ sub CmdParam {
     print "Arguments:\n";
     print "     <target directory> ... where you want to install the package (must exist)\n";    
     print "Options:\n";
-    print "    -parse        ... only parse *.in templates, no file copy \n";
+    print "    -t, -test     ... only check that the package is complete \n";	
+    print "    -p, -parse    ... only parse *.in templates, no file copy \n";
     print "\n";
     exit 0;
   };
   
   foreach my $a (@ARGV) {
 	if ($a =~ m/[-].*/) {
-		if ($a =~ m/[-]parse\z/) {$PARSE="only";};
+		if ($a =~ m/[-](p|parse)\z/) {$PARSE="only";};
+		if ($a =~ m/[-](t|test)\z/) {$TEST="yes";};
 	} else {
 	    $VARS{'INSTDIR'} = "$a";
 	};
   };
-  if ($VARS{'INSTDIR'} eq "") {$VARS{'INSTDIR'}="distr";};
+  if ($VARS{'INSTDIR'} eq ".") {$VARS{'INSTDIR'}="distr";};
   # check the target directory
   if (! -e "$VARS{'INSTDIR'}") {
     printf("Target directory %s does not exist.\n",$VARS{'INSTDIR'});
     die "Create one first.\n";
   };
+  
 };
 
 
@@ -277,12 +287,34 @@ sub findJRE {
 
 # ------------------------------ MAIN SECTION ----------------------------------
 
+
+# check system compatibility
+if (CheckSystem != 0) {
+ printf("If you still want to continue, edit SYSNAME and HOST variables in $0 ");
+ printf("to match your system and repeat the command.\n");
+ exit 1;
+};
+
+# process parameters
+CmdParam;
+
+# Define target directory as $TD, full path
+my $TD=UX2DOS($VARS{'INSTDIR'});
+if ($TD !~ m/^(\/.*|[a-zA-Z]:.*)/) {
+    # installation in a subdirectory: add current directory as parent
+	$TD=UX2DOS("$VARS{'PWD'}/$VARS{'INSTDIR'}");
+}
+$VARS{'INSTDIR'}="$TD";
+
 # collect all *.in files
 @INFILES = CollectResourcesEx("in","","templates",@TEMPLATES);
 
 # collect all except *.in and *.obj files
 @SRCFILES = CollectResources("","in|obj|o|exe|mcpl",@SOURCES);
 
+# test package and exit if failed
+my $res = CheckPackage;
+if ($TEST -eq "yes" || $res != 0) {exit $res;};
 
 # installing to the current directory - no copying
 if (("$TD" eq "$CD") || ("$TD" eq ".") || ($PARSE eq "only") ) { 

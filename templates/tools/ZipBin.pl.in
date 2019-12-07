@@ -10,7 +10,7 @@ BEGIN {
 use Restrax;
 use strict;
 use Cwd;
-use vars qw/*dbg *SYSNAME *PATHDEL *HOST *PROMPT/;
+use vars qw/*dbg *SYSNAME *HOST *PROMPT/;
 *dbg      = *Restrax::dbg;
 *SYSNAME  = *Restrax::SYSNAME;
 *HOST     = *Restrax::HOST;
@@ -23,16 +23,13 @@ my @EXECS=("Install.pl","Restrax.pm");
 
 # Template *.in files to be copied to the distribution
 # (they will be parsed by Install.pl during installation)
-my @TEMPLATES = ("setup","GUI","motd.in");
+my @TEMPLATES = ("setup","GUI","motd.in","Uninstall.in");
 if ($SYSNAME eq 'win32') {
  push @TEMPLATES,("startGUI_win32.bat.in","startCON_win32.bat.in");	
 } else {
  push @TEMPLATES,("startGUI.in","startCON.in");
 }
-# Demo projects to be included
-my @DEMOS = ("demo/STRESSSPEC","demo/BEER","demo/ENGINX","demo/MEREDIT","demo/TAS","demo/simres_mcstas","demo/multiple_reflections",
-    "demo/crystal_reflectivity","demo/MAUD");
-push @TEMPLATES,@DEMOS;	
+	
 #-----------------------------------------------------------------------------
 
 # Global declarations
@@ -67,6 +64,12 @@ sub CmdParam {
 };
 
 # ------------------------------ MAIN SECTION ----------------------------------
+
+# Check that all files are present
+my @cmd=("perl","Install.pl","-test");
+if (dosystem(@cmd) !=0) {die "Script aborted.\n";};
+
+# process command parameters
 CmdParam;
 
 # clean/recreate target directory
@@ -80,7 +83,7 @@ my @cmd=("perl","Install.pl","$TD");
 dosystem(@cmd);
 
 # Copy *.in files in the distribution
-@INFILES=CollectResources("in","",@TEMPLATES);
+@INFILES = CollectResourcesEx("in","","templates",@TEMPLATES);
 my @notfound=();
 foreach my $F (@INFILES) {
   if ((my $res = FileCopyCmd($F,$TD,"0644")) ne "") {
