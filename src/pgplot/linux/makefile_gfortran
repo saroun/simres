@@ -6,7 +6,7 @@
 #-----------------------------------------------------------------------
 
 # PGPLOT source distribution directory:
-SRC?=/usr/local/pgplot/src
+SRC?=../../../3rdparty/pgplot
 # Target for binary files (pgdemo.. , libpgplot.dll, libpgplot.lib, libpgplot.so)
 BIN?=.
 # Target for grfont.dat and server (what should be PGPLOT_DIR) 
@@ -94,7 +94,7 @@ DEMOS= pgdemo1 pgdemo2 pgdemo3 pgdemo4 pgdemo5 pgdemo6 pgdemo7 pgdemo8 pgdemo9 p
 # Target "all" makes everything (except the library of obsolete routines)
 #-----------------------------------------------------------------------
 #all: lib grfont.dat prog pgplot.doc pgxwin_server
-all: lib grfont.dat pgxwin_server
+all: lib grfont.dat rgb.txt pgxwin_server
 	@echo ' ';echo '*** Finished compilation of PGPLOT ***';echo ' '
 	@echo 'Note that if you plan to install PGPLOT in a different'
 	@echo 'directory than the current one, the following files will be'
@@ -865,7 +865,11 @@ install:
 	cp -fp libpgplot.a $(BIN)
 	cp -fp pgxwin_server $(PGD)
 	cp -fp grfont.dat $(PGD)
+	cp -fp rgb.txt $(PGD)
 
+rgb.txt:
+	cp -fp  $(SRC)/rgb.txt $(PGD)	
+	
 #-----------------------------------------------------------------------
 # Target "erase" is used to remove all the intermediate and binary files.
 #-----------------------------------------------------------------------
@@ -876,12 +880,14 @@ erase:
 	rm -f  pgxwin_server
 	rm -f  grfont.dat
 	rm -f  pgdemo*
+	rm -f  rgb.txt 
 	
 uninstall:
 	rm -f  $(BIN)/$(SHARED_LIB)
 	rm -f  $(BIN)/libpgplot.a
 	rm -f  $(PGD)/pgxwin_server
 	rm -f  $(PGD)/grfont.dat
+	rm -f  $(PGD)/rgb.txt
 	
 #-----------------------------------------------------------------------
 # Include file dependencies

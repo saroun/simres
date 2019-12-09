@@ -1,6 +1,6 @@
 #--------------------------------------------------------------
 # System dependent part of makefile for RESTRAX 
-# GCC with gfortran
+# GCC with gfortran for Linux
 #--------------------------------------------------------------
 # ====================  RESTRAX section ===============================
 
@@ -8,7 +8,7 @@
 CC= gcc
 
 # C options:
-CCFLAGS= -O -O -DLINK_DYNAMIC 
+CCFLAGS= -O -DLINK_DYNAMIC 
 
 # Fortran compler 
 FC= gfortran
@@ -25,7 +25,7 @@ DBGFLAGS=  -Og -fcheck=all -Waliasing -Wampersand  -Wsurprising  -Wc-binding-typ
 FCFLAGS= $(DBGFLAGS)  -funderscoring -ffixed-form -ffixed-line-length-132 -Jbin
 
 # user libraries to link with RESTRAX:
-USER_LIBS= -L./bin -lpgplot -lmcplio
+USER_LIBS= -L./bin -lpgplot 
 
 # other libraries to link with RESTRAX:
 restrax_LDADD= -lX11

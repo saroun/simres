@@ -1,5 +1,5 @@
 BIN?=.
-MCPLSRC?=./mcpl/src/mcpl
+MCPLSRC?=../..3rdparty/mcpl/src/mcpl
 MCIMP=libmcplio.lib
 MCLIB=libmcplio.dll
 MCOPT= -std=c99 -fPIC -I$(MCPLSRC) 

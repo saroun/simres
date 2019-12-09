@@ -10,7 +10,6 @@
 #      -noparse    ... do not process *.in templates
 #      -parseonly  ... only process *.in templates, no configuration of makefile etc.\n";
 #      -nomake     ... do not create makefile
-#      -m64        ... build 64 bit version
 ###########################################################
 BEGIN {
 	push @INC, '.';
@@ -27,6 +26,9 @@ use vars qw/*dbg *SYSNAME *ARCHNAME *HOST/;
 printf("System: %s [%s]\n",$SYSNAME, $HOST);
 printf("Architecture: %s\n",$ARCHNAME);
 
+# forward declaration of fpath
+sub fpath;
+
 my $CD=cwd();       # current directory
 $dbg=0;          # set 1 for debug: no system commands will be executed
 my $ThisScript=$0;  # name of this script
@@ -34,7 +36,7 @@ my $PARSE="yes";    # parse *.in files by default (change via cmd options)
 my $DOMAKE="yes";   # set to "no" if you don't want to create makefile
 #------------  DEFINE VERSION HERE  ------------
 my $PGMNAME="simres";      # program name
-my $VERSION="6.4.0";       # version
+my $VERSION="6.4.1";       # version
 my $LPGPLOT="";            # PGPLOT link option (if empty,  it will be set by this script)
 my $LMCPL="";              # MCPL link option (if empty,  it will be set by this script)
 #--------------------------------------------
@@ -103,10 +105,11 @@ $VARS{'LIB'}="lib";                # Path to library files
 $VARS{'MKFILE'}="makefile";        # makefile with full path
 $VARS{'INSTDIR'}=".";              # default installation directory
 $VARS{'SHEXT'}="$SHEXT";           # shared library extension, definned above
-$VARS{'J3DCLS'}="j3d-jre/lib/ext"; # location of J3D jar classes (relative to ./GUI)
-$VARS{'MCPLIO'}="mcplio";          # location of MCPLIO source files - binding of MCPL to SIMRES
-$VARS{'PGSRC'}="3rdparty/pgplot";        # location of PGPPLOT source files 
-$VARS{'MCPLSRC'}="3rdparty/mcpl/src/mcpl";        # location of MCPL source files 
+$VARS{'J3DCLS'}=fpath("j3d-jre/lib/ext"); # location of J3D jar classes (relative to ./GUI)
+$VARS{'MCPLIO'}=fpath("src/mcplio");          # location of MCPLIO source files - binding of MCPL to SIMRES
+$VARS{'PGSRC'}=fpath("3rdparty/pgplot");        # location of PGPPLOT source files 
+$VARS{'MCPLSRC'}=fpath("3rdparty/mcpl/src/mcpl");        # location of MCPL source files 
+$VARS{'JSDRIV'}=fpath("jsdriv_server/jsdriv");        # location of jsdriv_server project 
 $VARS{'SYSNAME'}="$SYSNAME";       # OS name
 $VARS{'ARCHNAME'}="$ARCHNAME";     # architecture name
 $VARS{'HOST'}="$HOST";             # short architecture name
@@ -121,12 +124,12 @@ if ($HOST eq 'x86_64') {
 }
 # Windows:
 if ($SYSNAME eq 'win32') {
-  $VARS{'PGTGT'}="pgplot/windows";  # location of PGPLOT binding files
+  $VARS{'PGTGT'}="src/pgplot/windows";  # location of PGPLOT binding files
   $VARS{'PGPLOT_DEV'}="/jsdriv";     # default pgplot device
   $VARS{'J3DLIB'}="j3d-jre/bin";     # location of J3D shared libraries (relative to ./GUI)	
 } else {
 # Linux:
-  $VARS{'PGTGT'}="pgplot/linux";  # location of PGPLOT binding files
+  $VARS{'PGTGT'}="src/pgplot/linux";  # location of PGPLOT binding files
   $VARS{'PGPLOT_DEV'}="/xserve";         # default pgplot device
   if ($HOST eq 'x86_64') {         # location of J3D shared libraries (relative to ./GUI)
 	$VARS{'J3DLIB'}="j3d-jre/lib/amd64"; 
@@ -555,7 +558,7 @@ sub CreateMakefile {
 
 # Executable target
   # format options for linking
-  $libraries="$LPGPLOT $LMCPL \$(USER_LIBS) \$(restrax_LDADD)";
+  $libraries="\$(USER_LIBS) \$(restrax_LDADD)";
   if ($SYSNAME eq 'win32') {
 	# Windows: don't link with MCPLIO, it will be loaded dynamically at runtime.
 	$libraries="\$(USER_LIBS) \$(restrax_LDADD)";
@@ -673,6 +676,30 @@ sub CreateMakefile {
   printf(OUTFILE "\t\$(MAKE) -C \$(PGTGT) -f makefile_gfortran  erase \n");
   printf(OUTFILE "\t\$(MAKE) -C \$(PGTGT) -f makefile_gfortran  uninstall %s\n", $options);
   printf(OUTFILE "\n\n");
+
+ 
+#--------------------------------------------------- 
+# Build JSDRIV server and client library for Windows
+#---------------------------------------------------
+
+if ($SYSNAME eq 'win32') {
+    printf(OUTFILE "# Builds jsdrivlib.dll and jsdriv_server.exe using Lazarus compiler \n"); 
+	my $jsdrivlib=fpath("\$(PWD)/\$(BIN)/jsdrivlib.dll");
+	my $jsdrivsrv=fpath("\$(PWD)/\$(LIB)/pgplot/jsdriv_server.exe");
+	
+	printf(OUTFILE "jsdriv: %s %s \n",$jsdrivlib,$jsdrivsrv);
+	printf(OUTFILE "\trmdir /S /Q %s\\bin \n",$VARS{'JSDRIV'});
+	printf(OUTFILE "\trmdir /S /Q %s\\lib \n",$VARS{'JSDRIV'});
+
+	printf(OUTFILE "%s: \n",$jsdrivlib);
+	printf(OUTFILE "\tlazbuild %s\\jsdrivlib.lpi \n",$VARS{'JSDRIV'});
+	printf(OUTFILE "\tcopy /Y  %s\\bin\\jsdrivlib.dll %s \n", $VARS{'JSDRIV'}, $jsdrivlib);
+
+	printf(OUTFILE "%s: \n",$jsdrivsrv);
+	printf(OUTFILE "\tlazbuild %s\\jsdriv_server.lpi \n",$VARS{'JSDRIV'});
+	printf(OUTFILE "\tcopy /Y  %s\\bin\\jsdriv_server.exe %s \n",$VARS{'JSDRIV'},$jsdrivsrv);
+	printf(OUTFILE "\n\n");
+};
 
 #------------------------------------------- 
 # format options for compiling with Fortran

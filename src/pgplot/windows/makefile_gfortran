@@ -40,9 +40,9 @@
 #-----------------------------------------------------------------------
 
 # PGPLOT source distribution directory:
-SRC?=./src
+SRC?=..\..\..\3rdparty\pgplot
 # Your system dependent source directory:
-SYSDIR=./sys_mingw
+SYSDIR=.\sys_mingw
 # Target for binary files (pgdemo.. , libpgplot.dll, libpgplot.lib, libpgplot.so)
 BIN?=.
 # Target for grfont.dat and server (what should be PGPLOT_DIR) 
@@ -127,7 +127,7 @@ DEMOS= pgdemo1.exe pgdemo2.exe pgdemo3.exe pgdemo4.exe pgdemo5.exe pgdemo6.exe p
 #-----------------------------------------------------------------------
 # Target "all" makes everything (except the library of obsolete routines)
 #-----------------------------------------------------------------------
-all: lib grfont.dat
+all: lib rgb.txt grfont.dat
 	@echo ' ';echo '*** Finished compilation of PGPLOT ***';echo ' '
 	@echo 'Note that if you plan to install PGPLOT in a different'
 	@echo 'directory than the current one, the following files will be'
@@ -783,6 +783,8 @@ grfont.dat: $(FNTDIR)/grfont.txt $(FNTDIR)/pgpack.f
 	pgpack.exe <$(FNTDIR)/grfont.txt
 	$(RM) pgpack.exe
 
+rgb.txt:
+	$(COPY) $(SRC)\rgb.txt $(PGD)	
 #-----------------------------------------------------------------------
 # Target "clean" is used to remove all the intermediate files.
 #-----------------------------------------------------------------------
@@ -794,7 +796,7 @@ install:
 	$(COPY) $(SHARED_LIB) $(BIN)
 	$(COPY) $(IMP_LIB) $(BIN)
 	$(COPY) grfont.dat $(PGD)
-	$(COPY) $(SRC)\rgb.txt $(PGD)
+	$(COPY) rgb.txt $(PGD)
 
 #-----------------------------------------------------------------------
 # Target "erase" is used to remove all the intermediate and binary files.
@@ -806,6 +808,7 @@ erase:
 	$(RM) $(IMP_LIB)
 	$(RM) $(DEF_LIB)
 	$(RM) grfont.dat
+	$(RM) rgb.txt 
 	
 uninstall:
 	$(RM) $(BIN)\$(SHARED_LIB) 
