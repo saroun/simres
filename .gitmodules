@@ -10,3 +10,6 @@
 [submodule "jsdriv_server"]
 	path = submodules/jsdriv_server
 	url = https://github.com/saroun/jsdriv_server
+[submodule "submodules/simresGUI"]
+	path = submodules/simresGUI
+	url = https://github.com/saroun/simresUI
