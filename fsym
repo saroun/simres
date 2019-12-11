@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Search for references in source files.
+# Search for references in fortran source files.
 # Usage: perl fsym [symbol]
   $SS=@ARGV[0];
   @FNAMES=<src/*.inc include/*.inc src/ness/*.inc >;
