@@ -10,7 +10,7 @@ User guide: http://neutron.ujf.cas.cz/restrax/download/simres-guide.pdf
 -----------------------------------------------------------------
 # TODO
 
-## terms of use
+## Terms of use
 see COPYING.md
 
 ## Binary distribution

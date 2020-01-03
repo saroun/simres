@@ -28,6 +28,9 @@ src/config.inc
 3rdparty/pgplot/*
 GUI
 distr
+ZipBin.pl
+ZipSrc.pl
+
 
 # generated files
 variables.ini

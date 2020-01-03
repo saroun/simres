@@ -12,7 +12,7 @@
 #      -nomake     ... do not create makefile
 ###########################################################
 BEGIN {
-	push @INC, '.';
+  push @INC, '.';
 }
 use Restrax;
 use strict;
@@ -57,28 +57,19 @@ my @SRCDIR=();     # source directories
 my @INFILES=();    # array with *.in files
 
 # system dependent variables
-# Linux:
-my $rm="rm -f ";      # remove comman
+# Linux - default:
+my $rm="rm -f ";      # remove file command
+my $rmdir="rm -f ";   # remove directory command
 my $cp="cp -f -p ";   # copy command
 my $ext="";           # executable file extension
 my $SHEXT="so";       # shared library extension
-my $PGLIB="libpgplot.so"; # PGPLOT library name
-my $PGSERV="pgxwin_server"; # PGPLOT server executable
-my $MCPLLIB="libmcplio.so"; # MCPL shared library name
-my $PGIMP="";
-my $MCPLIMP="";
-
 # Windows:
 if ($SYSNAME eq 'win32') {
-  $rm="erase ";       #  remove command
-  $cp="copy /Y ";     # copy command  
-  $ext=".exe"; # we are using restrax as DLL in win32
-  $SHEXT="dll"; # shared library extension
-  $PGLIB="libpgplot.dll"; # PGPLOT library name
-  $PGIMP="libpgplot.lib"; # PGPLOT import library name (to be linked width)
-  $PGSERV="jsdriv_server.exe"; # PGPLOT server executable   
-  $MCPLLIB="libmcplio.dll"; # MCPL shared library name
-  $MCPLIMP="libmcplio.lib"; # MCPL import library name (to be linked width)
+  $rm="del /Q  ";              # remove command
+  $rmdir="rmdir /S /Q  ";      # remove directory command
+  $cp="copy /Y ";              # copy command  
+  $ext=".exe";                 # we are using restrax as DLL in win32
+  $SHEXT="dll";                # shared library extension
 };
 
 
@@ -89,8 +80,7 @@ my $PACKNUM=$VERSION;
 $PACKNUM =~ s/[.]//g;
 $BUILDNUM =~ s/(\d*)[.](\d*)[.](\d*)/$1.$2$3/;
 
-# get VARS hash table
-# $VARS{'CD'}=UX2DOS($CD);   # current directory
+# project information
 $VARS{'HOMEPAGE'}="http://neutron.ujf.cas.cz/restrax";  # RESTRAX hommepage
 $VARS{'PGMNAME'}=$PGMNAME;        # program name
 $VARS{'VERSION'}=$VERSION;        # version number
@@ -98,23 +88,33 @@ $VARS{'BUILDNUM'}=$BUILDNUM;      # build number (derived from version number)
 $VARS{'PACKNUM'}=$PACKNUM;        # package number (derived from version number)
 $VARS{'CFGDIR'}="./config";       # Path to the 'config.<sys> files
 $VARS{'BDATE'}=localtime();       # build time stamp
-$VARS{'EXEC'}="$PGMNAME$PACKNUM$ext"; # Name of the executable
+
+# some standard names
 $VARS{'SRC'}="src";                # Path to the source files
 $VARS{'BIN'}="bin";                # Path to executable files
 $VARS{'LIB'}="lib";                # Path to library files
 $VARS{'MKFILE'}="makefile";        # makefile with full path
 $VARS{'INSTDIR'}=".";              # default installation directory
 $VARS{'SHEXT'}="$SHEXT";           # shared library extension, definned above
-$VARS{'J3DCLS'}=fpath("j3d-jre/lib/ext"); # location of J3D jar classes (relative to ./GUI)
-$VARS{'MCPLIO'}=fpath("src/mcplio");          # location of MCPLIO source files - binding of MCPL to SIMRES
-$VARS{'PGSRC'}=fpath("3rdparty/pgplot");        # location of PGPPLOT source files 
-$VARS{'MCPLSRC'}=fpath("3rdparty/mcpl/src/mcpl");        # location of MCPL source files 
-$VARS{'JSDRIV'}=fpath("jsdriv_server/jsdriv");        # location of jsdriv_server project 
+
+# location of dependences
+$VARS{'MCPLIO'}=fpath("src/mcplio");                      # MCPLIO source files - binding of MCPL to SIMRES
+$VARS{'PGSRC'}=fpath("3rdparty/pgplot");                  # PGPPLOT source files 
+$VARS{'MCPLSRC'}=fpath("3rdparty/mcpl/src/mcpl");         # MCPL source files 
+$VARS{'JSDRIV'}=fpath("submodules/jsdriv_server/jsdriv"); # jsdriv_server project 
+$VARS{'UI'}=fpath("submodules/simresUI");                 # user interface - simresUI project
+$VARS{'DISTR'}=fpath("distr");                          # default path for distribution copy
+
+# system information - generated automatically
 $VARS{'SYSNAME'}="$SYSNAME";       # OS name
 $VARS{'ARCHNAME'}="$ARCHNAME";     # architecture name
 $VARS{'HOST'}="$HOST";             # short architecture name
-$VARS{'EXENAME'}=$VARS{'EXEC'};    # for compatibility with older scripts
 $VARS{'PWD'}=UX2DOS($CD);          # current directory when executing this configure
+
+# name of the executable - generated
+$VARS{'EXEC'}="$PGMNAME$PACKNUM$ext"; # Name of the executable
+$VARS{'EXENAME'}=$VARS{'EXEC'};    # for compatibility with older scripts
+
 
 # Add some system-dependent items
 if ($HOST eq 'x86_64') {
@@ -122,21 +122,30 @@ if ($HOST eq 'x86_64') {
 } else {
   $VARS{'BITS'}=32;
 }
+# Linux:
+my $PGLIB="libpgplot.so"; # PGPLOT library name
+my $PGIMP="";
+my $PGSERV="pgxwin_server"; # PGPLOT server executable
+my $MCPLLIB="libmcplio.so"; # MCPL shared library name
+my $MCPLIMP="";
+$VARS{'PGTGT'}="src/pgplot/linux";  # location of PGPLOT binding files
+$VARS{'PGPLOT_DEV'}="/xserve";         # default pgplot device
+if ($HOST eq 'x86_64') {         # location of J3D shared libraries (relative to ./GUI)
+$VARS{'J3DLIB'}="j3d-jre/lib/amd64"; 
+} else {
+$VARS{'J3DLIB'}="j3d-jre/lib/i386"; 
+}   
 # Windows:
 if ($SYSNAME eq 'win32') {
+  $PGLIB="libpgplot.dll"; # PGPLOT library name
+  $PGIMP="libpgplot.lib"; # PGPLOT import library name (to be linked width)
+  $PGSERV="jsdriv_server.exe"; # PGPLOT server executable   
+  $MCPLLIB="libmcplio.dll"; # MCPL shared library name
+  $MCPLIMP="libmcplio.lib"; # MCPL import library name (to be linked width)
   $VARS{'PGTGT'}="src/pgplot/windows";  # location of PGPLOT binding files
   $VARS{'PGPLOT_DEV'}="/jsdriv";     # default pgplot device
-  $VARS{'J3DLIB'}="j3d-jre/bin";     # location of J3D shared libraries (relative to ./GUI)	
-} else {
-# Linux:
-  $VARS{'PGTGT'}="src/pgplot/linux";  # location of PGPLOT binding files
-  $VARS{'PGPLOT_DEV'}="/xserve";         # default pgplot device
-  if ($HOST eq 'x86_64') {         # location of J3D shared libraries (relative to ./GUI)
-	$VARS{'J3DLIB'}="j3d-jre/lib/amd64"; 
-  } else {
-	$VARS{'J3DLIB'}="j3d-jre/lib/i386"; 
-  } 	
- };
+  $VARS{'J3DLIB'}="j3d-jre/bin";     # location of J3D shared libraries (relative to ./GUI)  
+};
 
 # Executable files (will be given 0755 permissions)
 my @XFILES=();
@@ -273,9 +282,7 @@ push @SRCDIR,("$VARS{'SRC'}/cfiles");
 
 
 # Target directories - will be created if they do not exist
-my @TARDIR=("$VARS{'BIN'}/", "$VARS{'LIB'}/", "$VARS{'LIB'}/pgplot", "doc",  "distr", "tools");
-# add distr subdirectories
-#push @TARDIR,("distr/bin", "distr/lib", "distr/lib/pgplot", "distr/doc", "distr/demo", "distr/setup", "distr/GUI");
+my @TARDIR=("$VARS{'BIN'}/", "$VARS{'LIB'}/", "$VARS{'LIB'}/pgplot/", "resources/doc/",  "$VARS{'DISTR'}/");
 
 # Directories with *.inc files
 my @INCDIR=("$VARS{'SRC'}");
@@ -287,13 +294,10 @@ my @HDIR=("$VARS{'SRC'}/cfiles", "$VARS{'MCPLIO'}");
 # Template *.in files to be processed at configiration time
 # Process only templates needed for creating makefile and installer scripts.
 # Other templates are processed on installation by the script Install.pl
-my @TEMPLATES = ("src", "tools", "Install.pl.in");
+my @TEMPLATES = ("src", "ZipBin.pl.in", "ZipSrc.pl.in", "Install.pl.in");
 if ($SYSNAME eq 'win32') {
  push @TEMPLATES, ("simres.iss.in", "variables.ini.in");
 };
-
-# in windows, place *.dll in the same directory as binaries
-# if ($SYSNAME eq 'win32') {$VARS{'LIB'}=$VARS{'BIN'};};
 
 #---------------------------------- SUBROUTINES  --------------------------------------------
 
@@ -305,7 +309,7 @@ if ($SYSNAME eq 'win32') {
 sub fpath {
  my $f=$_[0];
  if ($SYSNAME eq 'win32') {
-	$f =~ s/\//\\/g;
+  $f =~ s/\//\\/g;
  };
  return $f;
 };
@@ -316,8 +320,8 @@ sub fpath {
 sub CmdParam {
   # at least the argument with system configuration is required
   if ( $#ARGV < 0) {
-	print "-"x50;
-	print "\n";
+  print "-"x50;
+  print "\n";
     print "Usage: perl $0 <sys> [options]\n";
     print "Arguments:\n";
     print "    <sys> ... defines the configuration file $VARS{'CFGDIR'}/config.<sys>\n";
@@ -329,19 +333,19 @@ sub CmdParam {
     exit 0;
   };
   foreach my $a (@ARGV) {
-	if ($a =~ m/[-].*/) {
-	    push @cmdopt,$a;
-		if ($a =~ m/[-]noparse\z/) {$PARSE="no";};
-		if ($a =~ m/[-]parseonly\z/) {$PARSE="only";};
-		if ($a =~ m/[-]nomake\z/) {$DOMAKE="no";};
-		if ($a =~ m/[-]m(32|64)\z/) {
-			$VARS{'BITS'}=$1;
-			printf("set bits=%d\n",$VARS{'BITS'});
-		} 
-	} else {
-	    $CFG="$VARS{'CFGDIR'}/config.$a";
-		if (! -e $CFG) { die "Can't open $CFG:\n $!\n";};
-	};
+  if ($a =~ m/[-].*/) {
+      push @cmdopt,$a;
+    if ($a =~ m/[-]noparse\z/) {$PARSE="no";};
+    if ($a =~ m/[-]parseonly\z/) {$PARSE="only";};
+    if ($a =~ m/[-]nomake\z/) {$DOMAKE="no";};
+    if ($a =~ m/[-]m(32|64)\z/) {
+      $VARS{'BITS'}=$1;
+      printf("set bits=%d\n",$VARS{'BITS'});
+    } 
+  } else {
+      $CFG="$VARS{'CFGDIR'}/config.$a";
+    if (! -e $CFG) { die "Can't open $CFG:\n $!\n";};
+  };
   };
 };
 
@@ -354,13 +358,13 @@ sub FindLinks {
    if ($SYSNAME eq 'win32') {
    # windows: target is import library, install to lib
    # dll will go to bin
-	$LPGPLOT=UX2DOS("\$(BIN)/$PGIMP");
+  $LPGPLOT=UX2DOS("\$(BIN)/$PGIMP");
    } else {
    # linux: target is so, install to lib
-	$LPGPLOT="\$(LIB)/$PGLIB";
+  $LPGPLOT="\$(LIB)/$PGLIB";
    };
  } else {
-	if ( ! -e $LPGPLOT) {
+  if ( ! -e $LPGPLOT) {
       die "PGPLOT library '$LPGPLOT' does not exist\n $!";
     };
  };
@@ -370,13 +374,13 @@ sub FindLinks {
    if ($SYSNAME eq 'win32') {
    # windows: target is import library, install to lib
    # dll will go to bin
-	$LMCPL=UX2DOS("\$(BIN)/$MCPLIMP");
+  $LMCPL=UX2DOS("\$(BIN)/$MCPLIMP");
    } else {
    # linux: target is so, install to lib
-	$LMCPL="\$(LIB)/$MCPLLIB";
+  $LMCPL="\$(LIB)/$MCPLLIB";
    };
  } else {
-	if ( ! -e $LMCPL) {
+  if ( ! -e $LMCPL) {
       die "MCPL library '$LMCPL' does not exist\n $!";
     };
  };
@@ -517,7 +521,7 @@ sub CollectSources {
     foreach $F (@LST) {
       if ($F =~ m/.*[.]h/) {
         push @INCFILES,$F;
-	push @HFILES,$F;
+  push @HFILES,$F;
         if ($dbg != 0) {printf("Header file: %s\n",$F)};
       };
     };
@@ -560,8 +564,8 @@ sub CreateMakefile {
   # format options for linking
   $libraries="\$(USER_LIBS) \$(restrax_LDADD)";
   if ($SYSNAME eq 'win32') {
-	# Windows: don't link with MCPLIO, it will be loaded dynamically at runtime.
-	$libraries="\$(USER_LIBS) \$(restrax_LDADD)";
+  # Windows: don't link with MCPLIO, it will be loaded dynamically at runtime.
+  $libraries="\$(USER_LIBS) \$(restrax_LDADD)";
   };
   $options="\$(LPATHS) \$(restrax_LDFLAGS)";
   $output="\$(BIN)/\$(EXEC)";
@@ -583,11 +587,11 @@ sub CreateMakefile {
   printf(OUTFILE "\t$rm %s \n",$f);
   printf(OUTFILE "\n");
 
-# cleandist
+# cleanall
   $f="$VARS{'BIN'}/*.o  $VARS{'BIN'}/*.mod $VARS{'BIN'}/*.def \$(BIN)/\$(EXEC) ";
   $f=$f." startCON  startGUI  startCON*.bat  startGUI*.bat  simres.iss  motd ";
   $f=fpath($f);
-  printf(OUTFILE "cleandist: remove_pgplot remove_mcplio\n");
+  printf(OUTFILE "cleanall: remove_pgplot remove_mcplio\n");
   printf(OUTFILE "\t$rm %s \n",$f);
   printf(OUTFILE "\n");
 
@@ -599,16 +603,15 @@ sub CreateMakefile {
   printf(OUTFILE "\n");
 
 # install to ./distr
-  $f = fpath("\$(PWD)/distr");
   printf(OUTFILE "distr: Install.pl\n");
-  printf(OUTFILE "\tperl Install.pl %s\n",$f);
+  printf(OUTFILE "\tperl Install.pl -dist \$(DISTR)\n");
   printf(OUTFILE "\n");
   
 # clean ./distr
   printf(OUTFILE "cleandistr: Uninstall.pl\n");
-  printf(OUTFILE "\tperl Uninstall.pl %s\n",$f);
+  printf(OUTFILE "\tperl Uninstall.pl \$(DISTR)\n");
   printf(OUTFILE "\n");
-	
+  
 # distbin
   printf(OUTFILE "distbin: ZipBin.pl\n");
   printf(OUTFILE "\tperl ZipBin.pl -Q\n");
@@ -622,11 +625,6 @@ sub CreateMakefile {
 # distutil
   printf(OUTFILE "distutil: ZipSrc.pl\n");
   printf(OUTFILE "\tperl ZipSrc.pl -util -Q\n");
-  printf(OUTFILE "\n");
-
-# distdoc
-  printf(OUTFILE "distdoc: ZipDoc.pl\n");
-  printf(OUTFILE "\tperl ZipDoc.pl -Q\n");
   printf(OUTFILE "\n");
 
 # objfiles
@@ -650,7 +648,7 @@ sub CreateMakefile {
     $options="-f makefile_linux  BIN=\$(PWD)/\$(LIB) MCPLSRC=\$(PWD)/\$(MCPLSRC)";
   };  
   printf(OUTFILE "\t\$(MAKE) -C \$(MCPLIO) %s\n", $options);
-  printf(OUTFILE "\t\$(MAKE) -C \$(MCPLIO) %s  clean\n",$options);	  
+  printf(OUTFILE "\t\$(MAKE) -C \$(MCPLIO) %s  clean\n",$options);    
   printf(OUTFILE "remove_mcplio: \n");  
   printf(OUTFILE "\t\$(MAKE) -C \$(MCPLIO) %s  erase\n",$options);
   printf(OUTFILE "\n\n");
@@ -664,12 +662,12 @@ sub CreateMakefile {
 # move result to the appropriate targets
   if ($SYSNAME eq 'win32') {
     # windows: install to ./bin, swap slashes
-	$options=fpath("BIN=\$(PWD)/\$(BIN)  PGD=\$(PWD)/\$(LIB)/pgplot");
+  $options=fpath("BIN=\$(PWD)/\$(BIN)  PGD=\$(PWD)/\$(LIB)/pgplot");
   } else {
     $options=fpath("BIN=\$(PWD)/\$(LIB)  PGD=\$(PWD)/\$(LIB)/pgplot");
   };
   printf(OUTFILE "\t\$(MAKE) -C \$(PGTGT) -f makefile_gfortran  all %s\n",  $opt1);
-  printf(OUTFILE "\t\$(MAKE) -C \$(PGTGT) -f makefile_gfortran  clean \n"); 	
+  printf(OUTFILE "\t\$(MAKE) -C \$(PGTGT) -f makefile_gfortran  clean \n");   
   printf(OUTFILE "\t\$(MAKE) -C \$(PGTGT) -f makefile_gfortran  install %s\n", $options); 
   printf(OUTFILE "\n\n");
   printf(OUTFILE "remove_pgplot:   \n");
@@ -678,29 +676,42 @@ sub CreateMakefile {
   printf(OUTFILE "\n\n");
 
  
-#--------------------------------------------------- 
-# Build JSDRIV server and client library for Windows
-#---------------------------------------------------
+#----------------------------------------------------------------------- 
+# Build JSDRIV server and client library for Windows (requires: Lazarus)
+#-----------------------------------------------------------------------
 
-if ($SYSNAME eq 'win32') {
+  if ($SYSNAME eq 'win32') {
     printf(OUTFILE "# Builds jsdrivlib.dll and jsdriv_server.exe using Lazarus compiler \n"); 
-	my $jsdrivlib=fpath("\$(PWD)/\$(BIN)/jsdrivlib.dll");
-	my $jsdrivsrv=fpath("\$(PWD)/\$(LIB)/pgplot/jsdriv_server.exe");
+    my $jsdrivlib=fpath("\$(PWD)/\$(BIN)/jsdrivlib.dll");
+    my $jsdrivsrv=fpath("\$(PWD)/\$(LIB)/pgplot/jsdriv_server.exe");
+    
+    printf(OUTFILE "jsdriv: %s %s \n",$jsdrivlib,$jsdrivsrv);
+    printf(OUTFILE "\trmdir /S /Q %s\\bin \n",$VARS{'JSDRIV'});
+    printf(OUTFILE "\trmdir /S /Q %s\\lib \n",$VARS{'JSDRIV'});
+
+    printf(OUTFILE "%s: \n",$jsdrivlib);
+    printf(OUTFILE "\tlazbuild %s\\jsdrivlib.lpi \n",$VARS{'JSDRIV'});
+    printf(OUTFILE "\tcopy /Y  %s\\bin\\jsdrivlib.dll %s \n", $VARS{'JSDRIV'}, $jsdrivlib);
+
+    printf(OUTFILE "%s: \n",$jsdrivsrv);
+    printf(OUTFILE "\tlazbuild %s\\jsdriv_server.lpi \n",$VARS{'JSDRIV'});
+    printf(OUTFILE "\tcopy /Y  %s\\bin\\jsdriv_server.exe %s \n",$VARS{'JSDRIV'},$jsdrivsrv);
+    printf(OUTFILE "\n\n");
+  };
+
+#--------------------------------------------------- 
+# Build user interface (requires: Java JDK, Ant)
+#---------------------------------------------------
+  
+  printf(OUTFILE "# Builds user interface (requires: Java JDK, Ant) \n"); 
+  if ($SYSNAME eq 'win32') {
+	printf(OUTFILE "simresUI: %s \n","\$(UI)/makefile.windows");
+	printf(OUTFILE "\t\$(MAKE) -C \$(UI) -f makefile.windows\n");  
+  } else {
+	printf(OUTFILE "simresUI: %s \n","\$(UI)/makefile");
+	printf(OUTFILE "\t\$(MAKE) -C \$(UI) -f makefile \n");  
+  }
 	
-	printf(OUTFILE "jsdriv: %s %s \n",$jsdrivlib,$jsdrivsrv);
-	printf(OUTFILE "\trmdir /S /Q %s\\bin \n",$VARS{'JSDRIV'});
-	printf(OUTFILE "\trmdir /S /Q %s\\lib \n",$VARS{'JSDRIV'});
-
-	printf(OUTFILE "%s: \n",$jsdrivlib);
-	printf(OUTFILE "\tlazbuild %s\\jsdrivlib.lpi \n",$VARS{'JSDRIV'});
-	printf(OUTFILE "\tcopy /Y  %s\\bin\\jsdrivlib.dll %s \n", $VARS{'JSDRIV'}, $jsdrivlib);
-
-	printf(OUTFILE "%s: \n",$jsdrivsrv);
-	printf(OUTFILE "\tlazbuild %s\\jsdriv_server.lpi \n",$VARS{'JSDRIV'});
-	printf(OUTFILE "\tcopy /Y  %s\\bin\\jsdriv_server.exe %s \n",$VARS{'JSDRIV'},$jsdrivsrv);
-	printf(OUTFILE "\n\n");
-};
-
 #------------------------------------------- 
 # format options for compiling with Fortran
 #-------------------------------------------
@@ -736,7 +747,7 @@ if ($SYSNAME eq 'win32') {
 # close makefile
   close(OUTFILE);
 };
-
+# END OF MAKEFILE 
 # ===================================================================
 
 
@@ -744,10 +755,10 @@ if ($SYSNAME eq 'win32') {
 # variables marked as , using the %VARS hash table
 sub ProcessInFiles {
   if ($PARSE ne "no") {
-	printf("Processing templates: \n");
+  printf("Processing templates: \n");
     #foreach my $key (keys %VARS) {
-	#  printf("%s --> [%s]\n",$key,$VARS{$key});
-	#};
+  #  printf("%s --> [%s]\n",$key,$VARS{$key});
+  #};
     foreach my $F (@INFILES) {
       SubstituteInFile($F,$VARS{'INSTDIR'},\%VARS);
     };
@@ -764,8 +775,16 @@ sub EndTasks {
   };
 # print final messages
   printf("----------------------------------------------------------------\n ");
-  printf("Use following command to compile RESTRAX:\n");
+  printf("# Use following command to compile SIMRES core:\n");
   printf("%s -f %s \n",$VARS{'MAKE'},$VARS{'MKFILE'});
+  if ($SYSNAME eq 'win32') {
+    printf("# to compile JSDRIV windows server for PGPLOT:\n");
+    printf("%s -f %s jsdriv\n",$VARS{'MAKE'},$VARS{'MKFILE'});
+  };
+  printf("# to compile user interface for SIMRES:\n");
+  printf("%s -f %s simresUI\n",$VARS{'MAKE'},$VARS{'MKFILE'});
+  printf("# to prepare binary distribution folder ./distr:\n");
+  printf("perl Install.pl -dist\n",$VARS{'MAKE'},$VARS{'MKFILE'});
   printf("----------------------------------------------------------------\n ");
 };
 

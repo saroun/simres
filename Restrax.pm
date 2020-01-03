@@ -10,7 +10,7 @@ use base 'Exporter';
 use Cwd;
 use Config;
 
-our @EXPORT = ('UX2DOS','SplitFileName','MkSubDirCmd','FileCopyCmd','getFileCopyCmd',
+our @EXPORT = ('UX2DOS','SplitFileName','MkSubDirCmd','FileCopyCmd','FileCopyCmdEx','getFileCopyCmd',
     'dosystem','CollectResources','CollectResourcesEx','RmFileCmd','RmDirCmd','StripPath','getTUGZip',
     'ZipDirCmd','FindDependences','SubstituteInFile','SetChmod');
 
@@ -181,9 +181,9 @@ sub MkSubDirCmd {
   my $LD=UX2DOS("$_[0]"); # directory name
   my $mode=0755;
   my @path=SplitFileName("$LD"); # split pathname to drive, path, filename and extension
-  my $PD="$path[0]";      # drive name for subsequent use
+  my $PD="";      # drive name for subsequent use
 # split path to individual subdirectories
-#                                        printf("MkSubDirCmd:  %s \n","$LD");
+# printf("MkSubDirCmd:  %s, PD=%s \n","$LD","$PD");
   my @dlist=split(/[\/\\]/,"$path[1]");
 # create the subdirctory branch if necessary
   foreach my $D (@dlist) {
@@ -191,7 +191,8 @@ sub MkSubDirCmd {
 # append next directory
     if ($PD eq "") {$PD = "$D";} else {$PD = "$PD/$D";};
 # get required target directory, convert delimiters
-    my $PTD=UX2DOS("$PD");
+    my $PTD=UX2DOS("$path[0]$PD");
+	# printf("MkSubDirCmd:  PTD=%s \n","$PTD");
 # create when necessary, set privileges to $mode
     if ( ! -d "$PTD" ) {
       printf("Creates missing directory:  %s \n","$PTD");
@@ -221,6 +222,7 @@ sub getFileCopyCmd {
 sub GetTargetName {
   my $source="$_[0]"; # source file
   my $target="$_[1]"; # target directory
+  my $skippath=UX2DOS("$_[2]"); # skipped path prefix on target 
 #                           printf("FileCopyCmd:  %s --> %s\n",$source,$target);
 # split source file to drive, path, filename and extension
   my @input=SplitFileName("$source");
@@ -230,11 +232,28 @@ sub GetTargetName {
 #          printf("output :");foreach my $f (@output) {printf("%s:",$f)};printf("\n");
 # get subdirectory to be appended to the target
   my $path="";
-  if ($input[1] ne "") {$path="$input[1]/"};
+  my $dbg=0;
+  if ($input[1] ne "") {$path=UX2DOS("$input[1]/")};
+  my $lskip=length($skippath);
+  my $lpath=length($path);
+  my $path2=$path;
+  if ($lskip>0) {
+   # printf("[%s] [%s]\n",$skippath,$path);
+    my $i=index($path,$skippath);
+    if ($i==0) {
+	  if ($lskip==$lpath) {
+	    $path2="";
+	  } else {
+	    $path2=substr($path,$lskip+1);
+	  }
+	 # printf("matched i=%d len=%d [%s]\n",$i,$lskip,$path2);
+	};
+  }
+  
 # define target filename (with full path)
   my $prefix="$output[0]$output[1]/";
   if ($prefix eq "") {$prefix="./"};
-  $target="$prefix$path$input[2]$input[3]";
+  $target="$prefix$path2$input[2]$input[3]";
   return $target;
 }
 
@@ -243,12 +262,17 @@ sub GetTargetName {
 # Set access permissions to $_[2]
 # $_[0] may start with a path
 # $_[1] may end with a filename (would be ignored)
-sub FileCopyCmd {
+# $_[2] permissions to be set for the target file
+# $_[3] ignored path prefix on the target. 
+# For example if $_[3]=resources and $_[0]=resources/setup/file, then the target will be '$_[1]/setup/file'
+sub FileCopyCmdEx {
   my $source="$_[0]"; # source file
   my $tgt="$_[1]"; # target directory
 #                           printf("FileCopyCmd:  %s --> %s\n",$source,$target);
   my $mode=oct("$_[2]"); # permissions
-  my $target = GetTargetName($source,$tgt);
+  my $prefix="$_[3]"; # ignored path prefix
+  
+  my $target = GetTargetName($source,$tgt,$prefix);
 # copy the file using a command appropriate for given system
   my $result="";
  # printf("Restrax.pm: [%s] [%s]\n",$source, $target);
@@ -262,6 +286,20 @@ sub FileCopyCmd {
   return $result;
 };
 
+
+# Copy file $_[0] to another directory, $_[1]
+# Set access permissions to $_[2]
+# $_[0] may start with a path
+# $_[1] may end with a filename (would be ignored)
+# $_[2] permissions to be set for the target file
+sub FileCopyCmd {
+  my $source="$_[0]"; # source file
+  my $tgt="$_[1]"; # target directory
+#                           printf("FileCopyCmd:  %s --> %s\n",$source,$target);
+  my $mode=oct("$_[2]"); # permissions
+  return FileCopyCmdEx($source,$tgt,$mode,"");
+};
+
 # Set privileges on target 
 # Set access permissions to $_[2]
 # $_[0] may start with a path
@@ -271,7 +309,7 @@ sub SetChmod {
   my $tgt="$_[1]"; # target directory
 #                           printf("FileCopyCmd:  %s --> %s\n",$source,$target);
   my $mode=oct("$_[2]"); # permissions
-  my $target = GetTargetName($source,$tgt);
+  my $target = GetTargetName($source,$tgt,"");
   if ( -f "$target") {
     if ($dbg == 0) {chmod $mode,"$target";};
   };
@@ -348,7 +386,8 @@ sub CollectResourcesEx {
 	};
 # list directory + subdirectories
     my $DD=UX2DOS("$D");
-#  printf("%s    \n",$DD);
+	
+   printf("%s    \n",$DD);
     if ( -d $DD ) {
 #  printf("directory: %s    \n",$DD);
       File::Find::find(\&wantedSrcDirs, "$D");}
@@ -569,7 +608,7 @@ sub SubstituteInFile {
       my $source = "$file";
       if ($subpath ne "") {$source = UX2DOS("$subpath/$file")};
 	  my $tsubpath = $subpath;
-	  # in templates subdirectory: exclude "templaes/" from target file name 
+	  # in templates subdirectory: exclude "templates/" from target file name 
 	  if ( $subpath =~ m/^templates[\/\\](.*)/) {
 		 $tsubpath = "$1";
 	  } elsif ( $subpath =~ m/^templates/) {

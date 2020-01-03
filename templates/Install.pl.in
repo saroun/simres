@@ -10,7 +10,7 @@
 # startGUI_win32.bat has to be set manually.
 ##################################################################
 BEGIN {
-	push @INC, '.';
+  push @INC, '.';
 }
 use Restrax;
 use strict;
@@ -24,15 +24,20 @@ use vars qw/*dbg *SYSNAME *HOST/;
 $dbg=0;          # set 1 for debug: no system commands will be executed
 my $ThisScript=$0;  # name of this script
 my %VARS;           # hash table for substitutions
+my $TD="./distr";   # target directory
 my $CD=cwd();       # current directory
 my @INFILES=();     # array with *.in files
 my @SRCFILES=();    # array with files to install
+my @GUIFILES=();    # array with files to install, GUI
 my @EXECS=();       # executables cripts
 my $BITS=@BITS@; # 32 or 64
 my @notfound=();  # files not found = not installed
 my @installed=();  # files installed
-# option variable: set to PARSE="only" if you only want to parse templates, not to copy files
+# Option variables:
+# set to PARSE="only" if you only want to parse templates, not to copy files
 my $PARSE="yes"; 
+# set to DIST="yes" to create distribution package rather than install 
+my $DIST="no"; 
 # set TEST=yes to check that the package is complete and exit. 
 my $TEST="false"; 
 
@@ -46,34 +51,41 @@ $VARS{'SHEXT'}="@SHEXT@";       # extension for shared libraries (so or dll)
 $VARS{'JRE'}="/usr/bin/java";   #  Java VM launcehr for Linux
 $VARS{'PGPLOT_DEV'}="@PGPLOT_DEV@";  # default device for PGPLOT
 $VARS{'PGPLOT_DIR'}="lib/pgplot";  # pgplot directory with grfont.dat etc. in the target folder
+$VARS{'UI'}="submodules/simresUI/dist";  # user interface directory to copy from (only with -dist option)
 
 # define hash table for substitution (direct)
 $VARS{'SYSNAME'}="@SYSNAME@";    # OS name
 $VARS{'HOST'}="@HOST@"; # short host name 
 $VARS{'CONSOLE'}="-cons"; # option for GUI: enable console (for Linux)
 $VARS{'J3DLIB'}="@J3DLIB@"; 
-$VARS{'J3DCLS'}="@J3DCLS@"; 
 $VARS{'PWD'}=UX2DOS($CD);          # current directory 
 
 
 # -------------------  PROJECT DEFINITIONS (edit to your convenience)------------
 
-# source files/directories
-my @SOURCES=("setup", "licenses",
-  "README.md", "COPYING.md", "LICENSE", "INSTALL.md", "doc/simres-guide.pdf", "doc/simres-release-notes.pdf");
-# GUI
-push @SOURCES,("GUI/@PGMNAME@GUI.jar","GUI/@PGMNAME@CON.jar", "GUI/JSUtils.jar");
+# readme and license info 
+my @SOURCES=("licenses", "README.md", "COPYING.md", "LICENSE", "INSTALL.md");
+
+# resources (setup files, docs)
+push @SOURCES,("resources/setup", "resources/doc/simres-guide.pdf", "resources/doc/simres-release-notes.pdf");
+  
 # PGPLOT grfont
 push @SOURCES,("lib/pgplot/grfont.dat", "lib/pgplot/rgb.txt");
 
-# add demo projects
-my @DEMOS = ("demo/STRESSSPEC","demo/BEER","demo/ENGINX",
-     "demo/MEREDIT","demo/TAS","demo/simres_mcstas","demo/multiple_reflections",
-    "demo/crystal_reflectivity","demo/MAUD");
+# demo projects
+my @DEMOS = (
+"resources/demo/STRESSSPEC",
+"resources/demo/BEER","demo/ENGINX",
+"resources/demo/MEREDIT",
+"resources/demo/TAS",
+"resources/demo/simres_mcstas",
+"resources/demo/multiple_reflections",
+"resources/demo/crystal_reflectivity",
+"resources/demo/MAUD");
 push @SOURCES,@DEMOS;
 
-# template *.in files, if not already included in the directories above
-# (they won't be copied, but parsed)
+# template *.in files from ./templates subdiretory
+# (they will be parsed, not copied)
 my @TEMPLATES = ("GUI/restraxCON.ini.in", "GUI/restraxGUI.ini.in");
 push @TEMPLATES, ("motd.in, Uninstall.pl.in");
 if ($SYSNAME eq "win32") {
@@ -82,78 +94,89 @@ if ($SYSNAME eq "win32") {
   push @TEMPLATES,("startGUI.in","startCON.in");
 };
 
-# executable scripts
-if ($SYSNAME eq "win32") {
-  push @EXECS,("startGUI_win32.bat","startCON_win32.bat");
-} else {
-  push @EXECS,("startGUI","startCON");
-};
 
 # executable binaries
 my @BINARIES=("bin/$VARS{'EXENAME'}");
 if ($SYSNAME eq "win32") {
-	push @BINARIES,("bin/jsdrivlib.dll","bin/libmcplio.dll","bin/libpgplot.dll");
-	push @BINARIES,("lib/pgplot/jsdriv_server.exe");
-	push @BINARIES,glob("GUI/$VARS{'J3DLIB'}/*.dll");  # Java 3D libraries
+  push @BINARIES,("bin/jsdrivlib.dll","bin/libmcplio.dll","bin/libpgplot.dll");
+  push @BINARIES,("lib/pgplot/jsdriv_server.exe");
 } else {
-	push @BINARIES,glob("lib/libmcplio.so", "lib/libpgplot.so");
-	push @BINARIES,glob("lib/pgplot/pgxwin_server");
-	push @BINARIES,glob("GUI/$VARS{'J3DLIB'}/*.so");  # Java 3D libraries
+  push @BINARIES,("lib/libmcplio.so", "lib/libpgplot.so");
+  push @BINARIES,("lib/pgplot/pgxwin_server");
 };
 # add compiled mcstas example ...
 push @BINARIES,glob("demo/simres_mcstas/mcstas/*.exe");
 
-# Java 3D library, jar files
-push @SOURCES,glob("GUI/$VARS{'J3DCLS'}/*.jar");
-# other external jar files
-push @SOURCES,glob("GUI/lib/*.jar");
 
+# GUI files (excludes root path prefix)
+my @GUI = ("@PGMNAME@GUI.jar","@PGMNAME@CON.jar","j3d-jre");
 
+# executable scripts and libraries
+my $EXECSCR;
+if ($SYSNAME eq "win32") {
+  $EXECSCR="startGUI_win32.bat";
+  push @EXECS,("startGUI_win32.bat","startCON_win32.bat"); # launch scripts
+  push @EXECS,glob("GUI/$VARS{'J3DLIB'}/*.dll");           # Java 3D libraries
+} else {
+  $EXECSCR="startGUI";
+  push @EXECS,("startGUI","startCON");              # launch scripts
+  push @EXECS,glob("GUI/$VARS{'J3DLIB'}/*.so");     # Java 3D libraries
+};
+
+# Target directories - will be created on the target if they do not exist
+my @TARDIR=("GUI/");
 
 # ------------------------------ SUBROUTINES ----------------------------------
 
-/* Check that the machine type and OS macthes*/
+# Check that the machine type and OS match the executing system
 sub CheckSystem {
     my $res = 0;
-	if ( ! ($VARS{'SYSNAME'} eq $SYSNAME)) {
-	  printf("Incompatible system %s, required %s\n",$SYSNAME,$VARS{'SYSNAME'});
-	  $res = 1;
-	};
-	if ( ! ($VARS{'HOST'} eq $HOST)) {
-	  printf("Incompatible platform %s, required %s\n",$HOST,$VARS{'HOST'});
-	  $res = 1;
-	};
-	return $res;
+  if ( ! ($VARS{'SYSNAME'} eq $SYSNAME)) {
+    printf("Incompatible system %s, required %s\n",$SYSNAME,$VARS{'SYSNAME'});
+    $res = 1;
+  };
+  if ( ! ($VARS{'HOST'} eq $HOST)) {
+    printf("Incompatible platform %s, required %s\n",$HOST,$VARS{'HOST'});
+    $res = 1;
+  };
+  return $res;
 }
 
-/* Check that the package is complete */
+# Check that the package is complete 
 sub CheckPackage {
     my $res = 0;
-	my @notfound=();
-	my @package=();
-	push @package,@SRCFILES;
-	push @package,@INFILES;
-	push @package,@BINARIES;
-	foreach my $f (@package) {
-		if (! -e $f) {
-		  push @notfound,($f);
-		}
-	};
-	# report uninstalled files:
-	if ($#notfound > -1) {
-	    $res=1;
-		printf("WARNING! Some installer files are missing: \n");
-		foreach my $f (@notfound) {
-			printf("     %s \n",$f);
-		};
-	};
-	return $res;
+  my @notfound=();
+  my @package=();
+  push @package,@SRCFILES;
+  push @package,@INFILES;
+  push @package,@BINARIES;
+  foreach my $f (@package) {
+    if (! -e $f) {
+      push @notfound,($f);
+    }
+  };
+  # report uninstalled files:
+  if ($#notfound > -1) {
+      $res=1;
+    printf("WARNING! Some installer files are missing: \n");
+    foreach my $f (@notfound) {
+      printf("     %s \n",$f);
+    };
+  };
+  # check target directories, create when needed
+  foreach my $F (@TARDIR) {
+	my $TDF="$TD/$F";
+    if (! -d $TDF) {
+      MkSubDirCmd($F);
+    };
+  };
+  return $res;
 };
 
 
 # handle command line parameters
 sub CmdParam {
-  $VARS{'INSTDIR'} = ".";
+  $VARS{'INSTDIR'} = "./distr";
   if ($#ARGV <= -1) {
     print "\n";
     print "Usage:\n";
@@ -161,25 +184,32 @@ sub CmdParam {
     print "Arguments:\n";
     print "     <target directory> ... where you want to install the package (must exist)\n";    
     print "Options:\n";
-    print "    -t, -test     ... only check that the package is complete \n";	
+    print "    -t, -test     ... only check that the package is complete \n";  
     print "    -p, -parse    ... only parse *.in templates, no file copy \n";
+    print "    -d, -dist     ... prepare the distribution package rather, do not install \n";
+    print "\n";
+    print "With the -dist option, the GUI files are searched for in $VARS{'UI'} instead of ./GUI \n";
     print "\n";
     exit 0;
   };
   
   foreach my $a (@ARGV) {
-	if ($a =~ m/[-].*/) {
-		if ($a =~ m/[-](p|parse)\z/) {$PARSE="only";};
-		if ($a =~ m/[-](t|test)\z/) {$TEST="yes";};
-	} else {
-	    $VARS{'INSTDIR'} = "$a";
-	};
+  if ($a =~ m/[-].*/) {
+    if ($a =~ m/[-](p|parse)\z/) {$PARSE="only";};
+    if ($a =~ m/[-](t|test)\z/) {$TEST="yes";};
+    if ($a =~ m/[-](d|dist)\z/) {$DIST="yes";};
+  } else {
+      $VARS{'INSTDIR'} = "$a";
+  };
   };
   if ($VARS{'INSTDIR'} eq ".") {$VARS{'INSTDIR'}="distr";};
   # check the target directory
   if (! -e "$VARS{'INSTDIR'}") {
     printf("Target directory %s does not exist.\n",$VARS{'INSTDIR'});
     die "Create one first.\n";
+  };
+  if (not $DIST eq "yes") {
+    $VARS{'UI'}="./GUI";
   };
   
 };
@@ -193,141 +223,154 @@ sub ProcessInFiles {
     foreach my $F (@INFILES) {
       if ($F !~ m/^.*$ThisScript\.in/) { # don't process Install.pl.in
         $tgt=SubstituteInFile($F,$TD,\%VARS);
-		if ($tgt eq "") {
-			push @notfound,("$F");
-		} else {
-			push @installed,("$tgt");
-		};
+    if ($tgt eq "") {
+      push @notfound,("$F");
+    } else {
+      push @installed,("$tgt");
+    };
       };
     };
 };
 
 # message at the end
 sub EndTasks {
-  my $f;
 # print final messages
   printf("%s %s installed in %s.\n",$VARS{'PGMNAME'},$VARS{'VERSION'},$TD);
-  if ($SYSNAME eq 'win32') {
-    $f="startGUI_win32.bat";
-    chmod oct("0755"),"$TD/$f";
-	chmod oct("0755"),"$TD/startCON_win32.bat";
-  } else {
-    $f="startGUI";
-   # chmod oct("0755"),"$TD/restrax_run";
-   # chmod oct("0755"),"$TD/start";
-	chmod oct("0755"),"$TD/$f";
-	chmod oct("0755"),"$TD/startCON";
-  };
-  printf("Run it by calling the script '%s/%s' \n\n",$TD,$f);
+  printf("Run it by calling the script '%s/%s' \n\n",$TD,$EXECSCR);
 };
 
 
 sub WriteInstalledList {
     my $target= shift  @_;  # input file
-	
-	open(OUTFILE,">$target") or die "Cannot create output file $target:\n $!\n";
-	foreach my $F (@installed) {
-		printf(OUTFILE "%s\n",UX2DOS($F));
-	};
-	close(OUTFILE);
+  
+  open(OUTFILE,">$target") or die "Cannot create output file $target:\n $!\n";
+  foreach my $F (@installed) {
+    printf(OUTFILE "%s\n",UX2DOS($F));
+  };
+  close(OUTFILE);
 }
 
 
 # find Java VM launcher on Linux
 #-----------------------------------------------------
+
 sub findJRE {
-	my $ver=32; # 32 or 64
-	if ($BITS == 64) {$ver=64;}; 
-	my @DIRS = glob("/usr/lib/jvm/*"); # search directories
-	my @javas = ();
-	my %goodJRE;
-	printf("Searching for Java VM:\n");
-	$VARS{'JRE'}="";
-	foreach my $d (@DIRS) {
-		if ( -d $d ) {
-			my $jre=$d."/jre/bin/java";
-			if ( -f $jre) {
-			  push @javas ,$jre;
-			};
-		};
-	};
+  my $abovever="1.7"; # version newer than 1.7 
+  my @javas = ();
+  my %goodJRE;
+  my $JRE="";
+  my $JRE_VER="0.0";
+  my $jexe="jre/bin/java"; 
+  my $pgm="/usr/lib/jvm";
+  if ($SYSNAME eq "win32") {
+     $jexe="bin/java.exe";    
+    if ($BITS eq 32) {
+      $pgm=sprintf("%s/Java",$ENV{'PROGRAMFILES(X86)'});
+    } else {
+      $pgm=sprintf("%s/Java",$ENV{'PROGRAMFILES'});
+    };
+  };
+  #printf("pgm=%s\n",$pgm);
+  my @DIRS = glob("'$pgm/*'");   
+  printf("Searching for Java VM, %d-bit:\n",$BITS);
+  foreach my $d (@DIRS) {
+    #printf("dir=%s\n",$d);
+    if ( -d $d ) {
+    my $jre=$d."/".$jexe;
+    if ( -f $jre) {
+      push @javas ,$jre;
+    };
+    };
+  };
 
-	foreach my $f (@javas) {
-			# printf("jre=%s\n",$f);
-			my $out=`$f -d$ver -version 2>&1`;
-		if ( $out =~ m/version[\s\t]*"([0-9_.]+)"/) {
-			printf("matched %s\n",$1);
-			$goodJRE{$1}=$f;
-		};	
-	};
+  foreach my $f (@javas) {
+    #printf("jre=%s\n",$f);
+    my $out=`"$f" -version 2>&1`;
+    my $b=32;
+    #printf("%s\n\n",$out);
+    if ( $out =~ m/version[\s\t]*"([0-9_.]+)"/) {
+     my $vstr=$1;
+     if ( $out =~ m/64[-]bit/i) {
+       $b=64;
+     };
+     if (($vstr > $abovever) and ($b==$BITS)) {
+       $goodJRE{$vstr}=$f;
+     };
+    };  
+  };
 
-	# min. version > 1.7
-	my $minver="1.7"; 
-	$ver="0.0";
-	for my $key (sort keys %goodJRE) {
-		if ($key > $ver) {
-			$VARS{'JRE'}=$goodJRE{$key};
-			$ver=$key;
-		};
-	};
-
-	if ($ver > $minver) {
-		printf("Found Java VM version=%s\n%s\n\n",$ver,$VARS{'JRE'});
-		printf("You can change this choice in %s/startGUI.\n",$TD);
-		printf("Press any key to continue ...",$TD);
-		<STDIN>;
-	} else {
-		printf("No suitable Java VM found for %s\n",$SYSNAME);
-		printf("You will need to define JRE maually in %s/startGUI.\n",$TD);
-		printf("Press any key to continue ...",$TD);
-		<STDIN>;
-		# die "Installation failed.";
-	};
+  #printf("found Java VM: \n");
+  for my $key (sort keys %goodJRE) {
+    printf("version=%-11s: %s\n",$key,$goodJRE{$key});
+    $JRE=$goodJRE{$key};
+    $JRE_VER=$key;
+  };
+  printf("\n");
+  
+  if ($JRE_VER > $abovever) {
+    printf("Found Java VM version=%s\n%s\n\n",$JRE_VER,$JRE);
+    printf("You can change this choice in %s/%s.\n",$TD,$EXECSCR);
+    printf("Press any key to continue ...");
+    <STDIN>;
+  $VARS{'JRE'}=$JRE;
+  } else {
+    printf("No suitable Java VM found for %s\n",$SYSNAME);
+    printf("You will need to define JRE maunally in %s/%s.\n",$TD,$EXECSCR);
+    printf("Press any key to continue ...");
+    <STDIN>;
+  };
 };
 
 # ------------------------------ MAIN SECTION ----------------------------------
 
 
-# check system compatibility
+# Check system compatibility
 if (CheckSystem != 0) {
  printf("If you still want to continue, edit SYSNAME and HOST variables in $0 ");
  printf("to match your system and repeat the command.\n");
  exit 1;
 };
 
-# process parameters
+# Process parameters
 CmdParam;
 
 # Define target directory as $TD, full path
-my $TD=UX2DOS($VARS{'INSTDIR'});
+$TD=UX2DOS($VARS{'INSTDIR'});
 if ($TD !~ m/^(\/.*|[a-zA-Z]:.*)/) {
     # installation in a subdirectory: add current directory as parent
-	$TD=UX2DOS("$VARS{'PWD'}/$VARS{'INSTDIR'}");
+  $TD=UX2DOS("$VARS{'PWD'}/$VARS{'INSTDIR'}");
 }
 $VARS{'INSTDIR'}="$TD";
 
-# collect all *.in files
+# collect all *.in files from ./templates
 @INFILES = CollectResourcesEx("in","","templates",@TEMPLATES);
 
-# collect all except *.in and *.obj files
+# collect all defined in SOURCES, except *.in,*.o,*.mcpl and *.exe files
 @SRCFILES = CollectResources("","in|obj|o|exe|mcpl",@SOURCES);
+
+# collect all defined in GUI
+@GUIFILES = CollectResourcesEx("","","$VARS{'UI'}",@GUI);
 
 # test package and exit if failed
 my $res = CheckPackage;
-if ($TEST -eq "yes" || $res != 0) {exit $res;};
+if ($TEST eq "yes" || $res != 0) {exit $res;};
 
-# installing to the current directory - no copying
+# installing to the current directory or -parseonly: 
+# no copying, only process *.in files and exit
 if (("$TD" eq "$CD") || ("$TD" eq ".") || ($PARSE eq "only") ) { 
   ProcessInFiles;
   EndTasks;
   exit;
 };
 
+# Main installation section:
+#-----------------------------------
+
 # install resource files
 my @notfound=();
-printf("Installs resources: \n");
+printf("Install all except executable binary files: \n");
 foreach my $F (@SRCFILES) {
-  if ((my $res = FileCopyCmd($F,$TD,"0644")) ne "") {
+  if ((my $res = FileCopyCmdEx($F,$TD,"0644",'resources')) ne "") {
     push @installed,("$res");
   } else {
     push @notfound,("$F");
@@ -335,15 +378,8 @@ foreach my $F (@SRCFILES) {
 };
 printf("\n");
 
-# install executable scripts
-printf("Set exec privileges on executable scripts: \n");
-foreach my $F (@EXECS) {
-  SetChmod($F,$TD,"0755");
-};
-printf("\n");
-
 # install binaries
-printf("Installs executable binary files \n");
+printf("Install executable binary files \n");
 foreach my $F (@BINARIES) {
   if ((my $res = FileCopyCmd($F,$TD,"0755")) ne "") {
     push @installed,("$res");
@@ -352,6 +388,27 @@ foreach my $F (@BINARIES) {
   };
 };
 
+# install GUI
+printf("Install GUI\n");
+foreach my $F (@GUIFILES) {
+  my $GUITGT = UX2DOS("$TD/GUI");
+  if ((my $res =  FileCopyCmdEx($F,$GUITGT,"0644",$VARS{'UI'})) ne "") {
+    push @installed,("$res");
+  } else {
+    push @notfound,("$F");
+  };
+};
+
+
+# set access rights for executable scripts
+printf("Set exec privileges on executable scripts: \n");
+foreach my $F (@EXECS) {
+  SetChmod($F,$TD,"0755");
+};
+printf("\n");
+
+
+# try to find JRE (defines path to java command in $VARS{'JRE'})
 findJRE;
 # Substitute for variables in *.in files
 ProcessInFiles;
