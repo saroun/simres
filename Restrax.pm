@@ -11,8 +11,8 @@ use Cwd;
 use Config;
 
 our @EXPORT = ('UX2DOS','SplitFileName','MkSubDirCmd','FileCopyCmd','FileCopyCmdEx','getFileCopyCmd',
-    'dosystem','CollectResources','CollectResourcesEx','RmFileCmd','RmDirCmd','StripPath','getTUGZip',
-    'ZipDirCmd','FindDependences','SubstituteInFile','SetChmod');
+    'dosystem','CollectResources','CollectResourcesEx','CollectResourcesEx2','RmFileCmd','RmDirCmd',
+	'StripPath','ZipDirCmd','FindDependences','SubstituteInFile','SetChmod');
 
 our $dbg=0;
 our $SYSNAME= "$Config{'osname'}";
@@ -28,13 +28,17 @@ use vars qw/*name *dir *prune/;
 *dir    = *File::Find::dir;
 *prune  = *File::Find::prune;
 
-# set the pathname of the TUGZip tzscript.exe utility
-# if not installed in the default location in "ProgramFiles\tugzip"
-my $TUGZIP="";
-
 my @INFILES=();     # array with *.in files
 my @SRCFILES=();    # array with files to install
 my @SRCDIRS=();     # array with directories to install
+my $excl_names="";  # temporary list of excluded names
+
+# define paths to zipping programs if not found automatically:
+# 7-Zip
+my $ZIP7="";
+# TUGZIP
+my $TUGZIP="";
+
 
 
 # Get unified OS name
@@ -45,25 +49,40 @@ if ($SYSNAME =~ m/MSWin32/i) {
     $HOST='x86_64';
   } else {    
     $HOST='x86_32';
-  }
+  };
 } else {
   if ($ARCHNAME =~ m/.*x86_64.*/) {
     $HOST='x86_64';
   } else {
     $HOST=`uname -m`;
 	$HOST =~ s/\n//;
-  }
+  };
 };
 
 # get TUGZip executable for win32
 sub getTUGZip {
-  if ( ! -e $TUGZIP) {
-    $TUGZIP="$ENV{'ProgramFiles'}\\tugzip\\tzscript.exe";
-    if ( ! -e $TUGZIP) {
-      die "Packaging in Win32 requires TUGZip. \nSee http://www.tugzip.com/ and path setting in Restrax.pm.";
-    };
+  if ( ! -e  $TUGZIP) {
+	  $TUGZIP="$ENV{'ProgramFiles'}\\tugzip\\tzscript.exe";
+	  if ( ! -e $TUGZIP) {
+		 printf("Packaging in Win32 requires TUGZip. \nSee http://www.tugzip.com/ and TUGZIP variable setting in Restrax.pm\n");
+		 return "";
+	  };
   };
   return $TUGZIP;
+};
+
+# get 7-Zip executable for win32
+sub get7Zip {
+  if ( ! -e  $ZIP7) {
+	  $ZIP7="$ENV{'ProgramFiles'}\\7-Zip\\7z.exe";
+	  if ( ! -e $ZIP7) {
+		  printf("Packaging in Win32 requires 7-Zip. \nSee https://www.7-zip.org/ and ZIP7 variable setting in Restrax.pm\n");
+		  return "";
+	  } elsif ($dbg != 0) {
+          printf("Zip command: %s\n",$ZIP7);
+	  };
+  };
+  return $ZIP7;
 };
 
 # UX2DOS - replace / delimiters with \
@@ -232,7 +251,6 @@ sub GetTargetName {
 #          printf("output :");foreach my $f (@output) {printf("%s:",$f)};printf("\n");
 # get subdirectory to be appended to the target
   my $path="";
-  my $dbg=0;
   if ($input[1] ne "") {$path=UX2DOS("$input[1]/")};
   my $lskip=length($skippath);
   my $lpath=length($path);
@@ -323,7 +341,7 @@ sub RmDirCmd {
   my $answ = "yes";
   if ( -d "$SD") {
     if ($PROMPT eq "yes") {
-      printf("WARNING ! Existing directory %s will be removed. Type 'yes' to continue: ",$SD);
+      printf("WARNING ! Directory %s will be removed. Type 'yes' to continue: \n",$SD);
       $answ=readline(*STDIN);
     };
     if ($answ =~ m/^yes[\n]*\z/) {
@@ -344,7 +362,7 @@ sub RmFileCmd {
   my $answ = "yes";
   if ( -f "$SD") {
     if ($PROMPT eq "yes") {
-      printf("WARNING ! Existing file %s will be removed. Type 'yes' to continue: ",$SD);
+      printf("WARNING ! File %s will be removed. Type 'yes' to continue: \n",$SD);
       $answ=readline(*STDIN);
     };
     if ($answ =~ m/^yes[\n]*\z/) {
@@ -366,18 +384,19 @@ sub RmFileCmd {
 # Both files and subdirectories remain listed in the global
 # arrays @SRCFILES and @SRCDIRS, respectively.
 
-sub CollectResourcesEx {
-  my $incl= shift @_; # include extensions
-  my $excl= shift @_; # exclude extensions
+sub CollectResourcesEx2 {
+  my $incl= shift @_;   # include extensions
+  my $excl= shift @_;   # exclude extensions
   my $prefix= shift @_; # path prefix for all items
-  my @SRCLIST= @_; # list of sources (files or directories)
+  $excl_names = shift @_;  # exclude directories
+  my @SRCLIST= @_;      # list of sources (files or directories)
   my @lst=();
   # Empty SRCFILES and SRCDIRS first
   while ($#SRCFILES > -1) {shift @SRCFILES;};
   while ($#SRCDIRS > -1) {shift @SRCDIRS;};
   my $CD=cwd();       # current directory
 #  printf("Current directory: %s\n",$CD);
-  if ($dbg != 2) {printf("Collecting resources (allow:%s, deny:%s)\n",$incl,$excl)};
+  if ($dbg != 2) {printf("Collecting resources (allow:%s, deny:%s,%s )\n",$incl,$excl,$excl_names)};
 
 # scan input list and separate files from directories
   foreach my $D (@SRCLIST) {
@@ -387,7 +406,7 @@ sub CollectResourcesEx {
 # list directory + subdirectories
     my $DD=UX2DOS("$D");
 	
-   printf("%s    \n",$DD);
+    printf("%s\n",$DD);
     if ( -d $DD ) {
 #  printf("directory: %s    \n",$DD);
       File::Find::find(\&wantedSrcDirs, "$D");}
@@ -417,13 +436,21 @@ sub CollectResourcesEx {
   return @SRCFILES;
 };
 
+# CollectResourcesEx2 without exluded names.
+sub CollectResourcesEx {
+  my $incl= shift @_;   # include extensions
+  my $excl= shift @_;   # exclude extensions
+  my $prefix= shift @_; # path prefix for all items
+  my @SRCLIST= @_;      # list of sources (files or directories)
+  return CollectResourcesEx2($incl,$excl,$prefix,"",@SRCLIST);
+};
 
 # For backward compatibility: call CollectResourcesEx without prefix 
 sub CollectResources {
   my $incl= shift @_; # include extensions
   my $excl= shift @_; # exclude extensions
-  my @SRCLIST= @_; # list of sources (files or directories)
-  return CollectResourcesEx($incl,$excl,"",@SRCLIST);
+  my @SRCLIST= @_;    # list of sources (files or directories)
+  return CollectResourcesEx2($incl,$excl,"","",@SRCLIST);
 };
 
 # Collect directories to be installed
@@ -439,11 +466,22 @@ sub addSrcDir {
   my $F="$_[1]";
   my $DD="";
   if ($F ne ".") {$DD=UX2DOS("$D/$F")} else { $DD=UX2DOS("$D")};
-# exclude CVS from distributions
-  if ( $DD !~ m/.*CVS\z/)  {
-    push @SRCDIRS, ("$DD");
+  my $exc="CVS|[.]git|".$excl_names;
+  my $regout=qr/(^|[\/\\])($exc)(\z|$|[\/\\])/;
+  # split source file to drive, path, filename and extension
+  my @input=SplitFileName("$DD");
+  # last element of the path
+  my $leaf="$input[2]$input[3]";
+  if ($dbg != 0) {
+    printf("addSrcDir: %s, leaf=[%s], exc=[%s]\n",$DD,$leaf,$exc);
+  }
+# exclude CVS and .git from distributions
+  if ( not $leaf eq "") {
+	  if ( $DD !~ m/$regout/i) {
+	    push @SRCDIRS, ("$DD");
+		if ($dbg != 2) {printf("   added %s\n",$DD)};
+	  };
   };
-  return 1;
 };
 
 # Put given file on the list, apply specified filter on file extensions
@@ -455,63 +493,103 @@ sub addSrcFile {
   my $regout=qr/\|/; # default: deny none
   if ($incl ne "") {$regin=qr/^.+\.($incl)\z/};
   if ($excl ne "") {$regout=qr/^.+\.($excl)\z/};
+  my $exc="CVS|[.]git|".$excl_names;
+  my $regout2=qr/^($exc)\z/;
+  # split source file to drive, path, filename and extension
+  my @input=SplitFileName("$F");
+  # last element of the path
+  my $leaf="$input[2]$input[3]";
+  
 #  printf("%s    \n",$F);
   if (( $F =~ m/$regin/i) && ( $F !~ m/$regout/i)) {
-    push @SRCFILES, ("$F");
-    if ($dbg != 2) {printf("   added %s\n",$F)};
+	if ( $leaf !~ m/$regout2/i) {
+	    push @SRCFILES, ("$F");
+		if ($dbg != 2) {printf("   added %s\n",$F)};
+	};
   };
   return 1;
+};
+
+
+# create command for TUGZIP 
+sub CmdTugZip {
+  my $SD="$_[0]";
+  my @cmd=();
+# script name for TUGZIP
+  my $scrname="$SD.tzs";
+# archive filename
+  my $ARCH="$SD.tgz";
+  my $TZP=getTUGZip;
+  if ($TZP eq "") {
+    return @cmd;
+  };
+  printf("Creating TZS script: %s \n",$scrname);
+  my $SCR="";
+  $SCR = $SCR . "function main() {\n";
+  $SCR = $SCR . "var Comp = new Compress();\n";
+  $SCR = $SCR . "Comp.Archive = \"$ARCH\";\n";
+  $SCR = $SCR . "Comp.Type = \"TGZ\";\n";
+  $SCR = $SCR . "Comp.Compression = 3;\n";
+  $SCR = $SCR . "Comp.WorkingDir = \".\\\\\";\n";
+  $SCR = $SCR . "Comp.Data = \"$SD\";\n";
+  $SCR = $SCR . "Comp.Password = \"\";\n";
+  $SCR = $SCR . "Comp.DateExtension = 0;\n";
+  $SCR = $SCR . "Comp.TimeExtension = 0;\n";
+  $SCR = $SCR . "Comp.Overwrite = 1;\n";
+  $SCR = $SCR . "Comp.Recurse = 1;\n";
+  $SCR = $SCR . "Comp.StoreFolderNames = 1;\n";
+  $SCR = $SCR . "Comp.IncludeHiddenFiles = 0;\n";
+  $SCR = $SCR . "Comp.DoCompress(); }\n";
+  if ($dbg == 0) {
+	open(SCRFILE, ">$scrname") or die "Cannot open TZS file: $scrname\n $! \n";
+	printf(SCRFILE "%s",$SCR);
+	close(SCRFILE);
+  } else {
+	printf("%s \n",$SCR);
+  };
+  @cmd=("$ARCH","$TZP","$scrname");
+  return @cmd;
+};
+
+# create command for 7-ZIP 
+sub Cmd7Zip {
+  my $SD="$_[0]";
+  my @cmd=();
+# archive filename
+  my $ARCH="$SD.zip";
+  my $TZP=get7Zip;
+  if ($TZP eq "") {
+    return @cmd;
+  };
+  @cmd=("$ARCH","$TZP","-tzip","a","$ARCH","$SD");
+  return @cmd;
 };
 
 # create archive from a subdirectory
 # returns archive name, when created, or ""
 sub ZipDirCmd {
   my $SD="$_[0]";
-  my @cmd=();
-# script name for TUGZIP
-  my $scrname="$SD.tzs";
 # archive filename
   my $ARCH="$SD.tar.gz";
   if ($SYSNAME eq 'win32') {$ARCH="$SD.tgz";};
-
   if ( -d "$SD") {
-# remove existing archive
-    RmFileCmd("$ARCH");
-# in win32, TUGZip is required
+# in win32, TUGZip or 7-Zip is required
     if ($SYSNAME eq 'win32') {
+      my @cmd=Cmd7Zip($SD);
+	  if ( scalar(@cmd)==0 ) {
 # create and execute script for TUGZip
-      my $TZP=getTUGZip;
-      printf("Creating TZS script: %s \n",$scrname);
-      my $SCR="";
-      $SCR = $SCR . "function main() {\n";
-      $SCR = $SCR . "var Comp = new Compress();\n";
-      $SCR = $SCR . "Comp.Archive = \"$ARCH\";\n";
-      $SCR = $SCR . "Comp.Type = \"TGZ\";\n";
-      $SCR = $SCR . "Comp.Compression = 3;\n";
-      $SCR = $SCR . "Comp.WorkingDir = \".\\\\\";\n";
-      $SCR = $SCR . "Comp.Data = \"$SD\";\n";
-      $SCR = $SCR . "Comp.Password = \"\";\n";
-      $SCR = $SCR . "Comp.DateExtension = 0;\n";
-      $SCR = $SCR . "Comp.TimeExtension = 0;\n";
-      $SCR = $SCR . "Comp.Overwrite = 1;\n";
-      $SCR = $SCR . "Comp.Recurse = 1;\n";
-      $SCR = $SCR . "Comp.StoreFolderNames = 1;\n";
-      $SCR = $SCR . "Comp.IncludeHiddenFiles = 0;\n";
-      $SCR = $SCR . "Comp.DoCompress(); }\n";
-      if ($dbg == 0) {
-        open(SCRFILE, ">$scrname") or die "Cannot open TZS file: $scrname\n $! \n";
-        printf(SCRFILE "%s",$SCR);
-        close(SCRFILE);
-      } else {
-        printf("%s \n",$SCR);
+		@cmd=CmdTugZip($SD);
+	    if ( scalar(@cmd)==0 ) {
+	      die "Cannot find a zipping tool."
+		};
       };
-      @cmd=("$TZP","$scrname");
-      printf("Executing %s \%s\n",$TZP,$scrname);
+	  $ARCH = shift @cmd;
+	  RmFileCmd("$ARCH");
       dosystem(@cmd);
-
 # in other systems, use GNU tar, gzip
     } else {
-      @cmd=("tar","-czf","$SD.tar.gz","$SD");
+      my @cmd=("tar","-czf","$SD.tar.gz","$SD");
+	  RmFileCmd("$ARCH");
       dosystem(@cmd);
     };
   } else {

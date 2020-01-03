@@ -24,6 +24,7 @@ pgplot/src/*
 
 # Project specific excludes:
 pgplot/linux/pgxwin_server
+pgplot/linux/pgxwin_server
 src/config.inc
 3rdparty/pgplot/*
 GUI
@@ -37,7 +38,6 @@ variables.ini
 *.iss
 motd
 makefile
-*.bat
 Install.pl
 tools/*
 

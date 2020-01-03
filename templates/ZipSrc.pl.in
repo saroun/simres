@@ -19,35 +19,31 @@ use vars qw/*dbg *SYSNAME *PROMPT *HOST/;
 # -------------------  PROJECT DEFINITIONS (edit to your convenience)------------
 
 # source files/directories
-# script DOES descent directories, so you can define the whole tree
+# the script DOES descent directories, so you can define the whole tree
 # Note that *.in files are added automatically
 my @SOURCES=(
 # complete directories
-    "config","doc","pgplot","setup","src","mcplio","templates","licenses",
-# demos (add GUI binary also to sources)
-    "demo/STRESSSPEC","demo/BEER","demo/ENGINX","demo/MEREDIT","demo/TAS","demo/simres_mcstas","demo/multiple_reflections",
-    "demo/crystal_reflectivity","demo/MAUD",	
-# some alias and def files for binding with dll
-
+    "3rdparty","config","resources","src","licenses","templates",
 # information files
-   "README.md", "COPYING.md", "LICENSE", 
-   "simres.ico","simres.svg",
-# 3rd party SW
-   "3rdparty/mcpl", "3rdparty/pgplot", 
-# Java GUI
-    "GUI/lib/*.jar","GUI/simresCON.jar","GUI/simresGUI.jar","GUI/JSUtils.jar"
-  );
-push @SOURCES,("GUI/*.ini.in");
+   "*.md", "LICENSE", 
+# GUI
+    "submodules/simresUI",
+# JSDRIV server
+    "submodules/jsdriv_server"	
+);
+
+my $exclnames = "bin|lib|Java3D|dist|[.]gitignore|[.]gitmodules|tmp[.]txt|config[.]inc"; # excluded names (files or directories)
+my $exclext="exe|bin|dcu|lib|dpp|dll|so|res"; # excluded file extensions 		   
 
 # extra files that are missed by source collection:
 my @EXTRAS=(
-  "setup/crystal.lib","setup/tables/atoms.lib"
+  "resources/setup/crystal.lib","resources/setup/tables/atoms.lib"
 );
 
 # executable scripts:
 my @EXECS=(
 # perl script system for configuration, installation and packaging
-    "Restrax.pm", "configure.pl", "fsym",
+    "Restrax.pm", "configure.pl", "fsym", "findJRE.pl", "build.bat"
 # batch files useful in win32
   );
 
@@ -56,12 +52,14 @@ my @UTILS=(
 # Java 3D files:
     "GUI/j3d-jre",
 	# information files
-   "README.md", "COPYING.md", "LICENSE", "licenses"
+   "*.md", "LICENSE", "licenses"
 ); 
 if ($SYSNAME eq 'win32') {
-	push @UTILS,("bin/libpgplot.dll", "bin/jsdrivlib.dll", "lib/pgplot/jsdriv_server.exe", "lib/pgplot/grfont.dat");
+	push @UTILS,("bin/libpgplot.dll", "bin/jsdrivlib.dll", "lib/pgplot/jsdriv_server.exe",
+      "lib/pgplot/grfont.dat", "lib/pgplot/rgb.txt");
 } else {
-    push @UTILS,("lib/libpgplot.so", "lib/pgplot/pgxwin_server", "lib/pgplot/grfont.dat");
+    push @UTILS,("lib/libpgplot.so", "lib/pgplot/pgxwin_server", "lib/pgplot/grfont.dat", 
+	  "lib/pgplot/rgb.txt");
 };
 
 
@@ -85,15 +83,15 @@ my $TD="$PGMNAME-$VERSION-src";
 sub CmdParam {
   if ($#ARGV > -1) {
     foreach my $a (@ARGV) {
-      if ($a =~ m/[-]*Q\z/) {$PROMPT="no";};
-	  if ($a =~ m/[-]*util\z/) {$WHAT="util";};
-      if ($a =~ m/[-]*help\z/) {
+      if ($a =~ m/[-]+Q\z/) {$PROMPT="no";};
+	  if ($a =~ m/[-]+util\z/) {$WHAT="util";};
+      if ($a =~ m/[-]+help\z/) {
         print "\n";
         print "Usage:\n";
         print "perl $0 [options]\n";
         print "Options:\n";
         print "  -Q       ... quiet mode: does not prompt for anything \n";
-	print "  -util    ... pack only system dependent files needed to compile and run the SIMRES \n";
+        print "  -util    ... pack only system dependent files needed to compile and run the SIMRES \n";
         print "  -help    ... this help \n";
         print "\n";
         exit;
@@ -116,39 +114,41 @@ if ($dbg == 0) {
   mkdir("$TD");
 };
 my @notfound=();
+# collect utilities
 if ($WHAT eq "util") {
-	my $exclist=""; #excluded extensions
-	my @UTILF = CollectResources("",$exclist,@UTILS);
+	my @UTILF = CollectResourcesEx("","","distr",@UTILS);
+												  
 	# copy sources to $TD
 	foreach my $F (@UTILF) {
-	  if ((my $res = FileCopyCmd($F,$TD,"0644")) ne "") {
+	  if ((my $res = FileCopyCmd($F,$TD,"0644")) eq "") {
 		push @notfound,("$res")
 	  };
 	};
-	open(OUTFILE,">$TD/README") or die "Cannot create $TD/README:\n $!\n";
-    printf(OUTFILE "This package contains files, which may be needed to compile and then install/run SIMRES. \n");
+	open(OUTFILE,">$TD/README_utils") or die "Cannot create $TD/README_utils:\n $!\n";
+    printf(OUTFILE "The package $TD contains files, which may be needed to compile and then install/run SIMRES. \n");
 	printf(OUTFILE "Copy contents to the SIMRES source directory before compilation.\n");
 	close(OUTFILE);
+# collect source files
 } else {
 	# collect all resources defined in $SOURCES list
-	my $exclist="exe|bin|dcu|lib|dpp|dll|so"; #excluded extensions
-	@SRCFILES = CollectResources("",$exclist,@SOURCES);
+															   
+	@SRCFILES = CollectResourcesEx2("",$exclext,"",$exclnames,@SOURCES);
 	# copy sources to $TD
 	foreach my $F (@SRCFILES) {
-	  if ((my $res = FileCopyCmd($F,$TD,"0644")) ne "") {
+	  if ((my $res = FileCopyCmd($F,$TD,"0644")) eq "") {
 		push @notfound,("$res")
 	  };
 	};
 	# copy extras to $TD
 	my @EXTRAF = CollectResources("","",@EXTRAS);
 	foreach my $F (@EXTRAF) {
-	  if ((my $res = FileCopyCmd($F,$TD,"0644")) ne "") {
+	  if ((my $res = FileCopyCmd($F,$TD,"0644")) eq "") {
 		push @notfound,("$res")
 	  };
 	};	
 	# copy executable scripts to $TD
 	foreach my $F (@EXECS) {
-	  if ((my $res = FileCopyCmd($F,$TD,"0644")) ne "") {
+	  if ((my $res = FileCopyCmd($F,$TD,"0755")) eq "") {
 		push @notfound,("$res");
 	  };
 	};

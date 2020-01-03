@@ -12,7 +12,6 @@
 BEGIN {
 	push @INC, '.';
 }
-use Restrax;
 use strict;
 use Cwd;
 use File::Path qw(remove_tree);
@@ -21,7 +20,7 @@ use File::Path qw(remove_tree);
 # Set PURGE=no to only delete files logged in install.log (to be found in the target directory)
 my $PURGE="no";  
 # target directory
-my $TD="@INSTDIR@";
+my $TD='@INSTDIR@';
 
 # process parameters
 sub CmdParam;
@@ -41,7 +40,7 @@ sub prnHelp {
     print "Usage:\n";
     print "perl $0 [options] \n";  
     print "Options:\n";
-    print "    -purge    ... clean completely the instlllation directory - CAUTION!\n";
+    print "    -purge    ... clean completely the installation directory - CAUTION!\n";
     print "    -help     ... print this help\n";
 	print " \n";
 	print "By default, only files in listed in the file install.log are deleted.\n";
@@ -64,33 +63,37 @@ sub CmdParam {
   };
 };
 
-
-/* Remove all files in the target directory. 
-Use with caution, no confirmation is requested!
-*/
+# Remove all files in the target directory. 
+# Use with caution, no confirmation is requested!
 sub removeAll {
-    remove_tree( "$TD", {keep_root => 1, safe => 1,} );
+    remove_tree( "$TD", {keep_root => 1, safe => 1} ) or die "Cannot rmtree '$TD' : $!";
 }
-
-/* Remove all files logged in the install.log file.
-*/
+										 
+#  Remove all files logged in the install.log file.
 sub removeInstalled {
   my $rmpath = "$TD/install.log";
   my @cont=(); 
   if (! -e $rmpath) {
      printf("No install log was found. Expected %s\n",$rmpath);
      exit 0;
-  }
+  };
+  my $lino=0;
   open(INFILE,  "<$rmpath") or die "Can't open $rmpath:\n $!\n";
   while (<INFILE>) {
 	$lino = $lino + 1;
-	$LINE=$_;
-	if (-e $LINE) {
-	   push @cont,($LINE);
-    }
-  }
+	my $LINE=$_;
+	$LINE =~ s/[\n\r]//;
+	#printf("    [%s]\n",$LINE);
+	if ( -e "$LINE") {
+	   push @cont,("$LINE");
+    } else {
+	  printf("not found [%s]\n",$LINE);
+	}
+  };
+  push @cont,("$rmpath");
   close(INFILE);
   foreach my $file ( @cont ) {
+     printf("    %s\n",$file);
 	 unlink($file) or warn "Could not delete $file: $!";
-  }
+  };
 }

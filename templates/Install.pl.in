@@ -24,7 +24,7 @@ use vars qw/*dbg *SYSNAME *HOST/;
 $dbg=0;          # set 1 for debug: no system commands will be executed
 my $ThisScript=$0;  # name of this script
 my %VARS;           # hash table for substitutions
-my $TD="./distr";   # target directory
+my $TD="distr";   # target directory
 my $CD=cwd();       # current directory
 my @INFILES=();     # array with *.in files
 my @SRCFILES=();    # array with files to install
@@ -87,7 +87,7 @@ push @SOURCES,@DEMOS;
 # template *.in files from ./templates subdiretory
 # (they will be parsed, not copied)
 my @TEMPLATES = ("GUI/restraxCON.ini.in", "GUI/restraxGUI.ini.in");
-push @TEMPLATES, ("motd.in, Uninstall.pl.in");
+push @TEMPLATES, ("motd.in", "Uninstall.pl.in");
 if ($SYSNAME eq "win32") {
   push @TEMPLATES,("startGUI_win32.bat.in","startCON_win32.bat.in");
 } else {
@@ -167,7 +167,7 @@ sub CheckPackage {
   foreach my $F (@TARDIR) {
 	my $TDF="$TD/$F";
     if (! -d $TDF) {
-      MkSubDirCmd($F);
+      MkSubDirCmd($TDF);
     };
   };
   return $res;
@@ -176,7 +176,7 @@ sub CheckPackage {
 
 # handle command line parameters
 sub CmdParam {
-  $VARS{'INSTDIR'} = "./distr";
+  $VARS{'INSTDIR'} = "distr";
   if ($#ARGV <= -1) {
     print "\n";
     print "Usage:\n";
