@@ -880,7 +880,6 @@ erase:
 	rm -f  pgxwin_server
 	rm -f  grfont.dat
 	rm -f  pgdemo*
-	rm -f  rgb.txt 
 	
 uninstall:
 	rm -f  $(BIN)/$(SHARED_LIB)

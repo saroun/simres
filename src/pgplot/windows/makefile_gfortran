@@ -808,7 +808,6 @@ erase:
 	$(RM) $(IMP_LIB)
 	$(RM) $(DEF_LIB)
 	$(RM) grfont.dat
-	$(RM) rgb.txt 
 	
 uninstall:
 	$(RM) $(BIN)\$(SHARED_LIB) 
