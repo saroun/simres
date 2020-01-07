@@ -1,13 +1,12 @@
 #! /usr/bin/perl
 ##################################################################
 #  $Id$
-#  *****  Installation script for SIMRES  *****
-#  Usage: perl Install.pl <installation directory>
+#  *****  Uninstall script for SIMRES  *****
+#  Usage: perl Uninstall.pl <installation directory>
 # Edit the "PROJECT DEFINITIONS" section below to modify the contents
 # of installation package.
-# The script is used to install SIMRES on Linux.
-# It also works on Windows, but the JRE variable in the startup script
-# startGUI_win32.bat has to be set manually.
+# The script can be used to uninstall SIMRES, previously installed 
+# with the Install.pl script.
 ##################################################################
 BEGIN {
 	push @INC, '.';
@@ -16,23 +15,16 @@ use strict;
 use Cwd;
 use File::Path qw(remove_tree);
 
-# Set PURGE=yes if you want to erase the whole tree (CAUTION).
-# Set PURGE=no to only delete files logged in install.log (to be found in the target directory)
-my $PURGE="no";  
 # target directory
 my $TD='@INSTDIR@';
+# top level directory tree
+my @tree = ("bin","lib","GUI","setup","licenses","demo","doc"); 
 
 # process parameters
 sub CmdParam;
 sub removeInstalled;
-sub removeAll;
 CmdParam;
-
-if ($PURGE eq "yes") {
-  removeAll;
-} else {
-  removeInstalled;	
-}
+removeInstalled;	
 
 # ------------------------------ SUBROUTINES ----------------------------------
 sub prnHelp {
@@ -40,19 +32,14 @@ sub prnHelp {
     print "Usage:\n";
     print "perl $0 [options] \n";  
     print "Options:\n";
-    print "    -purge    ... clean completely the installation directory - CAUTION!\n";
     print "    -help     ... print this help\n";
 	print " \n";
-	print "By default, only files in listed in the file install.log are deleted.\n";
-    print "\n"
 }
 
 # handle command line parameters
 sub CmdParam {
-  $PURGE="no";
   foreach my $a (@ARGV) {
-	if ($a =~ m/[-].*/) {
-		if ($a =~ m/[-]purge\z/) {$PURGE="yes";};
+	if ($a =~ m/^[-].*/) {
 		if ($a =~ m/[-]help\z/) {prnHelp;};
 	};
   };
@@ -62,13 +49,7 @@ sub CmdParam {
     exit 0;
   };
 };
-
-# Remove all files in the target directory. 
-# Use with caution, no confirmation is requested!
-sub removeAll {
-    remove_tree( "$TD", {keep_root => 1, safe => 1} ) or die "Cannot rmtree '$TD' : $!";
-}
-										 
+									 
 #  Remove all files logged in the install.log file.
 sub removeInstalled {
   my $rmpath = "$TD/install.log";
@@ -95,5 +76,13 @@ sub removeInstalled {
   foreach my $file ( @cont ) {
      printf("    %s\n",$file);
 	 unlink($file) or warn "Could not delete $file: $!";
+  };
+  
+  foreach my $d ( @tree ) {
+     my $dd = "$TD/$d";
+	 printf("%s\n",$dd);
+     if ( -d $dd) {
+	   remove_tree( "$dd", {keep_root => 1, safe => 1}, keep_root => 0 ) or warn "Cannot remove '$dd' : $!";
+	 };
   };
 }

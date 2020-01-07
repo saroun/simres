@@ -40,7 +40,7 @@ See the license conditions provided with each source file/package.
 ### Code embeded in the SIMRES source distribution
 
 `Jama` - Java Matrix Package.   
-embedded in UI/Jama
+embedded in submodules/simresUI/simresCON/src/Jama  and GUI/simresCON.jar
 http://math.nist.gov/javanumerics/jama/  
 *License*: public domain
 
@@ -55,11 +55,12 @@ embedded in src/mtmod.f
 http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/VERSIONS/FORTRAN/mtfort90.f  
 *License*: LGPL 
 
-`MCPL` - Monte Carlo Particle Lists library   
+`MCPL` - Monte Carlo Particle Lists library 
+embedded in submodules/mcpl  
 https://github.com/mctools/mcpl  
 *License*: Creative Commons
 
-### Software dynamically linked to SIMRES, distributed in binary packages
+### Software linked to SIMRES, distributed in binary packages
 
 `PGPLOT` - The Fortran graphics library written by Tim Pearson, California Institute of Technology, provides graphical representation of results.  
 http://www.astro.caltech.edu/~tjp/pgplot   

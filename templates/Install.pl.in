@@ -62,6 +62,7 @@ $VARS{'PWD'}=UX2DOS($CD);          # current directory
 
 
 # -------------------  PROJECT DEFINITIONS (edit to your convenience)------------
+# IMPORTANT: DO NOT add trailing slash to directory entries
 
 # readme and license info 
 my @SOURCES=("licenses", "README.md", "COPYING.md", "LICENSE", "INSTALL.md");
@@ -75,7 +76,8 @@ push @SOURCES,("lib/pgplot/grfont.dat", "lib/pgplot/rgb.txt");
 # demo projects
 my @DEMOS = (
 "resources/demo/STRESSSPEC",
-"resources/demo/BEER","demo/ENGINX",
+"resources/demo/BEER",
+"resources/demo/ENGINX",
 "resources/demo/MEREDIT",
 "resources/demo/TAS",
 "resources/demo/simres_mcstas",
@@ -109,9 +111,9 @@ push @BINARIES,glob("demo/simres_mcstas/mcstas/*.exe");
 
 
 # GUI files (excludes root path prefix)
-my @GUI = ("@PGMNAME@GUI.jar","@PGMNAME@CON.jar","j3d-jre");
+my @GUI = ("$VARS{'UI'}/simresGUI.jar","$VARS{'UI'}/simresCON.jar","$VARS{'UI'}/j3d-jre/");
 
-# executable scripts and libraries
+# executable scripts and libraries: to set exec privileges on the target
 my $EXECSCR;
 if ($SYSNAME eq "win32") {
   $EXECSCR="startGUI_win32.bat";
@@ -126,6 +128,24 @@ if ($SYSNAME eq "win32") {
 # Target directories - will be created on the target if they do not exist
 my @TARDIR=("GUI/");
 
+# list of source files and directories to be used
+
+# collect all *.in files from ./templates
+@INFILES = CollectResourcesEx("in","","templates",@TEMPLATES);
+
+# collect all defined in SOURCES, except *.in,*.o,*.mcpl and *.exe files
+@SRCFILES = CollectResources("","in|obj|o|exe|mcpl",@SOURCES);
+
+# collect all defined in GUI
+@GUIFILES = CollectResources("","",@GUI);
+
+my @package=();
+push @package,@SRCFILES;
+push @package,@INFILES;
+push @package,@BINARIES;
+push @package,@GUIFILES;
+push @package,("Install.pl","Restrax.pm");
+  
 # ------------------------------ SUBROUTINES ----------------------------------
 
 # Check that the machine type and OS match the executing system
@@ -144,12 +164,9 @@ sub CheckSystem {
 
 # Check that the package is complete 
 sub CheckPackage {
-    my $res = 0;
+  printf("CheckPackage [%s]\n",$TD);
+  my $res = 0;
   my @notfound=();
-  my @package=();
-  push @package,@SRCFILES;
-  push @package,@INFILES;
-  push @package,@BINARIES;
   foreach my $f (@package) {
     if (! -e $f) {
       push @notfound,($f);
@@ -163,13 +180,6 @@ sub CheckPackage {
       printf("     %s \n",$f);
     };
   };
-  # check target directories, create when needed
-  foreach my $F (@TARDIR) {
-	my $TDF="$TD/$F";
-    if (! -d $TDF) {
-      MkSubDirCmd($TDF);
-    };
-  };
   return $res;
 };
 
@@ -180,13 +190,13 @@ sub CmdParam {
   if ($#ARGV <= -1) {
     print "\n";
     print "Usage:\n";
-    print "perl $0 <target directory> [options] \n";
+    print "perl $0 [options] <target directory> \n";
     print "Arguments:\n";
     print "     <target directory> ... where you want to install the package (must exist)\n";    
     print "Options:\n";
     print "    -t, -test     ... only check that the package is complete \n";  
     print "    -p, -parse    ... only parse *.in templates, no file copy \n";
-    print "    -d, -dist     ... prepare the distribution package rather, do not install \n";
+    print "    -d, -dist     ... prepare the distribution package, do not install \n";
     print "\n";
     print "With the -dist option, the GUI files are searched for in $VARS{'UI'} instead of ./GUI \n";
     print "\n";
@@ -194,7 +204,8 @@ sub CmdParam {
   };
   
   foreach my $a (@ARGV) {
-  if ($a =~ m/[-].*/) {
+  printf("   %s\n",$a);
+  if ($a =~ m/^[-].*/) {
     if ($a =~ m/[-](p|parse)\z/) {$PARSE="only";};
     if ($a =~ m/[-](t|test)\z/) {$TEST="yes";};
     if ($a =~ m/[-](d|dist)\z/) {$DIST="yes";};
@@ -203,33 +214,23 @@ sub CmdParam {
   };
   };
   if ($VARS{'INSTDIR'} eq ".") {$VARS{'INSTDIR'}="distr";};
-  # check the target directory
+  printf("Installation directory: %s\n",$VARS{'INSTDIR'});
+  # check the target directory - prompt for create
+  if (! -e "$VARS{'INSTDIR'}") {
+    #printf("Target directory %s does not exist.\n",$VARS{'INSTDIR'});
+	#my $ans = prompt("Target directory %s does not exist. Create a new one? [nY]\n", "n");
+	printf("Target directory %s does not exist. Create a new one? [nY] ","$VARS{'INSTDIR'}");
+	my $ans = readline(STDIN);
+    # check the target directory
+    if ($ans =~ m/[Y][\n]*$/) {
+	  mkdir("$VARS{'INSTDIR'}");
+    };	
+  };
+  # final check the target directory  
   if (! -e "$VARS{'INSTDIR'}") {
     printf("Target directory %s does not exist.\n",$VARS{'INSTDIR'});
     die "Create one first.\n";
-  };
-  if (not $DIST eq "yes") {
-    $VARS{'UI'}="./GUI";
-  };
-  
-};
-
-
-# Scan *.in files in directories defined in @_ and substitute for
-# variables marked as , using the %VARS hash table
-sub ProcessInFiles {
-    my $tgt;
-    printf("Processing templates: \n");
-    foreach my $F (@INFILES) {
-      if ($F !~ m/^.*$ThisScript\.in/) { # don't process Install.pl.in
-        $tgt=SubstituteInFile($F,$TD,\%VARS);
-    if ($tgt eq "") {
-      push @notfound,("$F");
-    } else {
-      push @installed,("$tgt");
-    };
-      };
-    };
+  };	
 };
 
 # message at the end
@@ -239,10 +240,8 @@ sub EndTasks {
   printf("Run it by calling the script '%s/%s' \n\n",$TD,$EXECSCR);
 };
 
-
 sub WriteInstalledList {
-    my $target= shift  @_;  # input file
-  
+  my $target= shift  @_;  # input file
   open(OUTFILE,">$target") or die "Cannot create output file $target:\n $!\n";
   foreach my $F (@installed) {
     printf(OUTFILE "%s\n",UX2DOS($F));
@@ -342,18 +341,21 @@ if ($TD !~ m/^(\/.*|[a-zA-Z]:.*)/) {
 }
 $VARS{'INSTDIR'}="$TD";
 
-# collect all *.in files from ./templates
-@INFILES = CollectResourcesEx("in","","templates",@TEMPLATES);
-
-# collect all defined in SOURCES, except *.in,*.o,*.mcpl and *.exe files
-@SRCFILES = CollectResources("","in|obj|o|exe|mcpl",@SOURCES);
-
-# collect all defined in GUI
-@GUIFILES = CollectResourcesEx("","","$VARS{'UI'}",@GUI);
-
 # test package and exit if failed
 my $res = CheckPackage;
 if ($TEST eq "yes" || $res != 0) {exit $res;};
+
+# Create distribution and exit
+#-----------------------------
+if ($DIST eq "yes") {
+	foreach my $F (@package) {
+       FileCopyCmd($F,$TD,"")	 
+	};
+	exit 0;
+};
+
+# else run installation tasks:
+#-----------------------------
 
 # installing to the current directory or -parseonly: 
 # no copying, only process *.in files and exit
@@ -365,7 +367,14 @@ if (("$TD" eq "$CD") || ("$TD" eq ".") || ($PARSE eq "only") ) {
 
 # Main installation section:
 #-----------------------------------
-
+# check extra target directories, create when needed
+foreach my $F (@TARDIR) {
+	my $TDF="$TD/$F";
+	if (! -d $TDF) {
+	  MkSubDirCmd($TDF);
+	};
+};
+  
 # install resource files
 my @notfound=();
 printf("Install all except executable binary files: \n");

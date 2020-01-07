@@ -12,7 +12,7 @@ use Config;
 
 our @EXPORT = ('UX2DOS','SplitFileName','MkSubDirCmd','FileCopyCmd','FileCopyCmdEx','getFileCopyCmd',
     'dosystem','CollectResources','CollectResourcesEx','CollectResourcesEx2','RmFileCmd','RmDirCmd',
-	'StripPath','ZipDirCmd','FindDependences','SubstituteInFile','SetChmod');
+	'StripPath','ZipDirCmd','FindDependences','SubstituteInFile','SetChmod','GetTargetName');
 
 our $dbg=0;
 our $SYSNAME= "$Config{'osname'}";
@@ -298,7 +298,7 @@ sub FileCopyCmdEx {
     MkSubDirCmd("$target"); # create directories if necessary
     my @cmd=getFileCopyCmd("$source","$target");
     dosystem(@cmd);
-    if ($dbg == 0) {chmod $mode,"$target";};
+    if (($dbg == 0) and (! $mode eq "")) {chmod $mode,"$target";};
 	$result = $target;
   };
   return $result;
