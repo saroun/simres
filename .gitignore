@@ -8,6 +8,10 @@
 *.a
 *.so
 *.log
+*.zip
+*.tgz
+*.gz
+*.tar.gz
 lib
 bin
 backup

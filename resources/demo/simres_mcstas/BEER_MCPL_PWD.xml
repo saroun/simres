@@ -12,7 +12,7 @@
   <P>
   <B>ToF diffractometer BEER@ESS.</B><BR/>
   <B>Demonstrator of a combined SIMRES+McStas simulation.</B><BR/>
-  This example permits to simulate ToF diffraction on a duplex steel sample (rod sample in axial strain geometry):
+  This example permits to simulate ToF diffraction on a polycrystalline sample (a rod in axial strain geometry defined in McStas file):
   <ol>
   <li>Primary beam is simulated by SIMRES in reverse-tracing mode (primary slit - source) alowing high speed even for very small primary slit (1x3 mm).</li>
   <li>Resulting events are saved in MCPL file and taken over by McStas, which then simulates the powder sample with secondary part (radial collimator and detector).</li>
@@ -20,6 +20,19 @@
   </ol>
   As a result, a diffractogram is produced by both SIMRES and McStas (see the ./mcresult subdirectory of the SIMRES output folder).
   </P>
+  <P> 
+  You can open and run the script in the Tools/Script window or run selected blocks (select text by mouse, then "Run selected").
+  See comments in the script for more details.
+  </P>   
+  <P>  
+  <B>IMPORTANT:</B><BR />
+  This project requires write access to the output path of the project (see Files/Projects)<BR />
+  When loaded as a demo project, this path points to the installation directory, which may not be writable. 
+  This is necessary because McStas uses this path for sharing mcpl data with SIMRES. 
+  To resolve this problem, create a new project in a writable directory by using the "clone" button in the Files/Projects dialog. 
+  Then set the output path to ./output subdirectory of the project folder. <BR />
+  </P>
+ 
   <P>  
   <I>Remarks:</I><BR />
   Use commands in the attached *.inp scripts to perform more complex settings.<BR />
@@ -1543,11 +1556,6 @@ See the files in <code>./mcstas</code> subdirectory of the SIMRES configuration 
 	</SECONDARY>
 </INSTRUMENT>
 <SCRIPT type="command">
-
-
-
-
-
 #----------------------------------------------------------------------
 # Commented script fot running combined SIMRES-McStas-SIMRES simulations.
 #----------------------------------------------------------------------
@@ -1566,7 +1574,7 @@ See the files in <code>./mcstas</code> subdirectory of the SIMRES configuration 
 # Switch to back  standard SIMRES interpreter by "block end' when running other SIMRES commands.
 #
 # NOTE 3:
-# The McStas output directory is erased befor each start of McStas simulation (except of the mcpl files)
+# The McStas output directory is erased before each start of McStas simulation (except of the mcpl files)
 # You have to copy them manually somewhere else in order to preserve them.
 # Alternatively, you can define a different output directory by using the script command
 # mcstas outputdir

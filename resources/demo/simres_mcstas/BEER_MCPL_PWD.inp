@@ -1,8 +1,4 @@
 
-
-
-
-
 #----------------------------------------------------------------------
 # Commented script fot running combined SIMRES-McStas-SIMRES simulations.
 #----------------------------------------------------------------------
@@ -21,7 +17,7 @@
 # Switch to back  standard SIMRES interpreter by "block end' when running other SIMRES commands.
 #
 # NOTE 3:
-# The McStas output directory is erased befor each start of McStas simulation (except of the mcpl files)
+# The McStas output directory is erased before each start of McStas simulation (except of the mcpl files)
 # You have to copy them manually somewhere else in order to preserve them.
 # Alternatively, you can define a different output directory by using the script command
 # mcstas outputdir
