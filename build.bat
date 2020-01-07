@@ -1,5 +1,6 @@
 echo off
-rem Setup PATH and ANT_HOME to make required toolchain available:
+rem Setup PATH and ANT_HOME to make required toolchain available
+rem See also submodules/simresUI.README.md for details about Java3D setting
 set ANT_HOME=%programfiles%\Java\apache-ant
 set PATH=%programfiles%\Java\jdk-12.0.2\bin;%ANT_HOME%\bin;%PATH%
 set PATH=C:\lazarus;%PATH%

@@ -1,0 +1,30 @@
+###########################################################################
+#                    RestraxCON start-up file                             #
+###########################################################################
+
+[restrax]
+install_dir=@INSTDIR@
+program_name=@EXENAME@
+optional_par?=-hidden
+optional_par?=@CONSOLE@
+optional_par?=-s10001
+lib_ext=@SHEXT@
+classes=$restrax->install_dir$/setup/classes.xml
+repository=$restrax->install_dir$/setup/repository.xml
+commands=$restrax->install_dir$/setup/commands.xml
+components=$restrax->install_dir$/setup/components.xml
+
+[gui]
+install_dir=$restrax->install_dir$/GUI
+
+[tas]
+default_config=$restrax->install_dir$/setup/default.xml
+
+[environment variables]
+PGPLOT_DIR=$restrax->install_dir$\pgplot
+LD_LIBRARY_PATH=.:./lib/pgplot:./lib:$restrax->install_dir$\lib\pgplot:$restrax->install_dir$/lib
+PGPLOT_DEV=/NULL
+
+
+
+

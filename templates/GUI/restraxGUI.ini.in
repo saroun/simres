@@ -1,0 +1,50 @@
+[restrax]
+install_dir=@INSTDIR@
+program_name=@EXENAME@
+optional_par?=-hidden
+optional_par?=@CONSOLE@
+optional_par?=-s10001
+lib_ext=@SHEXT@
+classes=$restrax->install_dir$/setup/classes.xml
+
+[gui]
+install_dir=$restrax->install_dir$/GUI
+
+# theme = (BLUE|BORDEAUX|RESTRAX)
+theme=BLUE
+
+# BUTTONS_IN_COLUMN variable defines maximal vertical number of component
+# buttons. If the real number of components is bigger then new column of
+# buttons will be added.
+buttons_in_column=10
+
+[gui.config_window]
+location=0,110
+iconized=false
+
+[gui.exec_window]
+location=0,0
+iconized=false
+
+[gui.console_window]
+location=600,350
+size=600,350
+iconized=false
+
+[gui.results_window]
+location=0,350
+size=600,350
+iconized=false
+#number of records left in results window after putting off
+left_records=50
+#maximum capacity of results window in bytes
+maximum_capacity=102400
+
+[environment variables]
+PGPLOT_DIR=$restrax->install_dir$/lib/pgplot
+PGPLOT_FONT=$restrax->install_dir$/lib/pgplot/grfont.dat
+PGPLOT_DEV=@PGPLOT_DEV@
+LD_LIBRARY_PATH=.:./lib/pgplot:./lib:$restrax->install_dir$\lib\pgplot:$restrax->install_dir$/lib
+
+
+

@@ -32,7 +32,6 @@ Unpack the archive to `./3dparty/pgplot`.
 ### Get source files from archive
 Alternatively, it is possible to download source distribution as a zip archive at `http://neutron.ujf.cas.cz/restrax/download` and unpack it to a new folder. 
 
-
 ### Compile on Windows
 Edit the `build.bat` script from the source distribution to make sure that the required toolchain is available. Specifically, the following tools are required:
 

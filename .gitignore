@@ -32,7 +32,6 @@ pgplot/linux/pgxwin_server
 pgplot/linux/pgxwin_server
 src/config.inc
 3rdparty/pgplot/*
-GUI
 distr
 ZipBin.pl
 ZipSrc.pl
