@@ -155,7 +155,7 @@ if ($WHAT eq "util") {
 };
 
 # pack the directory
-my $ARCH=ZipDirCmd($TD);
+my $ARCH=ZipDirCmd($TD,$TD);
 
 # remove the temporary directory
 RmDirCmd($TD);

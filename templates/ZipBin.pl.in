@@ -35,6 +35,7 @@ if ($SYSNAME eq 'win32') {
 # Global declarations
 $dbg=0;          # set 1 for debug: no system commands will be executed
 $PROMPT="yes";   # set to no if you dont want any user confirmation on file delete
+my $INNO="no";      # set to yes if you want to build INNO setup installer
 my @INFILES=();     # array for *.in files
 my $PGMNAME="@PGMNAME@"; # program executable name
 my $VERSION="@VERSION@"; # version string
@@ -43,17 +44,22 @@ my $VERSION="@VERSION@"; # version string
 # temporary subdirectory for the archive
 my $TD="$PGMNAME-$VERSION-$HOST-$SYSNAME";
 
+my $TD="$PGMNAME-$VERSION-$SYSNAME-$HOST";
+
 # ------------------------------------ PROCEDURES ------------------------------------------
 # handle command line parameters
 sub CmdParam {
   if ($#ARGV > -1) {
     foreach my $a (@ARGV) {
-      if ($a =~ m/[-]*Q\z/) {$PROMPT="no";};
-      if ($a =~ m/[-]*help\z/) {
+	  # printf("arg=[%s]\n",$a);
+      if ($a =~ m/^[-]*Q/) {$PROMPT="no";};
+	  if ($a =~ m/^[-]*inno/) {$INNO="yes";};
+      if ($a =~ m/^[-]*help/) {
         print "\n";
         print "Usage:\n";
         print "perl $0 [options]\n";
         print "Options:\n";
+		print "  -inno    ... build and pack windows installer using inno setup\n";
         print "  -Q       ... quiet mode: does not prompt for anything \n";
         print "  -help    ... this help \n";
         print "\n";
@@ -64,13 +70,30 @@ sub CmdParam {
 };
 
 # ------------------------------ MAIN SECTION ----------------------------------
+# process command parameters
+CmdParam;
+
+if ($INNO eq "yes") {
+  my @cmd=("iscc","simres.iss");
+  if (dosystem(@cmd) !=0) {die "Could not create installer. Script aborted.\n";};
+  # pack the installer
+  $TD="$PGMNAME-$VERSION-$SYSNAME-$HOST";
+  my $instname = "$PGMNAME-$VERSION-install.exe";
+  my $ARCH=ZipDirCmd($instname,$TD);
+  if ( $ARCH ne "" ) {
+    printf("Installer has been packed in $ARCH.\n");
+	RmFileCmd($instname);
+  } else {
+    printf("WARNING! Installer could not be packed.\n");
+  };
+  exit 0;
+};
 
 # Check that all files are present
 my @cmd=("perl","Install.pl","-test");
 if (dosystem(@cmd) !=0) {die "Script aborted.\n";};
 
-# process command parameters
-CmdParam;
+
 
 # clean/recreate target directory
 if ($dbg == 0) {
@@ -78,28 +101,35 @@ if ($dbg == 0) {
   mkdir("$TD");
 };
 
-# Install to the target directory,
-my @cmd=("perl","Install.pl","$TD");
+# Create package in the target directory
+my @cmd=("perl","Install.pl","-dist","$TD");
 dosystem(@cmd);
 
-# Copy *.in files in the distribution
-@INFILES = CollectResourcesEx("in","","templates",@TEMPLATES);
-my @notfound=();
-foreach my $F (@INFILES) {
-  if ((my $res = FileCopyCmd($F,$TD,"0644")) ne "") {
-    push @notfound,("$res");
+# Add runtime libraries from ./rtlib (optional)
+my @rtlib = ();
+my $rtdir = "";
+if ($SYSNAME eq "win32") {
+  $rtdir = "rtlib/windows";
+  if (-d "$rtdir") {
+	@rtlib = glob("$rtdir/*");
+  };
+} else {
+  $rtdir = "rtlib/linux"; 
+  if (-d "$rtdir") {  
+	@rtlib = glob("$rtdir/*");
   };
 };
 
-# Copy executable scripts
-for my $F (@EXECS) {
-  if ((my $res = FileCopyCmd($F,$TD,"0755")) ne "") {
-    push @notfound,("$res");
+if (scalar(@rtlib)>0) {
+  foreach my $f (@rtlib) {
+    my $T = UX2DOS("$TD/bin");
+    printf("rtlib: [%s] -> [%s]\n",$f,$T);
+    FileCopyCmdEx($f,$T,"0755",$rtdir);
   };
 };
 
 # pack the directory
-my $ARCH=ZipDirCmd($TD);
+my $ARCH=ZipDirCmd($TD,$TD);
 
 # remove the temporary directory
 RmDirCmd($TD);
@@ -110,14 +140,7 @@ if ( $ARCH ne "" ) {
   printf("WARNING! Archive could not be created.\n");
 };
 
-# report uninstalled files:
-if ($#notfound > -1) {
-  printf("WARNING! Could not find following files: \n");
-  foreach my $f (@notfound) {
-    printf("     %s \n",$f);
-  };
-  die;
-};
+
 
 
 

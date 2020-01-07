@@ -594,6 +594,11 @@ sub CreateMakefile {
   printf(OUTFILE "cleanall: remove_pgplot remove_mcplio\n");
   printf(OUTFILE "\t$rm %s \n",$f);
   printf(OUTFILE "\n");
+# erase  
+  printf(OUTFILE "erase: cleanall  remove_UI\n");
+  $f=fpath("bin/* lib/pgplot/*");
+  printf(OUTFILE "\t$rm %s \n",$f);
+  printf(OUTFILE "\n");
 
 # install
   printf(OUTFILE "install: \n");
@@ -604,12 +609,12 @@ sub CreateMakefile {
 
 # install to ./distr
   printf(OUTFILE "distr: Install.pl\n");
-  printf(OUTFILE "\tperl Install.pl -dist \$(DISTR)\n");
+  printf(OUTFILE "\tperl Install.pl \$(DISTR)\n");
   printf(OUTFILE "\n");
   
 # clean ./distr
-  printf(OUTFILE "cleandistr: Uninstall.pl\n");
-  printf(OUTFILE "\tperl Uninstall.pl \$(DISTR)\n");
+  printf(OUTFILE "cleandistr: \$(DISTR)/Uninstall.pl\n");
+  printf(OUTFILE "\tperl \$(DISTR)/Uninstall.pl\n");
   printf(OUTFILE "\n");
   
 # distbin
@@ -669,7 +674,6 @@ sub CreateMakefile {
   printf(OUTFILE "\t\$(MAKE) -C \$(PGTGT) -f makefile_gfortran  all %s\n",  $opt1);
   printf(OUTFILE "\t\$(MAKE) -C \$(PGTGT) -f makefile_gfortran  clean \n");   
   printf(OUTFILE "\t\$(MAKE) -C \$(PGTGT) -f makefile_gfortran  install %s\n", $options); 
-  printf(OUTFILE "\n\n");
   printf(OUTFILE "remove_pgplot:   \n");
   printf(OUTFILE "\t\$(MAKE) -C \$(PGTGT) -f makefile_gfortran  erase \n");
   printf(OUTFILE "\t\$(MAKE) -C \$(PGTGT) -f makefile_gfortran  uninstall %s\n", $options);
@@ -711,7 +715,15 @@ sub CreateMakefile {
 	printf(OUTFILE "simresUI: %s \n","\$(UI)/makefile");
 	printf(OUTFILE "\t\$(MAKE) -C \$(UI) -f makefile \n");  
   }
-	
+  printf(OUTFILE "# Cleans user interface (requires: Java JDK, Ant) \n"); 
+  if ($SYSNAME eq 'win32') {
+	printf(OUTFILE "remove_UI: %s \n","\$(UI)/makefile.windows");
+	printf(OUTFILE "\t\$(MAKE) -C \$(UI) -f makefile.windows cleandist\n");  
+  } else {
+	printf(OUTFILE "remove_UI: %s \n","\$(UI)/makefile");
+	printf(OUTFILE "\t\$(MAKE) -C \$(UI) -f makefile cleandist\n");  
+  }
+  
 #------------------------------------------- 
 # format options for compiling with Fortran
 #-------------------------------------------

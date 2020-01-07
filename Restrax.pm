@@ -514,11 +514,12 @@ sub addSrcFile {
 # create command for TUGZIP 
 sub CmdTugZip {
   my $SD="$_[0]";
+  my $aname="$_[1]";
   my @cmd=();
 # script name for TUGZIP
   my $scrname="$SD.tzs";
 # archive filename
-  my $ARCH="$SD.tgz";
+  my $ARCH="$aname.tgz";
   my $TZP=getTUGZip;
   if ($TZP eq "") {
     return @cmd;
@@ -554,9 +555,10 @@ sub CmdTugZip {
 # create command for 7-ZIP 
 sub Cmd7Zip {
   my $SD="$_[0]";
+  my $aname="$_[1]";
   my @cmd=();
 # archive filename
-  my $ARCH="$SD.zip";
+  my $ARCH="$aname.zip";
   my $TZP=get7Zip;
   if ($TZP eq "") {
     return @cmd;
@@ -569,31 +571,32 @@ sub Cmd7Zip {
 # returns archive name, when created, or ""
 sub ZipDirCmd {
   my $SD="$_[0]";
+  my $aname="$_[1]";
 # archive filename
-  my $ARCH="$SD.tar.gz";
+  my $ARCH="";
+  my @cmd=();
   if ($SYSNAME eq 'win32') {$ARCH="$SD.tgz";};
-  if ( -d "$SD") {
+  if ( -e "$SD") {
 # in win32, TUGZip or 7-Zip is required
     if ($SYSNAME eq 'win32') {
-      my @cmd=Cmd7Zip($SD);
+      push @cmd,Cmd7Zip($SD,$aname);
 	  if ( scalar(@cmd)==0 ) {
 # create and execute script for TUGZip
-		@cmd=CmdTugZip($SD);
+		push @cmd,CmdTugZip($SD,$aname);
 	    if ( scalar(@cmd)==0 ) {
 	      die "Cannot find a zipping tool."
 		};
       };
 	  $ARCH = shift @cmd;
-	  RmFileCmd("$ARCH");
-      dosystem(@cmd);
 # in other systems, use GNU tar, gzip
     } else {
-      my @cmd=("tar","-czf","$SD.tar.gz","$SD");
-	  RmFileCmd("$ARCH");
-      dosystem(@cmd);
+	  $ARCH = "$aname.tar.gz";
+      push @cmd,("tar","-czf","$ARCH","$SD");
     };
+	RmFileCmd("$ARCH");
+    dosystem(@cmd);
   } else {
-    printf("Can't create archive from %s: directory does not exist \n",$SD);
+    printf("Can't create archive from %s: directory/file does not exist \n",$SD);
   };
   if ( ! -e $ARCH) {$ARCH=""};
   return $ARCH;

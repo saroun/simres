@@ -41,8 +41,8 @@ AppContact=saroun@ujf.cas.cz
 Name: english; MessagesFile: compiler:Default.isl
 
 [Tasks]
-Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked
-Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked; OnlyBelowVersion: 0,6.1
+Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:AdditionalIcons}; 
+Name: quicklaunchicon; Description: "Create icon in start menu"; GroupDescription: {cm:AdditionalIcons}; MinVersion: 10;
 
 [Files]
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
@@ -86,15 +86,15 @@ Source: {#MyAppSrc}\resources\demo\MAUD\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; D
 Source: {#MyAppSrc}\resources\demo\TAS\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; DestDir: {app}\demo\TAS; Flags: ignoreversion recursesubdirs
 Source: {#MyAppSrc}\resources\demo\crystal_reflectivity\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; DestDir: {app}\demo\crystal_reflectivity; Flags: ignoreversion recursesubdirs
 Source: {#MyAppSrc}\resources\demo\multiple_reflections\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; DestDir: {app}\demo\multiple_reflections; Flags: ignoreversion recursesubdirs
-Source: {#MyAppSrc}\resources\demo\simres_mcstas\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; DestDir: {app}\demo\multiple_reflections; Flags: ignoreversion recursesubdirs
+Source: {#MyAppSrc}\resources\demo\simres_mcstas\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; DestDir: {app}\demo\simres_mcstas; Flags: ignoreversion recursesubdirs
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; WorkingDir: {app}; IconFilename: {app}\simres.ico
 Name: {group}\Release notes; Filename: {app}\doc\{#MyAppNotes}
 Name: {group}\User guide; Filename: {app}\doc\{#MyAppGuide}
 Name: {group}\{cm:ProgramOnTheWeb,{#MyAppName}}; Filename: {#HOMEPAGE}
 Name: {group}\{cm:UninstallProgram,{#MyAppName}}; Filename: {uninstallexe}
-Name: {commondesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: desktopicon; WorkingDir: {app}; IconFilename: {app}\simres.ico
-Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: quicklaunchicon; WorkingDir: {app}; IconFilename: {app}\simres.ico
+Name: {autodesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: desktopicon; WorkingDir: {app}; IconFilename: {app}\simres.ico
+Name: {autostartmenu}\Programs\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: quicklaunchicon; WorkingDir: {app}; IconFilename: {app}\simres.ico
 
 [UninstallDelete]
 Name: {app}; Type: filesandordirs
@@ -148,10 +148,10 @@ jlist:TStringList;
 begin
   if (bits=32) then
   begin
-    src:=AddBackslash(ExpandConstant('{commonpf32}'))+'Java\';
+    src:=AddBackslash(ExpandConstant('{autopf32}'))+'Java\';
   end else
   begin
-    src:=AddBackslash(ExpandConstant('{commonpf64}'))+'Java\';
+    src:=AddBackslash(ExpandConstant('{autopf64}'))+'Java\';
   end;
   res:=((length(JRE)>0) and FileExists(JRE));
   if (not res) then DbgLog.add('trying to find Java launcher ... ');
@@ -164,7 +164,7 @@ begin
     DbgLog.add('    path='+s);
     if (DirExists(s)) then
     begin
-      f:=AddBackslash(s)+'bin\java.exe';
+      f:=AddBackslash(s)+'java.exe';
       if (FileExists(f)) then
       begin
 			  JRE:=f;
@@ -173,6 +173,7 @@ begin
       end;
     end;
   end;
+  {
   if (jlist.count>1) then
   begin
      msg:='Found multiple Java VMs. Choose one.';
@@ -195,6 +196,7 @@ begin
        end;
      end;
   end;
+  }
   result:=res;
 end;
 
@@ -383,6 +385,8 @@ end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
 var s:string;
+
+i:integer;
 begin
 
 try
@@ -395,21 +399,29 @@ try
     begin
       DbgLog.add('java not found !!!');
       s:='Java VM for 64 bit platform was not found.'+#13;
-      s:=s+'You can provide full path to java.exe later in the startup script: ';
-      s:=s+AddBackslash(ExpandConstant('{app}'))+ExpandConstant('{#MyAppExeName}')+#13;
+      s:=s+'Install 64 bit Java JRE or SDK first'+#13;
+      s:=s+'(see https://openjdk.java.net/).'+#13+#13;
+
+      s:=s+'You can provide full path to java.exe later in the startup script: '+#13;
+      s:=s+AddBackslash(ExpandConstant('{app}'))+ExpandConstant('{#MyAppExeName}')+#13+#13;
       s:=s+'Do you want to continue?';
       if MsgBox(s, mbError, MB_YESNO) <> IDYES then
       begin
         DbgLog.add('Installation aborted.');
+        s:='';
+        for i:=0 to DbgLog.count-1 do
+        begin
+          s:=s+DbgLog[i]+#13;
+        end;
+        MsgBox(s, mbInformation, MB_OK);
         Abort;
       end;
     end else 
     begin
       s:='Found Java VM for 64 bit platform:'+#13;
-      s:=s+JRE+#13;
+      s:=s+JRE+#13+#13;
       s:=s+'You can change this selection by editing the startup: '+#13;
-      s:=s+AddBackslash(ExpandConstant('{app}'))+ExpandConstant('{#MyAppExeName}')+#13; 
-      s:=s+JRE+#13;; 
+      s:=s+AddBackslash(ExpandConstant('{app}'))+ExpandConstant('{#MyAppExeName}')+#13;  
       MsgBox(s, mbInformation, MB_OK);
     end;
  end
@@ -429,4 +441,5 @@ except
 end;
 
 end;
+
 

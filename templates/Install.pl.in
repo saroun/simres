@@ -233,6 +233,23 @@ sub CmdParam {
   };	
 };
 
+# Scan *.in files in directories defined in @_ and substitute for
+# variables marked as , using the %VARS hash table
+sub ProcessInFiles {
+    my $tgt;
+    printf("Processing templates: \n");
+    foreach my $F (@INFILES) {
+      if ($F !~ m/^.*$ThisScript\.in/) { # don't process Install.pl.in
+        $tgt=SubstituteInFile($F,$TD,\%VARS);
+    if ($tgt eq "") {
+      push @notfound,("$F");
+    } else {
+      push @installed,("$tgt");
+    };
+      };
+    };
+};
+
 # message at the end
 sub EndTasks {
 # print final messages
