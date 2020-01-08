@@ -1,7 +1,7 @@
 # generated binaries and temporary files
 *.dll
-*.lib
 *.exe
+*.lib
 *.o
 *.mod
 *.def

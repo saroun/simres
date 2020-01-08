@@ -42,7 +42,7 @@
 
 !---------------------------------------------------------------------
       SUBROUTINE READ_ATOMS
-! read atoms.lib and fill the table in TABLE_ATOMS
+! read atoms.dat and fill the table in TABLE_ATOMS
 !---------------------------------------------------------------------
       character(MAX_FNAME_LENGTH) :: FRES
       CHARACTER*128 :: LINE
@@ -51,12 +51,13 @@
       character*(32) :: S
 1     FORMAT(a)
       error=.false.
-      CALL DLG_FILEOPEN('atoms',trim(CFGPATH)//'/tables','lib',0,0,IRES,FRES)
+      ! CALL DLG_FILEOPEN('atoms',trim(CFGPATH)//'/tables','lib',0,0,IRES,FRES)
+      CALL DLG_FILEOPEN('atoms',trim(CFGPATH)//'/tables','dat',0,0,IRES,FRES)
       if (IRES.gt.0) then
         call XML_RSXDUMP(SMES,' ',1)
         IU=OPENFILEUNIT(FRES,.true.)
         if (IU.le.0) then
-          call MSG_ERROR('READ_ATOMS','Cannot open atoms.lib',0,0)
+          call MSG_ERROR('READ_ATOMS','Cannot open atoms.dat',0,0)
         ELSE
           ILINE=0
           ie=0
@@ -69,7 +70,7 @@
           close(IU)
           if (error) then
             call INT2STR(ILINE,S)
-            call MSG_WARN('Format error in atoms.lib, line'//trim(S),0)
+            call MSG_WARN('Format error in atoms.dat, line'//trim(S),0)
           endif
           call MSG_INFO('Atoms library read from '//trim(FRES),0)
         endif
@@ -80,7 +81,7 @@
 
 !---------------------------------------------------------------------
       SUBROUTINE READCRYST
-! read crystal.lib and fill the table CR_TABLE
+! read crystal.dat and fill the table CR_TABLE
 !---------------------------------------------------------------------
       character(MAX_FNAME_LENGTH) :: FRES
       CHARACTER*128 LINE
@@ -90,10 +91,11 @@
       integer :: ITYPE,IORD
 1     FORMAT(a)
 2     FORMAT('Format error in the crystal library, line ',I5 )
-4     FORMAT('Cannot open crystal.lib' )
+4     FORMAT('Cannot open crystal.dat' )
 5     FORMAT('WARNING: Incompatible crystal library, ',a,' is not defined in ',a )
 
-      CALL DLG_FILEOPEN('crystal','|'//trim(RESPATH)//'|'//trim(CFGPATH),'lib',0,0,IRES,FRES)
+      ! CALL DLG_FILEOPEN('crystal','|'//trim(RESPATH)//'|'//trim(CFGPATH),'lib',0,0,IRES,FRES)
+      CALL DLG_FILEOPEN('crystal',trim(RESPATH)//'/tables|'//trim(CFGPATH)//'/tables','dat',0,0,IRES,FRES)
       if (IRES.gt.0) then
         IU=OPENFILEUNIT(FRES,.true.)
         if (IU.le.0) then
