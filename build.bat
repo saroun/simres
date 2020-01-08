@@ -7,8 +7,10 @@ set PATH=C:\lazarus;%PATH%
 set PATH=C:\mingw-w64\mingw64\bin;%PATH%
 set MK=mingw32-make
 
-rem Configure makefile
+rem Configure makefile (release options)
 perl configure.pl mingw_w64
+rem Use this for compiling with debugging options:
+rem perl configure.pl -dbg mingw_w64
 
 rem Compile SIMRES core
 %MK% -f makefile 

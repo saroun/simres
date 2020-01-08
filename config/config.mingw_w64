@@ -21,11 +21,11 @@ FC= gfortran
 # debugging:
 DBGFLAGS=  -Og -fcheck=all -Waliasing -Wampersand  -Wsurprising  -Wc-binding-type  -Wintrinsics-std   -Wintrinsic-shadow  -Wline-truncation  -Wtarget-lifetime  -Winteger-division  -Wreal-q-constant -Wundefined-do-loop  -Wmaybe-uninitialized -Werror
 # optimized for release:
-# DBGFLAGS= -O2
+ADDFLAGS= -O2
 #--------------------------------------------------
 
 # Fortran options:
-FCFLAGS= $(DBGFLAGS)  -funderscoring -ffixed-form -ffixed-line-length-132 -Jbin
+FCFLAGS= $(ADDFLAGS)  -funderscoring -ffixed-form -ffixed-line-length-132 -Jbin
 
 # user libraries to link with RESTRAX:
 USER_LIBS= -L.\bin -lpgplot

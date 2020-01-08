@@ -34,6 +34,7 @@ $dbg=0;          # set 1 for debug: no system commands will be executed
 my $ThisScript=$0;  # name of this script
 my $PARSE="yes";    # parse *.in files by default (change via cmd options)
 my $DOMAKE="yes";   # set to "no" if you don't want to create makefile
+my $DBGOPT="no";   # compile with debugging options
 #------------  DEFINE VERSION HERE  ------------
 my $PGMNAME="simres";      # program name
 my $VERSION="6.5.0";       # version
@@ -328,6 +329,7 @@ sub CmdParam {
     print "Options:\n";
     print "    -noparse    ... do not process *.in templates\n";
     print "    -parseonly  ... only process *.in templates, no configuration of makefile etc.\n";
+    print "    -dbg        ... compile with debugging options\n";	
     print "    -nomake     ... do not create makefile\n";
     print "\n";
     exit 0;
@@ -338,6 +340,7 @@ sub CmdParam {
     if ($a =~ m/[-]noparse\z/) {$PARSE="no";};
     if ($a =~ m/[-]parseonly\z/) {$PARSE="only";};
     if ($a =~ m/[-]nomake\z/) {$DOMAKE="no";};
+    if ($a =~ m/[-]dbg\z/) {$$DBGOPT="yes";};
     if ($a =~ m/[-]m(32|64)\z/) {
       $VARS{'BITS'}=$1;
       printf("set bits=%d\n",$VARS{'BITS'});
@@ -420,7 +423,8 @@ my $lino; my $LINE;
   $VARS{'MAKE'}="make";             # make executable
   $VARS{'FC'}="gfortran";
   $VARS{'DBGFLAGS'}= "-Og -fcheck=all -Waliasing -Wampersand -Wsurprising -Wc-binding-type -Wintrinsics-std -Wintrinsic-shadow -Wline-truncation -Wtarget-lifetime -Winteger-division -Wreal-q-constant -Wundefined-do-loop -Wmaybe-uninitialized -Werror";
-  $VARS{'FCFLAGS'}="-O -funderscoring -ffixed-form -ffixed-line-length-132 -Jbin";
+  $VARS{'ADDFLAGS'}= "-O2";  
+  $VARS{'FCFLAGS'}="\$(ADDFLAGS) -O -funderscoring -ffixed-form -ffixed-line-length-132 -Jbin";
   $VARS{'CC'}="gcc";
   $VARS{'CCFLAGS'}="-O";
   $VARS{'USER_LIBS'}="";
@@ -440,6 +444,9 @@ my $lino; my $LINE;
         $VARS{$key}="$1";
       };
     };
+  };
+  if ($DBGOPT eq "yes") {
+    $VARS{'ADDFLAGS'}=$VARS{'DBGFLAGS'};
   };
   close(INFILE);
 };
