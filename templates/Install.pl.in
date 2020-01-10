@@ -30,7 +30,6 @@ my @INFILES=();     # array with *.in files
 my @SRCFILES=();    # array with files to install
 my @GUIFILES=();    # array with files to install, GUI
 my @EXECS=();       # executables cripts
-my $BITS=@BITS@; # 32 or 64
 my @notfound=();  # files not found = not installed
 my @installed=();  # files installed
 # Option variables:
@@ -56,6 +55,7 @@ $VARS{'UI'}="submodules/simresUI/dist";  # user interface directory to copy from
 # define hash table for substitution (direct)
 $VARS{'SYSNAME'}="@SYSNAME@";    # OS name
 $VARS{'HOST'}="@HOST@"; # short host name 
+$VARS{'BITS'}="@BITS@"; # 32 or 64
 $VARS{'CONSOLE'}="-cons"; # option for GUI: enable console (for Linux)
 $VARS{'J3DLIB'}="@J3DLIB@"; 
 $VARS{'PWD'}=UX2DOS($CD);          # current directory 
@@ -280,7 +280,7 @@ sub findJRE {
   my $pgm="/usr/lib/jvm";
   if ($SYSNAME eq "win32") {
      $jexe="bin/java.exe";    
-    if ($BITS eq 32) {
+    if ($VARS{'BITS'} eq 32) {
       $pgm=sprintf("%s/Java",$ENV{'PROGRAMFILES(X86)'});
     } else {
       $pgm=sprintf("%s/Java",$ENV{'PROGRAMFILES'});
@@ -288,7 +288,7 @@ sub findJRE {
   };
   #printf("pgm=%s\n",$pgm);
   my @DIRS = glob("'$pgm/*'");   
-  printf("Searching for Java VM, %d-bit:\n",$BITS);
+  printf("Searching for Java VM, %d-bit:\n",$VARS{'BITS'});
   foreach my $d (@DIRS) {
     #printf("dir=%s\n",$d);
     if ( -d $d ) {
@@ -309,7 +309,7 @@ sub findJRE {
      if ( $out =~ m/64[-]bit/i) {
        $b=64;
      };
-     if (($vstr > $abovever) and ($b==$BITS)) {
+     if (($vstr > $abovever) and ($b==$VARS{'BITS'})) {
        $goodJRE{$vstr}=$f;
      };
     };  

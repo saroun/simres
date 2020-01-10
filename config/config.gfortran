@@ -28,7 +28,7 @@ FCFLAGS= $(ADDFLAGS)  -funderscoring -ffixed-form -ffixed-line-length-132 -Jbin
 USER_LIBS= -L./bin -lpgplot 
 
 # other libraries to link with RESTRAX:
-restrax_LDADD= -lX11
+restrax_LDADD= -lX11 -ldl
 
 # Command for linking RESTRAX
 restrax_LD= $(FC)

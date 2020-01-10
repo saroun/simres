@@ -74,6 +74,8 @@ void *mydlopen( const char *libname) {
 }
 
 #else
+#include <cstddef>
+#include <stdio.h>
 #include <dlfcn.h>	
 #include "dlapi.h"
 
@@ -89,7 +91,7 @@ int mydlerror() {
 
 
 int mydlclose(void *handle) {
-	return dlclose();
+	return dlclose(handle);
 }
 
 void *mydlsym(void *handle, const char *name, int *ires) {
