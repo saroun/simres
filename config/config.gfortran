@@ -25,7 +25,7 @@ ADDFLAGS= -O2
 FCFLAGS= $(ADDFLAGS)  -funderscoring -ffixed-form -ffixed-line-length-132 -Jbin
 
 # user libraries to link with RESTRAX:
-USER_LIBS= -L./bin -lpgplot 
+USER_LIBS= -L./lib -lpgplot 
 
 # other libraries to link with RESTRAX:
 restrax_LDADD= -lX11 -ldl
