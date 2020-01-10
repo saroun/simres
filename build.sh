@@ -30,5 +30,3 @@ make -f makefile clean
 
 #   install in ./distr
 make -f makefile distr
-
-pause
