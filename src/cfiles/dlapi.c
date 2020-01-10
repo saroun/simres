@@ -74,7 +74,7 @@ void *mydlopen( const char *libname) {
 }
 
 #else
-#include <cstddef>
+#include <stdlib.h>
 #include <stdio.h>
 #include <dlfcn.h>	
 #include "dlapi.h"

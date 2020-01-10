@@ -28,13 +28,13 @@ grfont.dat
 pgplot/src/*
 
 # Project specific excludes:
-pgplot/linux/pgxwin_server
-pgplot/linux/pgxwin_server
+pgxwin_server
 src/config.inc
 3rdparty/pgplot/*
 distr
 ZipBin.pl
 ZipSrc.pl
+rgb.txt
 
 
 # generated files
@@ -43,5 +43,4 @@ variables.ini
 motd
 makefile
 Install.pl
-tools/*
 

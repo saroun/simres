@@ -1,5 +1,5 @@
 #!/bin/bash
-export LD_LIBRARY_PATH="@INSTDIR@/GUI/@J3DLIB@:$LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH="@INSTDIR@/lib:@INSTDIR@/GUI/@J3DLIB@:$LD_LIBRARY_PATH"
 GUI=@INSTDIR@/GUI/simresGUI.jar
 # Give full path to Java VM launcher 
 JRE=@JRE@
