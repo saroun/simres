@@ -7,7 +7,7 @@ rem   then %programfiles%  translates to 'Program Files (x86)' instead of 'Progr
 rem   even if Windows is 64bit. 
 
 
-rem   Example setting: uncoment and edit as needed:
+rem   Example setting: uncomment and edit as needed:
 rem set ANT_HOME=\Java\apache-ant
 rem set PATH=%programfiles%\Java\jdk-12.0.2\bin;%ANT_HOME%\bin;%PATH%
 rem set PATH=C:\lazarus;%PATH%

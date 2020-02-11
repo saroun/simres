@@ -24,14 +24,16 @@ use vars qw/*dbg *SYSNAME *HOST/;
 $dbg=0;          # set 1 for debug: no system commands will be executed
 my $ThisScript=$0;  # name of this script
 my %VARS;           # hash table for substitutions
-my $TD="distr";   # target directory
-my $CD=cwd();       # current directory
 my @INFILES=();     # array with *.in files
 my @SRCFILES=();    # array with files to install
 my @GUIFILES=();    # array with files to install, GUI
 my @EXECS=();       # executables cripts
+my @package=();     # distribution package list
 my @notfound=();  # files not found = not installed
 my @installed=();  # files installed
+my $default_tgt = "@INSTALLTGT@"; # default target directory
+my $TD=$default_tgt;   # actual target directory
+my $CD=cwd();          # current directory
 # Option variables:
 # set to PARSE="only" if you only want to parse templates, not to copy files
 my $PARSE="yes"; 
@@ -128,25 +130,18 @@ if ($SYSNAME eq "win32") {
 # Target directories - will be created on the target if they do not exist
 my @TARDIR=("GUI/");
 
-# list of source files and directories to be used
-
-# collect all *.in files from ./templates
-@INFILES = CollectResourcesEx("in","","templates",@TEMPLATES);
-
-# collect all defined in SOURCES, except *.in,*.o,*.mcpl and *.exe files
-@SRCFILES = CollectResources("","in|obj|o|exe|mcpl",@SOURCES);
-
-# collect all defined in GUI
-@GUIFILES = CollectResources("","",@GUI);
-
-my @package=();
-push @package,@SRCFILES;
-push @package,@INFILES;
-push @package,@BINARIES;
-push @package,@GUIFILES;
-push @package,("Install.pl","Restrax.pm");
   
 # ------------------------------ SUBROUTINES ----------------------------------
+sub AddPrefix {
+  my $prefix= shift @_; # path prefix for all items
+  my @FLIST = @_;       # list 
+  foreach my $D (@FLIST) {
+    if (! $prefix eq "") {
+	$D = UX2DOS($prefix."/".$D);
+    };
+  };
+  return @FLIST;
+};
 
 # Check that the machine type and OS match the executing system
 sub CheckSystem {
@@ -167,7 +162,12 @@ sub CheckPackage {
   printf("CheckPackage [%s]\n",$TD);
   my $res = 0;
   my @notfound=();
-  foreach my $f (@package) {
+  my @requires=();
+  push @requires,AddPrefix("templates",@TEMPLATES);
+  push @requires,@BINARIES;
+  push @requires,@SOURCES;
+  push @requires,@GUI;
+  foreach my $f (@requires) {
     if (! -e $f) {
       push @notfound,($f);
     }
@@ -179,6 +179,12 @@ sub CheckPackage {
     foreach my $f (@notfound) {
       printf("     %s \n",$f);
     };
+	printf("Install anyway? [nY] ");
+    my $ans = readline(STDIN);
+    # check the target directory
+    if ($ans =~ m/[Y][\n]*$/) {
+	  $res=0;
+    };	
   };
   return $res;
 };
@@ -186,7 +192,7 @@ sub CheckPackage {
 
 # handle command line parameters
 sub CmdParam {
-  $VARS{'INSTDIR'} = "distr";
+  $VARS{'INSTDIR'} = ".";
   if ($#ARGV <= -1) {
     print "\n";
     print "Usage:\n";
@@ -198,7 +204,10 @@ sub CmdParam {
     print "    -p, -parse    ... only parse *.in templates, no file copy \n";
     print "    -d, -dist     ... prepare the distribution package, do not install \n";
     print "\n";
-    print "With the -dist option, the GUI files are searched for in $VARS{'UI'} instead of ./GUI \n";
+    unless ($SYSNAME eq "win32") {
+      printf("The default target directory is %s. ",$default_tgt);
+      printf("It can be replaced by '.' as\nsudo perl Install.pl .\n");
+    }; 			 
     print "\n";
     exit 0;
   };
@@ -213,7 +222,19 @@ sub CmdParam {
       $VARS{'INSTDIR'} = "$a";
   };
   };
-  if ($VARS{'INSTDIR'} eq ".") {$VARS{'INSTDIR'}="distr";};
+  # set default target
+  if ($VARS{'INSTDIR'} eq ".") {
+    if ($SYSNAME eq "win32") {
+      $VARS{'INSTDIR'} = "distr";
+    } else { 
+      if ($DIST eq "yes") {
+        $VARS{'INSTDIR'} = "distr";
+      } else {
+        $VARS{'INSTDIR'} = $default_tgt;
+      };
+    }; 
+  };
+
   printf("Installation directory: %s\n",$VARS{'INSTDIR'});
   # check the target directory - prompt for create
   if (! -e "$VARS{'INSTDIR'}") {
@@ -227,7 +248,7 @@ sub CmdParam {
     };	
   };
   # final check the target directory  
-  if (! -e "$VARS{'INSTDIR'}") {
+  if ( ($TEST eq "no") and ( ! -e "$VARS{'INSTDIR'}")) {
     printf("Target directory %s does not exist.\n",$VARS{'INSTDIR'});
     die "Create one first.\n";
   };	
@@ -255,6 +276,16 @@ sub EndTasks {
 # print final messages
   printf("%s %s installed in %s.\n",$VARS{'PGMNAME'},$VARS{'VERSION'},$TD);
   printf("Run it by calling the script '%s/%s' \n\n",$TD,$EXECSCR);
+  unless ($SYSNAME eq "win32") {
+    if ($VARS{'INSTDIR'} eq "/opt/simres") {
+      if ( (-e "/usr/bin") and (-e "/opt/simres/startGUI")) { 
+        my $res = eval { symlink("/opt/simres/startGUI","/usr/bin/simres");1 };
+        if ($res) {
+          printf("Symbolic link created at /usr/bin/simres.\n",$TD,$EXECSCR);  
+        };
+      };
+    };
+  };  
 };
 
 sub WriteInstalledList {
@@ -339,7 +370,6 @@ sub findJRE {
 
 # ------------------------------ MAIN SECTION ----------------------------------
 
-
 # Check system compatibility
 if (CheckSystem != 0) {
  printf("If you still want to continue, edit SYSNAME and HOST variables in $0 ");
@@ -357,6 +387,21 @@ if ($TD !~ m/^(\/.*|[a-zA-Z]:.*)/) {
   $TD=UX2DOS("$VARS{'PWD'}/$VARS{'INSTDIR'}");
 }
 $VARS{'INSTDIR'}="$TD";
+
+# list of source files and directories to be used
+# collect all *.in files from ./templates
+@INFILES = CollectResourcesEx("in","","templates",@TEMPLATES);
+# collect all defined in SOURCES, except *.in,*.o,*.mcpl and *.exe files
+@SRCFILES = CollectResources("","in|obj|o|exe|mcpl",@SOURCES);
+# collect all defined in GUI
+@GUIFILES = CollectResources("","",@GUI);
+# define distribution package
+@package=();
+push @package,@SRCFILES;
+push @package,@INFILES;
+push @package,@BINARIES;
+push @package,@GUIFILES;
+push @package,("Install.pl","Restrax.pm");
 
 # test package and exit if failed
 my $res = CheckPackage;
@@ -425,6 +470,11 @@ foreach my $F (@GUIFILES) {
   };
 };
 
+# try to find JRE (defines path to java command in $VARS{'JRE'})
+findJRE;
+
+# Process templates, *.in files
+ProcessInFiles;
 
 # set access rights for executable scripts
 printf("Set exec privileges on executable scripts: \n");
@@ -433,11 +483,7 @@ foreach my $F (@EXECS) {
 };
 printf("\n");
 
-
-# try to find JRE (defines path to java command in $VARS{'JRE'})
-findJRE;
-# Substitute for variables in *.in files
-ProcessInFiles;
+# final tasks 
 EndTasks;
 WriteInstalledList("$TD/install.log");
 

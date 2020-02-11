@@ -125,10 +125,11 @@ if ($HOST eq 'x86_64') {
 }
 # Linux:
 my $PGLIB="libpgplot.so"; # PGPLOT library name
-my $PGIMP="";
+my $PGIMP="";             # PGPLOT import library name (empty for Linux)
 my $PGSERV="pgxwin_server"; # PGPLOT server executable
 my $MCPLLIB="libmcplio.so"; # MCPL shared library name
-my $MCPLIMP="";
+my $MCPLIMP="";             # MCPL import library name (empty for Linux)
+$VARS{'INSTALLTGT'} ="/opt/simres";      # default installation target directory
 $VARS{'PGTGT'}="src/pgplot/linux";  # location of PGPLOT binding files
 $VARS{'PGPLOT_DEV'}="/xserve";         # default pgplot device
 if ($HOST eq 'x86_64') {         # location of J3D shared libraries (relative to ./GUI)
@@ -138,11 +139,12 @@ $VARS{'J3DLIB'}="j3d-jre/lib/i386";
 }   
 # Windows:
 if ($SYSNAME eq 'win32') {
-  $PGLIB="libpgplot.dll"; # PGPLOT library name
-  $PGIMP="libpgplot.lib"; # PGPLOT import library name (to be linked width)
+  $PGLIB="libpgplot.dll";  # PGPLOT library name
+  $PGIMP="libpgplot.lib";  # PGPLOT import library name (to be linked width)
   $PGSERV="jsdriv_server.exe"; # PGPLOT server executable   
   $MCPLLIB="libmcplio.dll"; # MCPL shared library name
   $MCPLIMP="libmcplio.lib"; # MCPL import library name (to be linked width)
+  $VARS{'INSTALLTGT'} ="distr";      # default installation target directory
   $VARS{'PGTGT'}="src/pgplot/windows";  # location of PGPLOT binding files
   $VARS{'PGPLOT_DEV'}="/jsdriv";     # default pgplot device
   $VARS{'J3DLIB'}="j3d-jre/bin";     # location of J3D shared libraries (relative to ./GUI)  

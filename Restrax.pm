@@ -232,7 +232,7 @@ sub getFileCopyCmd {
   if ($SYSNAME eq 'win32') {
     @cmd=("COPY","/Y","$source","$target");
   } else {
-    @cmd=("cp","-fp","$source","$target");
+    @cmd=("cp","-f","$source","$target");
   };
   return @cmd;
 };
@@ -314,7 +314,7 @@ sub FileCopyCmd {
   my $source="$_[0]"; # source file
   my $tgt="$_[1]"; # target directory
 #                           printf("FileCopyCmd:  %s --> %s\n",$source,$target);
-  my $mode=oct("$_[2]"); # permissions
+  my $mode="$_[2]"; # permissions
   return FileCopyCmdEx($source,$tgt,$mode,"");
 };
 
