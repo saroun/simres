@@ -1,5 +1,5 @@
 # S I M R E S - Neutron ray-tracing simulations
-Copyright (c) 1997-2019   
+Copyright (c) 1997-2020   
 Nuclear Physics Institute, CAS, Rez, Czech Republic  
 Institut Laue Langevin, Grenoble, France  
 http://neutron.ujf.cas.cz/restrax/  
@@ -68,5 +68,5 @@ http://www.astro.caltech.edu/~tjp/pgplot
 
 `Java3D` - 3D Graphics Package  
 http://www.java3d.org  
-*License*: Sun Microsystems, see licenses/java3d.txt
+*License*: see licenses/java3d.txt
 

@@ -1,8 +1,11 @@
-*** SIMRES version @VERSION@, @BDATE@ ***
-homepage: @HOMEPAGE@
-source: https://github.com/saroun/simres
-see "doc/simres-release-notes.pdf" for the list of changes, bug fixes etc..
-see "doc/simres-guide.pdf" for documentation to the current release
+*** SIMRES - ray-tracing simulations of neutron scattering instruments ***
+version:	@VERSION@
+build:	@BDATE@ 
+homepage:	@HOMEPAGE@
+source code:	https://github.com/saroun/simres
+license:	@INSTDIR@/COPYING.md
+see "@INSTDIR@/doc/simres-release-notes.pdf" for the list of changes, bug fixes etc..
+see "@INSTDIR@/doc/simres-guide.pdf" for documentation to the current release
 
 ===============
 version 6.5

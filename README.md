@@ -6,7 +6,6 @@ Homepage: http://neutron.ujf.cas.cz/restrax
 SIMRES repository: https://github.com/saroun/simres  
 User guide: http://neutron.ujf.cas.cz/restrax/download/simres-guide.pdf
 
-
 -----------------------------------------------------------------
 
 ## Use conditions
@@ -17,7 +16,7 @@ SIMRES is provided under the terms of the *GNU General Public License v. 2.0* (s
 
 `PGPLOT` - The Fortran graphics library written by Tim Pearson, California Institute of Technology, provides graphical representation of results.  
 http://www.astro.caltech.edu/~tjp/pgplot  
-*License*: see pgplot/copyright.notice
+*License*: see licenses/pgplot.txt
 
 `Mersenne-Twister` - The random number generator developed by Makoto Matsumoto and Takuji Nishimura [ACM Trans. on Modeling and Computer Simulation Vol. 8, No. 1, Januray pp.3-30, 1998] and coded to Fortran by Hiroshi Takano.  
 http://www.math.sci.hiroshima-u.ac.jp/%7Em-mat/MT/emt.html  
@@ -29,7 +28,7 @@ https://github.com/mctools/mcpl
 
 `Java3D` - 3D Graphics Package  
 http://www.java3d.org/
-*License*: Sun Microsystems, see licenses/java3d.txt
+*License*: see licenses/java3d.txt
 
 `Jama` - Java Matrix Package.   
 http://math.nist.gov/javanumerics/jama/  
@@ -39,19 +38,13 @@ http://math.nist.gov/javanumerics/jama/
 
 Linux: 
 - tested with Ubuntu 18.04 LTE
-- `perl` (for running installation script only)
-- `Java`, JRE or SDK (ver. 7 or higher), 64 bit
+- `Java`, JRE or SDK (ver. 8 or higher), 64 bit
+- `perl` (for running installation and build scripts)
 - `gcc`, `gfortran` (version >= 7), if you want to compile from sources
 
 Windows:
 - tested with Windows 10 ver. 1809 
-- `perl` (for running installation script only)
-- `Java`, JRE or SDK (ver. 7 or higher), 64 bit
+- `Java`, JRE or SDK (ver. 8 or higher), 64 bit
+- `perl` (only for running build scripts)
 - `mingw-w64` with gcc and gfortran (version >= 7), if you want to compile from sources
-- `Lazarus` FreePascal, if you want to compile the PGPLOT driver (jsdriv_server) 
-
-
-
-
-
-
+- `Lazarus` FreePascal, if you want to compile the PGPLOT graphics driver for Windows (jsdriv_server) 
