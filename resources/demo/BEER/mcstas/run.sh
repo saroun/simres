@@ -1,6 +1,6 @@
 #!/bin/bash
 echo Running McStas
-MCSTAS=/usr/share/mcstas/2.4.1
+MCSTAS=/usr/share/mcstas/2.6
 # MCSTAS_CC=gcc
 mcmd="perl $MCSTAS/bin/mcrun.pl"
 

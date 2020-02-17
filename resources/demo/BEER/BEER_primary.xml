@@ -46,7 +46,7 @@
   <TD align="LEFT">Primary diffractometer with a monitor at 50 mm in front of the sample position. 
   It permits to export neutrons to an MCPL file for subsequent simulation of the sample and secondary part by another program (tested with McStas). 
   <BR />After simulation, you can export neutrons from the selected monitor to MCPL by typing a command in the console window or in the Tools/Script window, e.g.:
-  <BR /><code>MCPL_file.mcpl</code>
+  <BR /><code>MCPL file.mcpl</code>
   </TD>
   </TR>
   </TABLE>

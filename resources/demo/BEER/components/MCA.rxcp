@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SIMRES version="6.3.6">
+<SIMRES version="6.5.0">
 	<FRAME class="DCHOPPER" id="MCA" name="modulation chopper A">
 		<DIST name="distance" units="mm">950.0</DIST>
 		<SHAPE name="shape" value="3">box</SHAPE>
