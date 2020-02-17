@@ -1,9 +1,9 @@
 @echo off
 rem set up environment for your McStas distribution
-set PATH=C:/mcstas-2.5/bin;%PATH%
-set MCSTAS=C:/mcstas-2.5/lib
+set PATH=C:/mcstas-2.6/bin;%PATH%
+set MCSTAS=C:/mcstas-2.6/lib
 set MCSTAS_CC=gcc
-set MCSTAS_TOOLS=C:/mcstas-2.5/lib/tools/Perl
+set MCSTAS_TOOLS=C:/mcstas-2.6/lib/tools/Perl
 
 set name=%1
 if [%name%]==[] (
