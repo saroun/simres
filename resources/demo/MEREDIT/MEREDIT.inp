@@ -1,3 +1,4 @@
+
 # Simulation of a single powder diffraction peak
 # (i) scan diffraction pattern by the detector angle
 # (ii) simulate instrumental peak profile
@@ -32,6 +33,7 @@ do mc
 # Make a scan with the detector, using accumulated neutrons from the primary beam
 # number of counts in one step
 set TR CNT 2000
+do mc
 # switch ON  the double cycle in tracing options
 set TR DBC 1
 # set tracing mode to "secondary "

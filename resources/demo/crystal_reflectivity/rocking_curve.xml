@@ -9,18 +9,10 @@
 	-->
   </STYLE>
   <DIV class="bluebox">
-  <P><B>Three axis neutron spectrometer with flat-cone analyzer arrangement.</B></P>
+  <P><B>Rocking curve of a mosaic crystal with strain gradient.</B></P>
   <P>
-  The analyzer is put in flat-cone geometry by setting properties 
-	in the <code> Instrument setup / Interface </code> dialog. Set option <i>flat-cone analyzer</i> = on/off.
+  See the script <code>rocking_curve.inp</code> for details.
   </P>
-  <P>
-  Set option <i>Q off-plane</i> = on to choose the mode with tilted flatcone: keeps AB plane in the horizontal position
-  if Q is out of this plane. Otherwise, the sample is tilted to keep Q horizontal.
-  </P>
-  <P>
-  Use the commands in the script <code>TAS_flatcone.inp</code> to try this example. 
-  </P>  
   <P> 
   <I>Remarks:</I><BR />
   Use the commands in the attached *.inp script to perform various settings and commands.<BR />

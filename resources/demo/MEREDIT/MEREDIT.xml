@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SIMRES version="6.3.6">
+<SIMRES version="6.5.0">
 <HTML>
-<![CDATA[
-  <STYLE TYPE="text/css">
+ <![CDATA[
+<STYLE TYPE="text/css">
   	<!--    
    div.bluebox  {font-size: 12pt; background-color: #A3C4EA; }
 	 table.bluebox  {font-size: 10pt; background-color: #A3C4EA; 
@@ -225,6 +225,10 @@
 		<PLIMIT name="precision limit" units=" ">1.0E-6</PLIMIT>
 		<DBC name="double cycle" value="1">yes</DBC>
 		<MODE name="tracing mode" value="2">all</MODE>
+		<MCSTAS name="run McStas" value="0">no</MCSTAS>
+		<PATHIN name="path to sample" units="mm">0.0</PATHIN>
+		<PATHOUT name="path from sample" units="mm">0.0</PATHOUT>
+		<SPLIT name="split factor">1</SPLIT>
 		<STORE name="storage mode" value="0">detector</STORE>
 		<GRAVITY name="gravity" units="G">0.0</GRAVITY>
 		<PSMODE name="sampling space" value="0">k-space</PSMODE>
@@ -250,12 +254,12 @@
 		<SPECTROMETER class="SPECTROMETER" id="INST" name="basic instrument interface">
 			<INPSET name="input parameter set" value="0">diffraction</INPSET>
 			<FIX name="fixed K" value="0">Ki</FIX>
-			<KI name="Ki" units="A^-1">4.3036</KI>
-			<KF name="Kf" units="A^-1">4.3036</KF>
-			<Q0 name="Q" units="A^-1">4.384</Q0>
+			<KI name="Ki" units="A^-1">4.30355</KI>
+			<KF name="Kf" units="A^-1">4.30355</KF>
+			<Q0 name="Q" units="A^-1">2.24399</Q0>
 			<EN name="energy" units="meV">0.0</EN>
 			<LAMBDA name="wavelength" units="A">1.46</LAMBDA>
-			<THETA name="thetaS" units="deg">61.241</THETA>
+			<THETA name="thetaS" units="deg">30.2249</THETA>
 			<SS name="sign of thetaS" value="1">+1</SS>
 			<PSI name="psi" units="deg">0.0</PSI>
 			<ADJ name="auto-adjust instrument" value="1">yes</ADJ>
@@ -272,13 +276,14 @@
 			<SHAPE name="shape" value="1">cylinder</SHAPE>
 			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
 			<SIZE name="dimensions" units="mm">7.0 60.0 7.0</SIZE>
-			<AX name="axis" units="deg">61.241 0.0 0.0</AX>
+			<AX name="axis" units="deg">30.2249 0.0 0.0</AX>
 			<STA name="stage" units="mm">-1.2 0.0 0.0</STA>
 			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
 			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
 			<SAMPLE>
-				<TYPE name="type" value="2">powder</TYPE>
+				<TYPE name="type" value="1">elastic resolution</TYPE>
 				<SGN name="sign" value="1">+1</SGN>
+				<THICK name="thickness" units="mm">0.0</THICK>
 				<SIGSC name="Sigma_s" units="cm^-1">1.0E-1</SIGSC>
 				<SIGA name="Sigma_a" units="cm^-1A^-1">0.121</SIGA>
 				<SIGI name="Sigma_i" units="cm^-1">3.4E-2</SIGI>
@@ -290,13 +295,14 @@
 				<PRESS name="isotropic pressure" units="MPa">0.0</PRESS>
 				<PCRYST>
 					<FHKL name="structure factor" units="fm.A^-3">0.802</FHKL>
-					<DHKL name="d-spacing" units="A">1.4332</DHKL>
-					<THETA name="scattering angle" units="deg">61.241</THETA>
+					<DHKL name="d-spacing" units="A">2.8</DHKL>
+					<THETA name="scattering angle" units="deg">30.2249</THETA>
 					<DD name="d-spread" units=" ">0.0</DD>
 					<GRAIN name="grain size" units="um">0.0</GRAIN>
 					<JHKL name="plane multiplicity">6</JHKL>
 					<REFTAB name="reflections table">sample-duplex.dat</REFTAB>
 					<STRTAB name="strain table index">0</STRTAB>
+					<IREF name="reflection index">0</IREF>
 				</PCRYST>
 			</SAMPLE>
 		</FRAME>
@@ -343,6 +349,7 @@
 				<MATER name="blade material" value="0">absorbing</MATER>
 				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
 				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">0.0 0.0</MISALIGN>
 				<MONITOR name="monitor" value="0">no</MONITOR>
 				<CLOSED name="closed" value="0">no</CLOSED>
 				<ONESIDE name="one-sided" value="0">no</ONESIDE>
@@ -372,6 +379,7 @@
 				<MATER name="blade material" value="0">absorbing</MATER>
 				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
 				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">0.0 0.0</MISALIGN>
 				<MONITOR name="monitor" value="0">no</MONITOR>
 				<CLOSED name="closed" value="0">no</CLOSED>
 				<ONESIDE name="one-sided" value="0">no</ONESIDE>
@@ -401,6 +409,7 @@
 				<MATER name="blade material" value="0">absorbing</MATER>
 				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
 				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">0.0 0.0</MISALIGN>
 				<MONITOR name="monitor" value="0">no</MONITOR>
 				<CLOSED name="closed" value="0">no</CLOSED>
 				<ONESIDE name="one-sided" value="0">no</ONESIDE>
@@ -415,7 +424,7 @@
 			<SHAPE name="shape" value="3">box</SHAPE>
 			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
 			<SIZE name="dimensions" units="mm">110.0 60.0 10.0</SIZE>
-			<AX name="axis" units="deg">-69.6686 0.0 0.0</AX>
+			<AX name="axis" units="deg">-69.66859 0.0 0.0</AX>
 			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
 			<GON name="gonio" units="deg">0.0 0.0 -124.8343</GON>
 			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
@@ -467,6 +476,7 @@
 				<MATER name="blade material" value="0">absorbing</MATER>
 				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
 				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">0.0 0.0</MISALIGN>
 				<MONITOR name="monitor" value="0">no</MONITOR>
 				<CLOSED name="closed" value="0">no</CLOSED>
 				<ONESIDE name="one-sided" value="0">no</ONESIDE>
@@ -496,6 +506,7 @@
 				<MATER name="blade material" value="0">absorbing</MATER>
 				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
 				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">0.0 0.0</MISALIGN>
 				<MONITOR name="monitor" value="0">no</MONITOR>
 				<CLOSED name="closed" value="0">no</CLOSED>
 				<ONESIDE name="one-sided" value="0">no</ONESIDE>
@@ -525,6 +536,7 @@
 				<MATER name="blade material" value="0">absorbing</MATER>
 				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
 				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">0.0 0.0</MISALIGN>
 				<MONITOR name="monitor" value="0">no</MONITOR>
 				<CLOSED name="closed" value="0">no</CLOSED>
 				<ONESIDE name="one-sided" value="0">no</ONESIDE>
@@ -556,6 +568,7 @@
 				<MATER name="blade material" value="0">absorbing</MATER>
 				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
 				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">0.0 0.0</MISALIGN>
 				<MONITOR name="monitor" value="0">no</MONITOR>
 				<CLOSED name="closed" value="0">no</CLOSED>
 				<ONESIDE name="one-sided" value="0">no</ONESIDE>
@@ -588,6 +601,7 @@
 	</SECONDARY>
 </INSTRUMENT>
 <SCRIPT type="command">
+
 # Simulation of a single powder diffraction peak
 # (i) scan diffraction pattern by the detector angle
 # (ii) simulate instrumental peak profile
@@ -622,6 +636,7 @@ do mc
 # Make a scan with the detector, using accumulated neutrons from the primary beam
 # number of counts in one step
 set TR CNT 2000
+do mc
 # switch ON  the double cycle in tracing options
 set TR DBC 1
 # set tracing mode to "secondary "
