@@ -1,6 +1,6 @@
 #!/bin/bash
 # set up environment for your McStas distribution
-MCSTAS=/usr/share/mcstas/2.5
+MCSTAS=/usr/share/mcstas/2.6
 MCSTAS_CC=gcc
 INS=$1
 if [ -z "$1" ]
@@ -8,7 +8,6 @@ then
 	echo Provide file name without extension as a parameter.
 	echo Trying BEER_MCPL_PWD.
 	INS=BEER_MCPL_PWD
-fi
 else
    INS=$1
 fi
