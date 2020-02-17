@@ -227,7 +227,7 @@ sub CmdParam {
     if ($SYSNAME eq "win32") {
       $VARS{'INSTDIR'} = "distr";
     } else { 
-      if (($DIST eq "yes") or (($TEST eq "yes")) {
+      if (($DIST eq "yes") or ($TEST eq "yes")) {
         $VARS{'INSTDIR'} = "distr";
       } else {
         $VARS{'INSTDIR'} = $default_tgt;
@@ -262,11 +262,11 @@ sub ProcessInFiles {
     foreach my $F (@INFILES) {
       if ($F !~ m/^.*$ThisScript\.in/) { # don't process Install.pl.in
         $tgt=SubstituteInFile($F,$TD,\%VARS);
-    if ($tgt eq "") {
-      push @notfound,("$F");
-    } else {
-      push @installed,("$tgt");
-    };
+        if ($tgt eq "") {
+          push @notfound,("$F");
+        } else {
+          push @installed,("$tgt");
+        };
       };
     };
 };
