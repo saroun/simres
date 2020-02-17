@@ -536,7 +536,7 @@ c append extension when required
       else
         S=trim(FN)
       endif
-      LSTR=min(MAX_FNAME_LENGTH,len_trim(AUX))
+      LSTR=min(MAX_FNAME_LENGTH,len_trim(S))
       AUX=S(1:LSTR)
 
       select case(IWRITE)
