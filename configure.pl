@@ -52,6 +52,7 @@ my %VARS;          # list of variables passed to the makefile
 my %MODULES;       # list of modules (keys are module names, values are source files)
 my %FSOURCES;      # Fortran source files (all)
 my %CSOURCES;      # common C source files
+my %DEPEND=();     # explicit dependences
 my @INCFILES;      # list of *.inc files
 my @HFILES=();      # list of *.h files
 my @SRCDIR=();     # source directories
@@ -269,6 +270,10 @@ $MODULES{"MIRRLOG"}="src/mirrlog.f";
 # Matrix optimization 
 # excluded $MODULES{"DYNARRAY"}="src/matrix/dynarray.f";
 # excluded $MODULES{"MATRIX"}="src/matrix/matrix.f";
+
+# Add explicit dependences if not found automaticaly 
+# like fortran files depending on c code
+$DEPEND{"eventmonitor"}="bin/mcplhandle.o";
 
 # ---------------------------  directories with source files ------------------------
 @SRCDIR=("$VARS{'SRC'}");
@@ -747,6 +752,9 @@ sub CreateMakefile {
     $depends=FindDependences("$FSOURCES{$key}","f",@INCFILES);
     $moddepends=FindDependences("$FSOURCES{$key}","mod",@MODFILES);
     $object="$VARS{'BIN'}/$key.o";
+	if (defined $DEPEND{$key}) {
+	   $depends = "$depends $DEPEND{$key}";
+	};
     printf(OUTFILE "%s: %s %s %s\n",$object,$FSOURCES{$key}, $moddepends, $depends);
     printf(OUTFILE "\t\$(FC)  -c %s  %s  %s  -o %s \n",$FSOURCES{$key},$options,$incldir,$object);
   };

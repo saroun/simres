@@ -510,7 +510,9 @@ C initialize error function
       use MESSAGES
       IMPLICIT NONE
       WRITE(SMES,*) 'RESEND called'
-  !    read(*,*)
+      ! release dynamically loaded libraries
+      call RELEASEMCPL
+      ! restore IO
       CALL REINP(' ')
       CALL REOUT(' ')
     ! deallocate dynamically allocated data
@@ -518,6 +520,7 @@ C initialize error function
       call DSET_CLEAR ! also destroys associated NSTORE data
       call NSTORE_UNREGISTER_ALL ! destroy the remaining NSTORE data
       call FREE_IO    ! command buffer
+
       call FREE_MESSAGES
       call CLEAR_CLASSES
       call CLEAR_TABLE_CRYSTALS

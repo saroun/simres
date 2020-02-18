@@ -73,8 +73,7 @@
 3     format('r=',3(1x,G12.6),'k=',3(1x,G12.6),'s=',3(1x,G12.6),'t=',G12.6,'p=',G12.6)
 
       INTERFACE
-        FUNCTION LOADMCPL(F)
-            character*(*) :: F
+        FUNCTION LOADMCPL()
         END FUNCTION LOADMCPL
       END INTERFACE
       select case(STORAGE)
@@ -89,7 +88,7 @@
       if (REF>0) then
         ISTORE=BMONITORS(REF)%ISTORE
         if (ISTORE>0) then
-          dll=LOADMCPL('libmcplio.dll'//char(0))
+          dll=LOADMCPL()
           if (dll>=0) then
             fn=trim(FNAME)//char(0)
             call mcplopenread(trim(fn))
@@ -117,7 +116,6 @@
             enddo
             PRIMARY_INT = SUMA
             call mcplcloseread
-            call RELEASEMCPL
             write(*,1) trim(FNAME), NCNT, SUMA, ISTORE
           else
 		        write(*,*) 'Cann''t load libmcplio: ',dll
@@ -149,8 +147,7 @@
 3     format('Warning: requested monitor ',G10.4,' is empty. No MCPL export.')
 10    format(a,': ',10(1x,G12.5))
       INTERFACE
-        FUNCTION LOADMCPL(F)
-            character*(*) :: F
+        FUNCTION LOADMCPL()
         END FUNCTION LOADMCPL
       END INTERFACE
       select case(STORAGE)
@@ -170,7 +167,7 @@
             call BMONITORS_SETCOORD(C)
           endif
           CNORM=NSTORE_GETNORM(ISTORE)
-          dll=LOADMCPL('libmcplio.dll'//char(0))
+          dll=LOADMCPL()
           if (dll>=0) then
             fn=trim(FNAME)//char(0)
             call mcplopenwrite(trim(fn))
@@ -184,7 +181,6 @@
               SUMA=SUMA+NEU%P*CNORM
             enddo
             call mcplclosewrite
-            call RELEASEMCPL
             write(*,1) trim(FNAME),NCNT,SUMA,ISTORE
           else
 		        write(*,*) 'Cann''t load libmcplio: ',dll

@@ -17,6 +17,15 @@ the library is loaded at startup.
 #include <stdlib.h>
 #include <string.h>
 
+
+/* Define library name*/
+#if defined(_WIN32) || defined(_WIN64) || defined(__CYGWIN__)
+static const char LIBMCPLIO[] = "libmcplio.dll";
+#else
+static const char LIBMCPLIO[] = "libmcplio.so";
+#endif
+
+
 static char *lastname=NULL;
 static void *mcplhandle=NULL;
 void (*dll_mcplopenwrite)();
@@ -50,7 +59,7 @@ int cpname(const char *src) {
   return strlen(lastname);
 }
 
-/* Release EXCI library */
+/* Release library */
 void releasemcpl_() {
     int error;
     if (mcplhandle != NULL) {
@@ -84,39 +93,19 @@ Return:
 =1  newly loaded
 on error, return negative value of the error code
 */
-int loadmcpl_(char *libname) {
+int loadmcpl_() {
     int ires=0;
-    int icom;
     int ilen;
-
-/* libname=="" => free previously loaded libraray and exit*/
-    if (libname=="") {
-      releasemcpl_();
-      return -1;
-    };
-
- /* compare new library name with the current one */
-   if (lastname != NULL) {
-      icom=strcmp(lastname,libname);
-    } else { icom=-1; };
-
-/* Load a new library named *libname if
- (a) there is no library loaded, or
- (b) the names of the current and requested libraries are different, or
- (c) mcplhandle == NULL
-*/
-    if ((icom!=0) || (!mcplhandle)) {
-
-/* release previously loaded libraray if necessary */
-      releasemcpl_();
+/* Load the library if not yeat loaded */
+    if (!mcplhandle) {
       mydlerror();
-	  mcplhandle = mydlopen(libname);
+	  mcplhandle = mydlopen(LIBMCPLIO);
       ires=mydlerror();
       if ((ires != 0) || !mcplhandle) {
-        fprintf (stderr, "Cannot load library: %s, error=%d\n", libname,ires);
+        fprintf (stderr, "Cannot load library: %s, error=%d\n", LIBMCPLIO,ires);
         return -abs(ires);
       };
-      ilen=cpname(libname);
+      ilen=cpname(LIBMCPLIO);
       ires=0;
       /* load pointers to subroutines */
       *(void **) (&dll_mcplopenwrite)=mydlsym(mcplhandle, "mcplopenwrite",&ires);
@@ -126,8 +115,10 @@ int loadmcpl_(char *libname) {
       *(void **) (&dll_mcplcloseread)=mydlsym(mcplhandle, "mcplcloseread",&ires);
       *(void **) (&dll_mcplget)=mydlsym(mcplhandle, "mcplget",&ires);
       *(void **) (&dll_mcplnmax)=mydlsym(mcplhandle, "mcplnmax",&ires);
-      return ires;
-      fprintf (stdout, "Loaded library %s \n", libname);
+	  if (ires > 0) {
+         fprintf (stdout, "Loaded library %s \n", LIBMCPLIO);
+	  };
+	  return ires;
     };
     return 0;
 };
@@ -177,7 +168,7 @@ void mcplnmax_(double *n)
 ---------------------------------------------*/
 #include "mcplio.h"
 #include <stdio.h>
-int loadmcpl_(char *libname) {
+int loadmcpl_() {
 	return 0;
 };
 
