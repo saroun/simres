@@ -94,14 +94,20 @@ int mydlclose(void *handle) {
 	return dlclose(handle);
 }
 
+
 void *mydlsym(void *handle, const char *name, int *ires) {
-  void * res;	
-  res = dlsym(handle, name);
-  if (res==NULL) {
-	  *ires=1;
-  } else {
-	   *ires=-4;
-  }
+  int error;
+  void *res=NULL;	
+  mydlerror();    /* Clear any existing error */
+  if (*ires >= 0 && handle != NULL ) {
+    res = dlsym(handle, name);
+    if ((error = mydlerror()) != 0)  {
+      fprintf (stderr, "Error: cannot read symbol %s \n", name);
+      *ires=-4;
+    } else {
+      *ires=1;
+    };
+  };
   return res;
 };
 
