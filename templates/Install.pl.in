@@ -109,7 +109,7 @@ if ($SYSNAME eq "win32") {
   push @BINARIES,("lib/pgplot/pgxwin_server");
 };
 # add compiled mcstas example ...
-push @BINARIES,glob("demo/simres_mcstas/mcstas/*.exe");
+push @BINARIES,glob("resources/demo/simres_mcstas/mcstas/*.exe");
 
 
 # GUI files (excludes root path prefix)
@@ -452,7 +452,7 @@ printf("\n");
 # install binaries
 printf("Install executable binary files \n");
 foreach my $F (@BINARIES) {
-  if ((my $res = FileCopyCmd($F,$TD,"0755")) ne "") {
+  if ((my $res = FileCopyCmdEx($F,$TD,"0755",'resources')) ne "") {
     push @installed,("$res");
   } else {
     push @notfound,("$F");
