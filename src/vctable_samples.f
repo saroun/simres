@@ -313,6 +313,7 @@
             ! transform to incident axis coordinates
             call FRAME_LOCAL(-1,SAMOBJ%P_FRAME,TMPN1)
             TMPN1%P=NEU%P     ! set the final weight to the event
+            TMPN1%T0=NEU%T0   ! set the reference time of flight
             TMPN1%CNT=NEU%CNT ! must set counter to neutron before calling NSTORE_SETEVENT !!
             TMPN1%REF=NEU%REF ! set reference to the initial neutron !!
             call NSTORE_SETEVENT(SAMOBJ%ISTORE(1),TMPN1)
@@ -322,6 +323,7 @@
             ! transform to incident axis coordinates
             call FRAME_LOCAL(-1,SAMOBJ%P_FRAME,TMPN2)
             TMPN2%P=NEU%P     ! set the final weight to the event
+            TMPN2%T0=NEU%T0   ! set the reference time of flight
             TMPN2%CNT=NEU%CNT ! must set counter to neutron before calling NSTORE_SETEVENT !!
             TMPN2%REF=NEU%REF ! set reference to the initial neutron !!
             call NSTORE_SETEVENT(SAMOBJ%ISTORE(2),TMPN2)
