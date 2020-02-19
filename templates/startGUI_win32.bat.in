@@ -1,5 +1,4 @@
 @echo off
-set PATH=@INSTDIR@\GUI\@J3DLIB@;%PATH%
 rem set this variable to the full path to java launcher: java.exe (@BITS@ bit version)
 set JRE=@JRE@
 if exist "%JRE%" (
