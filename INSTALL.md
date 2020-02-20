@@ -92,7 +92,7 @@ Make sure that the required toolchain is available. Specifically, the following 
 `sudo apt-get install libx11-dev`
 - Java development kit  
 `sudo apt-get install openjdk-8-jdk-headless`
-- And builder  
+- Ant builder  
 `sudo apt-get install ant`
 - Java3D package  
 see `submodules/simresUI/README.md` for instructions.
