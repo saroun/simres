@@ -463,7 +463,7 @@
       end select
 
 ! do not allow tangential neutrons to pass
-      if (ABS(LANG-K(IX)/K(3)).LT.EPS) then
+      if ((ABS(RHO(IX)).LT.EPS).and.(ABS(LANG-K(IX)/K(3)).LT.EPS)) then
 !         write(*,*) 'rejected tangential event in ',trim(OBJ%FRAME%NAME),OBJ%FRAME%COUNT
         GET_CROSSTIME=TLIB_INF
         Return
