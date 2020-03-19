@@ -403,7 +403,7 @@
 ! shifts for an oscillating collimator
       REAL*8 :: OSCD,OSCA
       COMMON /OSCBEND/ OSCD,OSCA
-      
+
       WPOS=0.D0
       LPOS=0.D0
       LANG=0.D0
@@ -465,7 +465,7 @@
 ! do not allow tangential neutrons to pass
       if (ABS(LANG-K(IX)/K(3)).LT.EPS) then
 !         write(*,*) 'rejected tangential event in ',trim(OBJ%FRAME%NAME),OBJ%FRAME%COUNT
-        GET_CROSSTIME=0.D0
+        GET_CROSSTIME=TLIB_INF
         Return
       endif
 
