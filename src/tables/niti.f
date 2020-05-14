@@ -40,7 +40,7 @@
       logical :: incl_coh = .true.
       logical :: monitor = .false. ! true if we need to monitor process: capture, scattering, ...
 
-      public NITI_PROB, NITI_GETD, NITI_GETSIG, NITI_SET_MODE, NITI_COH
+      public NITI_PROB, NITI_GETD, NITI_GETSIG, NITI_SET_MODE
       ! public NITI_PROB_DBG
 
       contains
@@ -85,7 +85,7 @@
 !---------------------------------------------------------
       subroutine NITI_GETSIG(d, sig)
 ! Multilayer cross-sections averaged over total layer thicknesses
-! d = array(3) with thickness in um: (1) all, (2) Ni, (3) Ti
+! d = array(3) with thickness in um: (1) Ni, (2) Ti, (3) All
 ! Returns in sig:
 ! scattering cross-section in 1/cm: (1) capture, (2) incoherent, (3) coherent
 !---------------------------------------------------------
@@ -97,21 +97,21 @@
       end subroutine NITI_GETSIG
 
 !---------------------------------------------------------
-      REAL(KIND(1.D0)) function  NITI_COH(d, lambda)
+!      REAL(KIND(1.D0)) function  NITI_COH(d, lambda)
 ! Coherent scattering contribution in 1/cm
 ! Very primitive model assuming 1 or 0 below and above Bragg edge
 ! d = array(3) with thickness in um: (1) all, (2) Ni, (3) Ti
 ! lambda = wavelength [A]
 !---------------------------------------------------------
-      REAL(KIND(1.D0)),intent(in) :: d(3), lambda
-      REAL(KIND(1.D0)) :: res
-      res = 0.D0
-      if (incl_coh) then
-        if (lambda<bge(1)) res = res + d(1)*sigc(1)
-        if (lambda<bge(2)) res = res + d(2)*sigc(2)
-      endif
-      NITI_COH = res/d(3)
-      end function  NITI_COH
+!      REAL(KIND(1.D0)),intent(in) :: d(3), lambda
+!      REAL(KIND(1.D0)) :: res
+!      res = 0.D0
+!      if (incl_coh) then
+!        if (lambda<bge(1)) res = res + d(1)*sigc(1)
+!        if (lambda<bge(2)) res = res + d(2)*sigc(2)
+!      endif
+!      NITI_COH = res/d(3)
+!      end function  NITI_COH
 
 !---------------------------------------------------------
       subroutine  NITI_TOT(lambda, pcoh, sigt)
@@ -125,7 +125,7 @@
       REAL(KIND(1.D0)),intent(out) :: sigt(2)
       integer :: i
       REAL(KIND(1.D0)) :: sc
-1     format('NITI_TOT i, pcoh, lambda, sigi, siga, sigc, sigt: ',7(1x, G12.4))
+!1     format('NITI_TOT i, pcoh, lambda, sigi, siga, sigc, sigt: ',7(1x, G12.4))
       sigt=0.D0
       do i=1,2
         sc = 0.D0
@@ -139,18 +139,18 @@
       end subroutine  NITI_TOT
 
 !---------------------------------------------------------
-      REAL(KIND(1.D0)) function  NITI_AVE(d, lambda, pcoh)
+!      REAL(KIND(1.D0)) function  NITI_AVE(d, lambda, pcoh)
 ! Total removal cross section averaged over materials in 1/cm
 ! d = array(3) with thickness in um: (1) all, (2) Ni, (3) Ti
 ! lambda = wavelength [A]
 ! pcoh = coherent scattering factor
 !---------------------------------------------------------
-      REAL(KIND(1.D0)),intent(in) :: d(3), lambda, pcoh
-      REAL(KIND(1.D0)) :: res, sigt(2)
-      call NITI_TOT(lambda, pcoh, sigt)
-      res = d(1)*sigt(1) + d(2)*sigt(2)
-      NITI_AVE = res/d(3)
-      end function  NITI_AVE
+!      REAL(KIND(1.D0)),intent(in) :: d(3), lambda, pcoh
+!      REAL(KIND(1.D0)) :: res, sigt(2)
+!      call NITI_TOT(lambda, pcoh, sigt)
+!      res = d(1)*sigt(1) + d(2)*sigt(2)
+!      NITI_AVE = res/d(3)
+!      end function  NITI_AVE
 
 
 !---------------------------------------------------------

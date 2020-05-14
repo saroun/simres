@@ -218,7 +218,7 @@
       endif
 
 ! adjust position of other components
-      call AdjustBeamline(IERR)
+      call AdjustBeamline(IERR, 0)
       end subroutine INST_ADJUST
 
 !--------------------------------------------------------

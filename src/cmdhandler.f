@@ -44,7 +44,7 @@
       CHARACTER(LEN_LINE) :: CmdLine
       character(4) :: Space='    '
 
-      integer, PARAMETER :: RES_NCMD=24   	! Number of commands
+      integer, PARAMETER :: RES_NCMD=25   	! Number of commands
       CHARACTER*5 RES_NAM(RES_NCMD)         ! command names
       CHARACTER*60 RES_HLP(RES_NCMD)        ! command hints
 
@@ -235,6 +235,7 @@ C// process execution commands
           CASE('REPCR'); call MKUPCASE(RETSTR); call REPCRYST(RETSTR)
           CASE('REPRE'); call REPORT_MIRROR_REF(RETSTR)
           CASE('REPXT'); call MKUPCASE(RETSTR); call REPXTAL(RETSTR)
+          CASE('REPBM'); call MKUPCASE(RETSTR); call REPORT_BEAMLINE(RETSTR)
           case('BREF'); call SET_BMONITOR(RETSTR); call NSTORE_XML_LIST(SMES,BMONITOR_REF)
           case('MCPL'); call REPORT_MCPL(RETSTR)
           case('MCPIN'); call LOAD_MCPL(RETSTR)
@@ -384,54 +385,83 @@ C// process execution commands
 !-------------------------------------------------------------------------
       subroutine INIT_COMMANDS
 !-------------------------------------------------------------------------
-      RES_NAM(1)='CPATH'
-      RES_HLP(1)='[path] set search path for configuration files'
-      RES_NAM(2)='OPATH'
-      RES_HLP(2)='[path] set path for output'
-      RES_NAM(3)= 'SET'
-      RES_HLP(3)='[component ID] [variable ID] [value] set parameter'
-      RES_NAM(4)='CMD'
-      RES_HLP(4)='[command ID] set command parameters'
-      RES_NAM(5)='DO'
-      RES_HLP(5)='[command] execute command'
-      RES_NAM(6)='ADJCR'
-      RES_HLP(6)='[ID] [theta] adjust crystal for given wavelength'
-      RES_NAM(7)='REPCR'
-      RES_HLP(7)='[ID] report CRYSTAL reflecting properties'
-      RES_NAM(8)='REPXT'
-      RES_HLP(8)='[ID] report XTAL reflecting properties'
-      RES_NAM(9)='REPRE'
-      RES_HLP(9)='fname mval angle lambda; report mirror reflectivity'
-      RES_NAM(10)='XML'
-      RES_HLP(10)='load XML definition from console (GUI only)'
-      RES_NAM(11)='SEED'
-      RES_HLP(11)='[int] set seed for random number generator'
-      RES_NAM(12)='CNT'
-      RES_HLP(12)='[int] set number of requested counts'
-      RES_NAM(13)='REPLOT'
-      RES_HLP(13)='replot the latest graph'
-      RES_NAM(14)='GRFDE'
-      RES_HLP(14)='set output device name for PGPLOT'
-      RES_NAM(15)='BAT'
-      RES_HLP(15)='[jobname] execute a batch file'
-      RES_NAM(16)='BREF'
-      RES_HLP(16)='[index] select repository for BEAM1D and 2D plots'
-      RES_NAM(17)='MCPL'
-      RES_HLP(17)='[fname][coord, filt] dump current registry to MCPL file'
-      RES_NAM(18)='MCPIN'
-      RES_HLP(18)='[fname][0..2] load MCPL file to given registry'
-      RES_NAM(19)='MCPEX'
-      RES_HLP(19)='[fname][0..2] export MCPL file from given registry'
-      RES_NAM(20)='NDUMP'
-      RES_HLP(20)='[nr] dump given neutron registry to a file'
-      RES_NAM(21)='MRTAB'
-      RES_HLP(21)='[m file] read mirror reflectivity table'
-      RES_NAM(22)='STTAB'
-      RES_HLP(22)='[id file] read table with strain profile'
-      RES_NAM(23)='EXEC'
-      RES_HLP(23)='[CID] [ARG] execute component specific command'
-      RES_NAM(24)='EXFF'
-      RES_HLP(24)='exit'
+      integer :: i
+      i = 0
+      i = i+1
+      RES_NAM(i)='CPATH'
+      RES_HLP(i)='[path] set search path for configuration files'
+      i = i+1
+      RES_NAM(i)='OPATH'
+      RES_HLP(i)='[path] set path for output'
+      i = i+1
+      RES_NAM(i)= 'SET'
+      RES_HLP(i)='[component ID] [variable ID] [value] set parameter'
+      i = i+1
+      RES_NAM(i)='CMD'
+      RES_HLP(i)='[command ID] set command parameters'
+      i = i+1
+      RES_NAM(i)='DO'
+      RES_HLP(i)='[command] execute command'
+      i = i+1
+      RES_NAM(i)='ADJCR'
+      RES_HLP(i)='[ID] [theta] adjust crystal for given wavelength'
+      i = i+1
+      RES_NAM(i)='REPCR'
+      RES_HLP(i)='[ID] report CRYSTAL reflecting properties'
+      i = i+1
+      RES_NAM(i)='REPXT'
+      RES_HLP(i)='[ID] report XTAL reflecting properties'
+      i = i+1
+      RES_NAM(i)='REPRE'
+      RES_HLP(i)='fname mval angle lambda; report mirror reflectivity'
+      i = i+1
+      RES_NAM(i)='REPBM'
+      RES_HLP(i)='fname write a table with all components coordinates '
+      i = i+1
+      RES_NAM(i)='XML'
+      RES_HLP(i)='load XML definition from console (GUI only)'
+      i = i+1
+      RES_NAM(i)='SEED'
+      RES_HLP(i)='[int] set seed for random number generator'
+      i = i+1
+      RES_NAM(i)='CNT'
+      RES_HLP(i)='[int] set number of requested counts'
+      i = i+1
+      RES_NAM(i)='REPLOT'
+      RES_HLP(i)='replot the latest graph'
+      i = i+1
+      RES_NAM(i)='GRFDE'
+      RES_HLP(i)='set output device name for PGPLOT'
+      i = i+1
+      RES_NAM(i)='BAT'
+      RES_HLP(i)='[jobname] execute a batch file'
+      i = i+1
+      RES_NAM(i)='BREF'
+      RES_HLP(i)='[index] select repository for BEAM1D and 2D plots'
+      i = i+1
+      RES_NAM(i)='MCPL'
+      RES_HLP(i)='[fname][coord, filt] dump current registry to MCPL file'
+      i = i+1
+      RES_NAM(i)='MCPIN'
+      RES_HLP(i)='[fname][0..2] load MCPL file to given registry'
+      i = i+1
+      RES_NAM(i)='MCPEX'
+      RES_HLP(i)='[fname][0..2] export MCPL file from given registry'
+      i = i+1
+      RES_NAM(i)='NDUMP'
+      RES_HLP(i)='[nr] dump given neutron registry to a file'
+      i = i+1
+      RES_NAM(i)='MRTAB'
+      RES_HLP(i)='[m file] read mirror reflectivity table'
+      i = i+1
+      RES_NAM(i)='STTAB'
+      RES_HLP(i)='[id file] read table with strain profile'
+      i = i+1
+      RES_NAM(i)='EXEC'
+      RES_HLP(i)='[CID] [ARG] execute component specific command'
+      i = i+1
+      RES_NAM(i)='EXFF'
+      RES_HLP(i)='exit'
 
       CALL LINPSET(RES_NCMD,'SimRes',RES_NAM,RES_HLP)
       CALL LINPSETIO(SINP,SOUT,SMES)

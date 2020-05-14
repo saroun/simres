@@ -835,21 +835,29 @@ C velocity [m/s] - convert to wavevector
       use TRACINGDATA,only:NEUTRON
       TYPE(TFRAME) :: OBJ
       TYPE(NEUTRON) :: NEU,NGLOB
-      real(KIND(1.D0)) :: R(3),K(3)
-1     format(a,(6(1x,G12.5)))
-        NGLOB=NEU
+      TYPE(NEUTRON) :: NEU1
+        NEU1=NEU
       ! from local to incident axis
-        call FRAME_LOCAL(-1,OBJ,NGLOB)
-  !      write(*,1) 'Loc2Glob 1 ',NGLOB%R(1),NGLOB%R(3),NGLOB%K(1),NGLOB%K(3)
-      ! rotate to lab. coord.
-        call M3XV3(1,OBJ%RLAB,NGLOB%R,R)
-        call M3XV3(1,OBJ%RLAB,NGLOB%K,K)
-      ! transition to lab. coord.
-        NGLOB%R=R+OBJ%TLAB
-        NGLOB%K=K
-  !     write(*,1) 'Loc2Glob 2 ',NGLOB%R(1),NGLOB%R(3),NGLOB%K(1),NGLOB%K(3)
+        call FRAME_LOCAL(-1,OBJ,NEU1)
+      ! from OBJ'th incident axis to global coordinates
+        call Ax2Glob(OBJ,NEU1,NGLOB)
       end subroutine Loc2Glob
 
+
+!---------------------------------------------------------------------
+      subroutine Ax2Glob(OBJ,NEU,NGLOB)
+! Convert an event from OBJ'th incident axis to global coordinates:
+!---------------------------------------------------------------------
+      use TRACINGDATA,only:NEUTRON
+      TYPE(TFRAME) :: OBJ
+      TYPE(NEUTRON) :: NEU,NGLOB
+        NGLOB=NEU
+      ! rotate to lab. coord.
+        call M3XV3(1,OBJ%RLAB,NEU%R,NGLOB%R)
+        call M3XV3(1,OBJ%RLAB,NEU%K,NGLOB%K)
+      ! transition to lab. coord.
+        NGLOB%R = NGLOB%R + OBJ%TLAB
+      end subroutine Ax2Glob
 
 !---------------------------------------------------------------------
       subroutine Loc2GlobR(OBJ,R,RGL)

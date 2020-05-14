@@ -46,7 +46,7 @@
 
       PUBLIC REPORT_PROG,REPORT_VARI,REPORT_VOL,REPORT_STAT,REPORT_RES,TCOUNT_ESTIM,REPORT_GUIDE_PROF
       public REPORT_GUIDE_REC,REPORT_MCPL,LOAD_MCPL,SAVE_MCPL
-      public REPORT_MIRROR_REF
+      public REPORT_MIRROR_REF, REPORT_BEAMLINE
 
 
       contains
@@ -561,6 +561,26 @@ c console output
       endif
       end subroutine REPORT_MIRROR_REF
 
+!-------------------------------------------------------------
+      subroutine REPORT_BEAMLINE(FNAME)
+! Write a table with all components and their coordinates.
+! The table columns:
+! ID, x,y,z (world coordinates, mm), distance (mm), tof (us)
+! Input:
+! FNAME = filename for output.
+!-------------------------------------------------------------
+      character*(*) :: FNAME
+      integer :: IO, ierr
+      ! open output file
+      IO=6
+      if (len_trim(FNAME)>0) IO=OPENFILEOUT_SFX(fname,' ')
+      call AdjustBeamline(ierr, IO)
+      if (IO.ne.6) then
+        close(IO)
+      ! info to GUI that the file was saved.
+        call MSG_INFO('Beamline log file saved in '//trim(fname),1)
+      endif
+      end subroutine REPORT_BEAMLINE
 
 
       end module REPORTS

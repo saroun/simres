@@ -138,6 +138,11 @@
 
       real(KIND(1.D0)) :: modulation_dt,modulation_d0
 
+! overloaded POBJ
+      interface GENERATE_NOM
+        module procedure generate_nom_1
+        module procedure generate_nom_2
+      end interface
 
       contains
 
@@ -213,9 +218,8 @@
 
 
 !------------------------------------------------------
-      SUBROUTINE GENERATE_NOM(K0,NEU)
-! generate nominal event at the source with given |K|
-! for tracing beam axis
+      SUBROUTINE generate_nom_1(K0,NEU)
+! generate nominal event at the source with given |K| along z-axis
 !-------------------------------------------------------
       real(kind(1.D0)),intent(in) :: K0
       TYPE(NEUTRON),intent(out) :: NEU
@@ -228,7 +232,25 @@
       NEU%T=0.D0
       NEU%PHI=0.D0
       NEU%P=1.D0
-      end SUBROUTINE GENERATE_NOM
+      NEU%T=0.D0
+      NEU%REF=0
+      NEU%LABEL=0
+      NEU%CNT=0
+      NEU%STATE=0
+      end SUBROUTINE generate_nom_1
+
+
+!------------------------------------------------------
+      SUBROUTINE generate_nom_2(K0,NEU,R)
+! Generate nominal event at the source with given |K|.
+! The rotation matrix R defines beam axis direction:
+! K = (0,0,K0).R
+!-------------------------------------------------------
+      real(kind(1.D0)),intent(in) :: K0,R(3,3)
+      TYPE(NEUTRON),intent(out) :: NEU
+      call generate_nom_1(K0,NEU)
+      CALL M3XV3(1,R,(/0.D0, 0.D0, K0/),NEU%K)
+      end SUBROUTINE generate_nom_2
 
 !---------------------------------------------------
       real(KIND(1.D0)) function GETVAR(IVAR,NEU,K0)

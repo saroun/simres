@@ -264,26 +264,52 @@ C-------------------------------------------------------------
       end subroutine PrepareBeamline
 
 
+!-------------------------------------------------------------
+! Get coordinates of a neutron in global coordinates for logging
+! Assumes NEUT is in the state after adjust procedure, i.e.
+! in the exit axis coordinates of a component.
+! Input:
+! OBJ: component reference as TCOMOBJ
+!-------------------------------------------------------------
+      subroutine GetNCoord(F, NGLOB, DIST)
+      TYPE(TFRAME), intent(in) :: F
+      TYPE(NEUTRON), intent(out) :: NGLOB
+      real(KIND(1.D0)) :: DIST
+      TYPE(NEUTRON) :: NEU
+      NEU = NEUT
+      call FRAME_AXIS(1,F,NEU)
+      call Ax2Glob(F,NEU,NGLOB)
+      DIST= F%DIST
+      end subroutine GetNCoord
 
 
 !-------------------------------------------------------------
 ! Adjust position and orientation of all components except samples
 ! Adjust transformation matrices for laboratory system for the whole beamline
 ! Lab. coordinates = incident axis coordinates of the 1st component
+! if IO>0, write component table to this unit:
+!   ID, x, y, z, distance, tof
+! all in global coordinates, mm, us
 !--------------------------------------------------------------
-      subroutine AdjustBeamline(IERR)
+      subroutine AdjustBeamline(IERR, IO)
       integer,intent(out) :: IERR
-      integer :: i
+      integer :: i,IO
       logical :: tmp_g
-      real(KIND(1.D0)) :: ddet,dsam,dt0, aux
+      real(KIND(1.D0)) :: ddet,dsam,dt0, aux, d
       TYPE(TCOMOBJ) :: OBJ
       TYPE(PSOURCE) :: PSRC
+      TYPE(NEUTRON) :: NGLOB
+      TYPE(PFRAME) :: F
       !real(kind(1.D0)) :: K0
       character(32) :: CNUM
       call UNIMAT(RLAB,3,3)
 1     format(a,': ',7(G13.6,1x))
+11    format(a,1x,2(1x,G13.6),3(1x,G13.4))
       TLAB=0.D0
       ierr=0
+      if (IO>0) then
+        write(IO,*) '# ID, x, y, z, distance, tof'
+      endif
       TRACING_UP=.false.
   ! don't use gravity for adjustment
       tmp_g=use_gravity
@@ -297,16 +323,23 @@ C-------------------------------------------------------------
       TOF_ZERO=0.D0
       TOF_ZERO2=0.D0
 ! generate event at the origin of the beam axis
-      call GENERATE_NOM(INSOBJ%P_SPEC%KI,NEUT)
+      call GENERATE_NOM(INSOBJ%P_SPEC%KI,NEUT,PSRC%X%FRAME%REXI)
       ! turn K in the direction of source axis ...
       call SLIT_TURN(PSRC%X%FRAME)
       do i=1,BEAMLINE_NC(1)
         OBJ=BEAMLINE(i,1)%OBJ
-        aux = NEUT%K0*NEUT%T
+        !aux = NEUT%K0*NEUT%T
         call PCOMOBJ_ADJUST(OBJ,IERR)
         if (ierr.ne.0) goto 99
         !write(*,1) 'move by :  ',aux, NEUT%K0*NEUT%T
         call PCOMOBJ_UPDATE_LAB(OBJ,RLAB,TLAB)
+
+        if (IO>0) then
+          call PCOMOBJ_GET(OBJ,F)
+          call GetNCoord(F%X, NGLOB, d)
+          write(IO,11) OBJ%ID, NGLOB%R, d, NGLOB%T/HOVM
+        endif
+
       enddo
       ! combinded with McStas: add extra path before
       IF (TROPT%MCSTAS.and.(TROPT%PATHIN.gt.0)) then
@@ -324,6 +357,10 @@ C-------------------------------------------------------------
         TOF_SAMPLE=NEUT%T
         call FRAME_AXIS(1,SAMOBJ%P_FRAME,NEUI)
         call FRAME_UPDATE_LAB(SAMOBJ%P_FRAME,RLAB,TLAB)
+        if (IO>0) then
+          call GetNCoord(SAMOBJ%P_FRAME, NGLOB, d)
+          write(IO,11) SAMOBJ%P_FRAME%ID, NGLOB%R, d, NGLOB%T/HOVM
+        endif
       else
       ! no sample, only adjust NEUI relative to the secondary axis using instrument data
         !write(*,1) 'SPEC_ADJUST from :  ',NEUT%K0*NEUT%T, INSOBJ%P_SPEC%FRAME%DIST
@@ -346,10 +383,15 @@ C-------------------------------------------------------------
       !write(*,1) 'starting secondary at :  ',NEUT%K0*NEUT%T
       do i=1,BEAMLINE_NC(2)
         OBJ=BEAMLINE(i,2)%OBJ
-        aux = NEUT%K0*NEUT%T
+        !aux = NEUT%K0*NEUT%T
         call PCOMOBJ_ADJUST(OBJ,IERR)
         if (ierr.ne.0) goto 99
         call PCOMOBJ_UPDATE_LAB(OBJ,RLAB,TLAB)
+        if (IO>0) then
+          call PCOMOBJ_GET(OBJ,F)
+          call GetNCoord(F%X, NGLOB, d)
+          write(IO,11) OBJ%ID, NGLOB%R, d, NGLOB%T/HOVM
+        endif
         !write(*,1) 'move by :  ',aux, NEUT%K0*NEUT%T
       enddo
       TOF_DETECTOR=NEUT%T
@@ -359,6 +401,7 @@ C-------------------------------------------------------------
       ddet=dsam+NEUF%K0*(TOF_DETECTOR-TOF_SAMPLE)
       write(*,1) 'TOF  T0, sample, detector [us] ',TOF_ZERO/HOVM,TOF_SAMPLE/HOVM,TOF_DETECTOR/HOVM
       write(*,1) 'DIST T0, sample, detector [mm] ',dt0,dsam,ddet
+
 
 99    if (ierr.ne.0) then
         call FLOAT2STR(NEUT%K0,CNUM)
