@@ -269,7 +269,7 @@
         call GENERATOR_SETK(K0,kmin,kmax)
         call FLOAT2STR(TWOPI/kmax,CNUM)
         call FLOAT2STR(TWOPI/kmin,CNUM1)
-        write(*,*) 'No monochromator: wavelength range set to ',trim(CNUM),' .. ',trim(CNUM1)
+        write(*,1) 'No monochromator: wavelength range set to '//trim(CNUM)//' .. '//trim(CNUM1)
       else
     ! no clip range if there is a monochromator on the beam
         call FLUX_SET_RANGE(K0,0.D0)

@@ -89,7 +89,7 @@ C---------------------------------------------------------
       std=(trim(fname).eq.'STDIN')
       call PCLASS_CLEAR(OBJ)
       OBJ=getClassByID(trim(id))
-      write(*,*) 'save_component ',trim(id)
+      ! write(*,*) 'save_component ',trim(id)
       SELECT CASE(OBJ%TCLS)
       case(TCLS_COM,TCLS_SAM,TCLS_INS)
         if (std) then

@@ -95,19 +95,19 @@
       endif
   ! run dialog for file selection
       CALL DLG_FILEOPEN(FNAME,'|'//trim(RESPATH)//'|'//trim(CFGPATH),'xml',0,0,IRES,FRES)
-      write(*,*) 'parse_xmlcrystals DLG_FILEOPEN IRES=',IRES,' ',trim(FRES)
+      ! write(*,*) 'parse_xmlcrystals DLG_FILEOPEN IRES=',IRES,' ',trim(FRES)
       if (IRES.gt.0) then
         call xml_process_file(trim(FRES),startCRTABLE, dataCRTABLE, endCRTABLE,error )
-        write(*,*) 'parse_xmlclasses processed error=',error
         if (.not.error) then
           ierr=0
           call MSG_INFO('Definition of crystals loaded from '//trim(FRES),1)
           XCONFIG_CRYSTALS=trim(FRES)
         else
+          write(*,*) 'parse_xmlclasses processed error=',error
           call CLEAR_TABLE_CRYSTALS
         endif
       endif
-      write(*,*) 'parse_xmlclasses ierr==',ierr
+      !write(*,*) 'parse_xmlclasses ierr==',ierr
       end subroutine parse_xmlcrystals
 
 !--------------------------------------------------------

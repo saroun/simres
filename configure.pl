@@ -571,7 +571,8 @@ sub CreateMakefile {
 
 # Default target
   printf(OUTFILE "# ----------------------------- Targets -------------------------------------\n");
-  printf(OUTFILE "default: \$(BIN)/\$(EXEC) \n\n"); 
+  printf(OUTFILE ".PHONY: distr \n"); 
+  printf(OUTFILE "default: \$(BIN)/\$(EXEC) \n"); 
   printf(OUTFILE "\n",);
 
 # Executable target
@@ -609,7 +610,7 @@ sub CreateMakefile {
   printf(OUTFILE "\t$rm %s \n",$f);
   printf(OUTFILE "\n");
 # erase  
-  printf(OUTFILE "erase: cleanall  remove_UI\n");
+  printf(OUTFILE "erase: cleanall  erase_UI\n");
   $f=fpath("bin/* lib/pgplot/*");
   printf(OUTFILE "\t$rm %s \n",$f);
   printf(OUTFILE "\n");
@@ -737,7 +738,14 @@ sub CreateMakefile {
 	printf(OUTFILE "remove_UI: %s \n","\$(UI)/makefile");
 	printf(OUTFILE "\t\$(MAKE) -C \$(UI) -f makefile cleandist\n");  
   }
-  
+  printf(OUTFILE "# Cleans and erases binary files for user interface (requires: Java JDK, Ant) \n"); 
+  if ($SYSNAME eq 'win32') {
+	printf(OUTFILE "erase_UI: %s \n","\$(UI)/makefile.windows");
+	printf(OUTFILE "\t\$(MAKE) -C \$(UI) -f makefile.windows erase\n");  
+  } else {
+	printf(OUTFILE "erase_UI: %s \n","\$(UI)/makefile");
+	printf(OUTFILE "\t\$(MAKE) -C \$(UI) -f makefile erase\n");  
+  } 
 #------------------------------------------- 
 # format options for compiling with Fortran
 #-------------------------------------------

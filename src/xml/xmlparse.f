@@ -305,7 +305,7 @@
         info%lun = 10
         do i = 10,99
           inquire( unit = i, opened = opend )
-          write(*,*) 'xml_open ',i, opend
+          ! write(*,*) 'xml_open ',i, opend
           if ( .not. opend ) then
             info%lun = i
             inquire( file = fname, exist = exists )
