@@ -84,22 +84,53 @@
       FRAME_GO_INST=LOG1
       END FUNCTION FRAME_GO_INST
 
+
+!------------------------------------------------------------
+      SUBROUTINE FRAME_TRACE0(OBJ)
+! Tracing of nominal trajectory (beam axis)
+! to be used by guide-like components for alignment by *_ADJUST procedures.
+! Starts and ends with NEUT in local coordinates.
+! Assume forward tracing.
+!------------------------------------------------------------
+      TYPE(TFRAME),intent(out) :: OBJ
+      REAL(KIND(1.D0)) :: R2(3), K2(3), DX, DY, DT
+!1     format('TRACE0, ',a,': ',7(G13.6,1x))
+      ! tracing beam axis: we ignore any local stage or gonio movement
+      ! revert back to incident axis coord.
+      call FRAME_LOCAL(-1,OBJ,NEUT)
+      ! transport to the guide exit
+      DT = (OBJ%SIZE(3)-NEUT%R(3))/NEUT%K(3)
+      if (OBJ%ISDEFL) then
+        NEUT%R = OBJ%TDEFL
+        K2 = NEUT%K
+        !write(*,1) 'deflection in ',NEUT%R,NEUT%K,OBJ%RDEFL(1,3)
+        call M3xV3(-1, OBJ%RDEFL, K2, NEUT%K)
+        !write(*,1) 'deflection out',NEUT%R,NEUT%K,OBJ%RDEFL(1,3)
+        NEUT%T = NEUT%T + DT
+      else
+        call TransportG(DT)
+      endif
+!      write(*,1) 'DT, R',DT, NEUT%R
+      call FRAME_LOCAL(1,OBJ,NEUT)
+      !write(*,1) ' local',NEUT%R, NEUT%K
+! JS> OK, it's not very eficient since SLIT_POST does inverse operation just after,
+! but this is not a CPU critical code. It is only used for adjustment before simulation.
+! For code consistency, I'd prefere to stay in the same reference frame.
+      END SUBROUTINE FRAME_TRACE0
+
 !-------------------------------------------------
       SUBROUTINE FRAME_ADJUST(INST)
 ! Update position of the component using nominal trajectory represented by NEUT
 ! Call FRAME_INIT_MAT first.
-! Then use SLIT_PRE & SLIT_POST procedures to propagate NEUT
+! Then use SLIT_PRE & FRAME_TRACE0 & SLIT_POST procedures to propagate NEUT
 !-------------------------------------------------
       integer,intent(in) :: INST
       TYPE(TFRAME),POINTER :: OBJ
-1     format(a,': ',7(1x,G12.6))
       if (.not.FRAME_isValid(INST)) return
       OBJ => AFRAMES(INST)%X
-      call FRAME_INIT_MAT(OBJ)
-      !write(*,1) 'Move from '//trim(OBJ%ID),NEUT%K0*NEUT%T
       call SLIT_PRE(OBJ)
+      call FRAME_TRACE0(OBJ)
       call SLIT_POST(OBJ)
-      !write(*,1) 'Move to   '//trim(OBJ%ID),NEUT%K0*NEUT%T, OBJ%DIST
       end SUBROUTINE FRAME_ADJUST
 
 
@@ -226,18 +257,24 @@
       TYPE(TFRAME) :: OBJ
       INTEGER,intent(in) :: IT
       REAL(KIND(1.D0)) :: V(3),VK(3)
+!1     format('FRAME_AXIS, ',a,': ',7(G13.6,1x))
 
       IF (OBJ%MEXI.EQ.0) RETURN
+      !write(*,1) trim(OBJ%ID), IT, OBJ%MEXI,OBJ%REXI(1,3)
       select case(IT)
       case(-1)
         CALL M3XV3(-OBJ%MEXI,OBJ%REXI,NEU%R,V)
-        CALL M3XV3(-OBJ%MEXI,OBJ%REXI,NEU%K,VK)
+        NEU%R = V + OBJ%TEXI
+        VK = NEU%K
+        CALL M3XV3(-OBJ%MEXI,OBJ%REXI,VK, NEU%K)
       case default
-        CALL M3XV3(OBJ%MEXI,OBJ%REXI,NEU%R,V)
-        CALL M3XV3(OBJ%MEXI,OBJ%REXI,NEU%K,VK)
+!        write(*,1) '  in R, K',NEU%R, NEU%K
+        V = NEU%R - OBJ%TEXI
+        CALL M3XV3(OBJ%MEXI,OBJ%REXI,V,NEU%R)
+        VK = NEU%K
+        CALL M3XV3(OBJ%MEXI,OBJ%REXI,VK, NEU%K)
+        !write(*,1) ' out VK, K', VK, NEU%K
       end select
-      NEU%R=V
-      NEU%K=VK
       END SUBROUTINE FRAME_AXIS
 
 !------------------------------------------------------------
@@ -247,12 +284,14 @@
 !------------------------------------------------------------
       TYPE(TFRAME) :: OBJ
       REAL(KIND(1.D0)) :: VKI(3), VKF(3)
-      ! convert from local to incident axis coord.
-      CALL M3XV3(-OBJ%MLOC,OBJ%RLOC,NEUT%K,VKI)
-      ! turn neutron by AX
-      CALL M3XV3(-OBJ%MEXI,OBJ%REXI,VKI,VKF)
-      ! convert back to local coors.
-      CALL M3XV3(OBJ%MLOC,OBJ%RLOC,VKF,NEUT%K)
+      if (OBJ%MEXI.NE.0) then
+        ! convert from local to incident axis coord.
+        CALL M3XV3(-OBJ%MLOC,OBJ%RLOC,NEUT%K,VKI)
+        ! turn neutron by AX
+        CALL M3XV3(-OBJ%MEXI,OBJ%REXI,VKI,VKF)
+        ! convert back to local coors.
+        CALL M3XV3(OBJ%MLOC,OBJ%RLOC,VKF,NEUT%K)
+      endif
       END SUBROUTINE SLIT_TURN
 
 !------------------------------------------------------------
@@ -296,51 +335,6 @@
       call TransportG(DT)
       END subroutine FRAME_ENTRY
 
-
-
-!------------------------------------------------------------
-      SUBROUTINE FRAME_PRE(OBJ)
-! in up-stream mode:
-!    rotate position, momentum and gravity to incident coordinates
-!    invert momentum
-! in down stream mode:
-!    shift coordinates by DIST and transport neutron to the component center
-!    (usually z=0)
-!------------------------------------------------------------
-      TYPE(TFRAME) :: OBJ
-      REAL(KIND(1.D0)) :: R2(3),K2(3)
-      call SLIT_PRE(OBJ)
-! add deflection
-      if (TRACING_UP.and.OBJ%ISDEFL) then
-        K2=NEUT%K
-        call M3xV3(-1,OBJ%RDEFL,NEUT%R,R2)
-        call V3aV3(1,R2,OBJ%TDEFL,NEUT%R)
-        call M3xV3(-1,OBJ%RDEFL,K2,NEUT%K)
-      endif
-      END SUBROUTINE FRAME_PRE
-
-
-!------------------------------------------------------------
-      SUBROUTINE FRAME_POST(OBJ)
-! in down-stream mode:
-!    rotate position, momentum and gravity to exit coordinates
-!    invert momentum
-! in up-stream mode:
-!    shift coordinates by -DIST and transport neutron to the component center
-!    (usually z=0)
-!------------------------------------------------------------
-      TYPE(TFRAME) :: OBJ
-      REAL(KIND(1.D0)) :: R2(3),K2(3)
-! add deflection
-      if ((.not.TRACING_UP).and.OBJ%ISDEFL) then
-        K2=NEUT%K
-        call V3aV3(-1,NEUT%R,OBJ%TDEFL,R2)
-        call M3xV3(1,OBJ%RDEFL,R2,NEUT%R)
-        call M3xV3(1,OBJ%RDEFL,K2,NEUT%K)
-      endif
-      call SLIT_POST(OBJ)
-      END SUBROUTINE FRAME_POST
-
 !------------------------------------------------------------
       SUBROUTINE SLIT_PRE(OBJ)
 ! in up-stream mode:
@@ -352,6 +346,7 @@
 !------------------------------------------------------------
       TYPE(TFRAME) :: OBJ
       INTEGER :: I
+!1     format('SLIT_PRE, ',a,': ',7(G13.6,1x))
 ! transform from previous object ref. frame
 ! DT is time to R(3)=0 or R(3)=SIZE(3) for down or up stream tracing, resp.
   ! up-stream: convert to incident axis system and invert K
@@ -364,6 +359,7 @@
   ! down-stream: shift origin by OBJ%DIST along z
       else
     ! convert to the incident axis system = shift by +OBJ%DIST
+        !write(*,1) trim(OBJ%ID),NEUT%R, NEUT%K
         NEUT%R(3)=NEUT%R(3)-OBJ%DIST
     ! move to R(3)=0
         call SLIT_MIDDLE(.false.)
@@ -371,6 +367,7 @@
 ! transform to local coordinates
       call FRAME_LOCAL(1,OBJ,NEUT)
       call GRAVITY_LOCAL(1,OBJ)
+      !write(*,1) '    local',NEUT%R, NEUT%K
       END SUBROUTINE SLIT_PRE
 
 !------------------------------------------------------------
@@ -384,9 +381,12 @@
 !------------------------------------------------------------
       TYPE(TFRAME) :: OBJ
       integer :: i
+!1     format('SLIT_POST, ',a,': ',7(G13.6,1x))
 ! transform from local coordinates to incident axis reference frame
+!      write(*,1) trim(OBJ%ID),NEUT%R, NEUT%K
       call FRAME_LOCAL(-1,OBJ,NEUT)
       call GRAVITY_LOCAL(-1,OBJ)
+      !write(*,1) '   incid',NEUT%R, NEUT%K
 ! up-stream: shift origin by OBJ%DIST along z and invert K
       if (TRACING_UP) then
     ! convert to the exit axis system of the preceding component = shift by -OBJ%DIST
@@ -400,6 +400,7 @@
       else
         call FRAME_AXIS(1,OBJ,NEUT)
         call GRAVITY_AXIS(1,OBJ)
+!        write(*,1) '   exit',NEUT%R, NEUT%K
       endif
       END SUBROUTINE SLIT_POST
 
@@ -414,7 +415,8 @@
       INTEGER :: iref
       REAL(KIND(1.D0)) :: DT
       REAL(KIND(1.D0)),parameter :: TOL=1.D-9
-1     format(a,': ',6(G12.5,2x))
+!1     format('SLIT_MIDDLE, ',a,': ',7(G12.5,2x))
+      !write(*,1) 'before', NEUT%R,NEUT%K,NEUT%K0
       if (abs(NEUT%R(3)).gt.TOL) then
         if (abs(NEUT%K(3)).gt.1.D-6*NEUT%K0) then
           iref=3
@@ -424,11 +426,11 @@
           iref=2
         endif
         DT=-NEUT%R(iref)/NEUT%K(iref)
+      !write(*,1) 'iref, R,K,DT',iref,NEUT%R(iref),NEUT%K(iref),DT
         if (FORW) STOPTIME=(DT.LT.0.D0)
         call TransportG(DT)
 !      write(*,*)
-      !write(*,1) 'SLIT_MIDDLE K0*DT',NEUT%K0*DT,iref,NEUT%R(iref)
-      !write(*,1) 'SLIT_MIDDLE K=',NEUT%K,NEUT%K0
+      !write(*,1) 'post',NEUT%R,NEUT%K
       else
         NEUT%R(3)=0.D0
       endif

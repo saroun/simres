@@ -130,7 +130,6 @@
       if (.not.DCHOPPER_isValid(INST)) return
       OBJ => ADCHOPPERS(INST)%X
       IERR=0
-      CALL FRAME_INIT_MAT(OBJ%FRAME)
       call SLIT_PRE(OBJ%FRAME)
       OBJ%T0=NEUT%T
   ! set T0 chopper

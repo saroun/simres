@@ -62,7 +62,6 @@
       if (.not.CRYSTAL_isValid(INST)) return
       OBJ => ACRYSTALS(INST)%X
       ierr=1
-      call FRAME_INIT_MAT(OBJ%FRAME)
       OBJ%LAMBDA=twopi/NEUT%K0
 ! G-vector
       OBJ%GTOT=2*PI/OBJ%DHKL

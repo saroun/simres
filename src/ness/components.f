@@ -34,6 +34,7 @@
       use NSTORE
       use MESSAGES
       use MIRRLOG
+      use GENERATOR
       implicit none
 
 ! TCOMPID - component reference in BEAMLINE arrays
@@ -260,6 +261,7 @@ C-------------------------------------------------------------
           im= ADD_MESSAGE(m_error,'PSAMOBJ_PREPARE',trim(S),m_low)
         endif
       endif
+      !write(*,*) 'PrepareBeamline done.'
 
       end subroutine PrepareBeamline
 
@@ -300,18 +302,22 @@ C-------------------------------------------------------------
       TYPE(PSOURCE) :: PSRC
       TYPE(NEUTRON) :: NGLOB
       TYPE(PFRAME) :: F
+      character(32) :: CNUM,CNUM1
+      real(KIND(1.D0)) :: RL(3,3), TL(3)
+
       !real(kind(1.D0)) :: K0
-      character(32) :: CNUM
-      call UNIMAT(RLAB,3,3)
 1     format(a,': ',7(G13.6,1x))
-11    format(a,1x,2(1x,G13.6),3(1x,G13.4))
+11    format(a,1x,2(1x,G13.6),3(1x,G15.7))
+! initialize RLAB, TLAB arrays for conversion to LAB coord
+      !call getRotYXY(PSRC%X%FRAME%REXI,RL)
+      call UNIMAT(RLAB,3,3)
       TLAB=0.D0
       ierr=0
       if (IO>0) then
-        write(IO,*) '# ID, x, y, z, distance, tof'
+        write(IO,11) '# ID, x, y, z, distance, tof'
       endif
       TRACING_UP=.false.
-  ! don't use gravity for adjustment
+! don't use gravity for adjustment
       tmp_g=use_gravity
       use_gravity=.false.
       call SOURCE_GET(BEAMSOURCE%INST,PSRC)
@@ -323,21 +329,25 @@ C-------------------------------------------------------------
       TOF_ZERO=0.D0
       TOF_ZERO2=0.D0
 ! generate event at the origin of the beam axis
-      call GENERATE_NOM(INSOBJ%P_SPEC%KI,NEUT,PSRC%X%FRAME%REXI)
-      ! turn K in the direction of source axis ...
-      call SLIT_TURN(PSRC%X%FRAME)
+      call GENERATE_NOM(INSOBJ%P_SPEC%KI,NEUT)
+      !write(*,1) 'AdjustBeamline R,K',NEUT%R, NEUT%K
       do i=1,BEAMLINE_NC(1)
         OBJ=BEAMLINE(i,1)%OBJ
-        !aux = NEUT%K0*NEUT%T
+        aux = NEUT%K0*NEUT%T
         call PCOMOBJ_ADJUST(OBJ,IERR)
         if (ierr.ne.0) goto 99
-        !write(*,1) 'move by :  ',aux, NEUT%K0*NEUT%T
+        call PCOMOBJ_GET(OBJ,F)
+        !write(*,1) 'adjusted '//trim(F%X%ID),NEUT%R, NEUT%K
+        !write(*,1) 'adjust '//trim(F%X%ID),F%X%TEXI, F%X%REXI(1,3), NEUT%T
+        !write(*,1) 'move by :  ',aux, NEUT%K0*NEUT%T,NEUT%K0*NEUT%T-aux
         call PCOMOBJ_UPDATE_LAB(OBJ,RLAB,TLAB)
 
         if (IO>0) then
           call PCOMOBJ_GET(OBJ,F)
           call GetNCoord(F%X, NGLOB, d)
-          write(IO,11) OBJ%ID, NGLOB%R, d, NGLOB%T/HOVM
+          !write(IO,11) OBJ%ID, NGLOB%R, d, NGLOB%T/HOVM
+          CALL M3XV3(1,PSRC%X%FRAME%REXI,F%X%TLAB,TL)
+          write(IO,11) OBJ%ID, TL, d, NGLOB%T*NEUT%K0
         endif
 
       enddo
@@ -359,7 +369,9 @@ C-------------------------------------------------------------
         call FRAME_UPDATE_LAB(SAMOBJ%P_FRAME,RLAB,TLAB)
         if (IO>0) then
           call GetNCoord(SAMOBJ%P_FRAME, NGLOB, d)
-          write(IO,11) SAMOBJ%P_FRAME%ID, NGLOB%R, d, NGLOB%T/HOVM
+          !write(IO,11) SAMOBJ%P_FRAME%ID, NGLOB%R, d, NGLOB%T/HOVM
+          CALL M3XV3(1,PSRC%X%FRAME%REXI,SAMOBJ%P_FRAME%TLAB,TL)
+          write(IO,11) SAMOBJ%P_FRAME%ID, TL, d, NGLOB%T*NEUT%K0
         endif
       else
       ! no sample, only adjust NEUI relative to the secondary axis using instrument data
@@ -390,7 +402,9 @@ C-------------------------------------------------------------
         if (IO>0) then
           call PCOMOBJ_GET(OBJ,F)
           call GetNCoord(F%X, NGLOB, d)
-          write(IO,11) OBJ%ID, NGLOB%R, d, NGLOB%T/HOVM
+          !write(IO,11) OBJ%ID, NGLOB%R, d, NGLOB%T/HOVM
+          CALL M3XV3(1,PSRC%X%FRAME%REXI,F%X%TLAB,TL)
+          write(IO,11) OBJ%ID, TL, d, NGLOB%T*NEUT%K0
         endif
         !write(*,1) 'move by :  ',aux, NEUT%K0*NEUT%T
       enddo
@@ -399,9 +413,19 @@ C-------------------------------------------------------------
       dt0=NEUI%K0*TOF_ZERO
       dsam=NEUI%K0*TOF_SAMPLE
       ddet=dsam+NEUF%K0*(TOF_DETECTOR-TOF_SAMPLE)
-      write(*,1) 'TOF  T0, sample, detector [us] ',TOF_ZERO/HOVM,TOF_SAMPLE/HOVM,TOF_DETECTOR/HOVM
-      write(*,1) 'DIST T0, sample, detector [mm] ',dt0,dsam,ddet
-
+      if (IO>0) then
+        if (EVENTGEN%KPROF.ne.0) then
+          call FLOAT2STR(TWOPI/EVENTGEN%KMAX,CNUM)
+          call FLOAT2STR(TWOPI/EVENTGEN%KMIN,CNUM1)
+          write(IO,11) '# Wavelength range set to '//trim(CNUM)//' .. '//trim(CNUM1)
+        else
+          call FLOAT2STR(TWOPI/EVENTGEN%K0,CNUM)
+          write(IO,11) '# Wavelength set to:  '//trim(CNUM)
+        endif
+        write(IO,11) '# TOF  T0, sample, detector [us] ',TOF_ZERO/HOVM,TOF_SAMPLE/HOVM,TOF_DETECTOR/HOVM
+        write(IO,11) '# DIST T0, sample, detector [mm] ',dt0,dsam,ddet
+      endif
+      !write(*,*) 'AdjustBeamline done.'
 
 99    if (ierr.ne.0) then
         call FLOAT2STR(NEUT%K0,CNUM)

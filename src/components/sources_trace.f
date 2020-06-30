@@ -66,12 +66,9 @@
       if (.not.SOURCE_isValid(INST)) return
       OBJ => ASOURCES(INST)%X
       IERR=0
-      call FRAME_INIT_MAT(OBJ%FRAME)
       call SLIT_PRE(OBJ%FRAME)
-      ! TODO : any component specific adjustment
+      call SLIT_TURN(OBJ%FRAME)
       call SLIT_POST(OBJ%FRAME)
-      OBJ%is_pulsed=SOURCE_TABLE_IS_PULSED().or.(OBJ%PULSW>0.D0)
-      ! write(*,*) 'SOURCE_ADJUST pulsed, steady ' ,OBJ%is_pulsed,OBJ%TYP.eq.src_steady
       end SUBROUTINE SOURCE_ADJUST
 
 !-------------------------------------------------

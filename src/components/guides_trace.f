@@ -116,32 +116,15 @@
 !-------------------------------------------------
       integer,intent(in) :: INST
       integer,intent(out) :: IERR
-      integer :: SS
-      REAL(KIND(1.D0)) :: ROPT
       TYPE(GUIDE),POINTER :: OBJ
-1     format(a,': ',7(1x,G12.6))
       if (.not.GUIDE_isValid(INST)) return
       ! write(*,*) 'GUIDE_ADJUST '
       OBJ => AGUIDES(INST)%X
       IERR=0
-      ! adjust curvature of a curved guide if requiered
-      if ((OBJ%TYP == 1).and.(OBJ%NODIR).and.(OBJ%FRAME%SIZE(3)>0.D0)) then
-        if (abs(OBJ%ROH)>0.D0) then
-          SS=NINT(sign(1.D0,OBJ%ROH))
-          ROPT=4.D0*(OBJ%FRAME%SIZE(1)+OBJ%W2)/OBJ%FRAME%SIZE(3)**2
-          if (abs(OBJ%ROH)<ROPT) OBJ%ROH=SS*ROPT
-        else if (abs(OBJ%ROV)>0.D0) then
-          SS=NINT(sign(1.D0,OBJ%ROV))
-          ROPT=4.D0*(OBJ%FRAME%SIZE(2)+OBJ%H2)/OBJ%FRAME%SIZE(3)**2
-          if (abs(OBJ%ROV)<ROPT) OBJ%ROV=SS*ROPT
-        endif
-      endif
-      if (OBJ%TYP<=0) OBJ%LOGBNC=0
-      call FRAME_INIT_MAT(OBJ%FRAME)
       call SLIT_PRE(OBJ%FRAME)
+      call FRAME_TRACE0(OBJ%FRAME)
       call SLIT_POST(OBJ%FRAME)
-      ! translucent material is allowed only for straight guides
-      if (OBJ%TYP.ne.1) OBJ%MATER=0
+
       ! set material to absorbing if 1/MU>1 um*A
       select case (OBJ%MATER)
       case(0)
@@ -151,13 +134,7 @@
       case(3)
         OBJ%MU=GET_CR_ABS(MU_Al2O3,NEUT%K0)/TWOPI
       end select
-
-      if (OBJ%MONITOR) then
-        write(*,1) trim(OBJ%FRAME%ID)//' is monitor'
-      endif
-      !write(*,1) 'Distance '//trim(OBJ%FRAME%ID),NEUT%K0*NEUT%T
       end SUBROUTINE GUIDE_ADJUST
-
 
 !----------------------------------------------------
       LOGICAL FUNCTION GUIDE_GO_INST(OBJ,INST)
@@ -176,7 +153,7 @@
 ! generate misalignent using the value of OBJ%MISALIGN
       call GUIDE_MISALIGN(OBJ)
 ! Convert to local coordinate system
-      CALL FRAME_PRE(OBJ%FRAME)
+      CALL SLIT_PRE(OBJ%FRAME)
 ! transparent collimator:
       IF ((OBJ%TYP.LT.0).OR.(OBJ%FRAME%SIZE(3).LE.0)) GOTO 700
 ! move to the bender entry window
@@ -246,9 +223,9 @@
   ! register event
       TMPN(INST)=NEUT
       if (TRACING_UP) TMPN(INST)%K=-TMPN(INST)%K
-  ! post-transformation to exit coordinates, correct for deflection
+  ! post-transformation to exit coordinates
       ! DBGN=NEUT
-      CALL FRAME_POST(OBJ%FRAME)
+      CALL SLIT_POST(OBJ%FRAME)
       call incCounter(OBJ%FRAME%COUNT)
       GUIDE_GO_INST=.TRUE.
 
@@ -267,8 +244,6 @@
       !IF (GUIDES_dbg) write(sout,1)  '      POST R,K: ',NEUT%R,NEUT%K
       GUIDES_dbg=.false.
 !-------------------------------
-
-
       END FUNCTION GUIDE_GO_INST
 
 

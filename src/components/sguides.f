@@ -578,11 +578,21 @@ C---------------------------------------------------------
 !------------------------------------
       integer,intent(in) :: INST
       integer,intent(out) :: IERR
+      REAL(KIND(1.D0)) :: V(3), DV(3), R(3,3), ALPHA, BETA, DX, DY
       TYPE(SGUIDE),POINTER :: OBJ
         IERR=0
         if (.not.SGUIDE_isValid(INST)) return
         OBJ => ASGUIDES(INST)%X
+      ! calculate wall profiles
+        call SGUIDE_SET_PROFILE(INST,1)
+        call SGUIDE_SET_PROFILE(INST,2)
+      ! calculate curved wall parameters
+        call SGUIDE_CALC_PARAM(INST)
+      ! initialize rotation matrices
         call FRAME_INIT_MAT(OBJ%FRAME)
+      ! for curved guides, add deflection
+        OBJ%FRAME%ISDEFL=(ABS(OBJ%RHO(1))+ABS(OBJ%RHO(2))>1.D-9)
+        if (OBJ%FRAME%ISDEFL) call FRAME_DEFLECTION(OBJ%FRAME, OBJ%RHO)
       END SUBROUTINE SGUIDE_PREPARE
 
 !-------------------------------------------------------------
@@ -940,37 +950,6 @@ C---------------------------------------------------------
       END SELECT
       NARG=LR
       END SUBROUTINE SGUIDE_OUT_TAB
-
-
-
-!---------------------------------------------------------
-      SUBROUTINE SGUIDE_UPDATE_LAB(INST,RLAB,TLAB)
-! See FRAME_UPDATE_LAB.
-! Guide must account for deflection due to bending
-!---------------------------------------------------------
-      integer,intent(in) :: INST
-      REAL(KIND(1.D0)),intent(inout) :: RLAB(3,3),TLAB(3)
-      TYPE(SGUIDE),POINTER :: OBJ
-      REAL(KIND(1.D0)) :: ALPHA,BETA,DX,DY,LL(3),LL0(3)
-      if (.not.SGUIDE_isValid(INST)) return
-      OBJ => ASGUIDES(INST)%X
-
-      ALPHA=OBJ%RHO(1)*OBJ%FRAME%SIZE(3)
-      BETA=OBJ%RHO(2)*OBJ%FRAME%SIZE(3)
-      OBJ%FRAME%ISDEFL=(ABS(ALPHA)+ABS(BETA)>0.D0)
-      if (OBJ%FRAME%ISDEFL) then
-      ! get deflection angles and matrix
-        call getRotYXY((/ALPHA,-BETA,0.D0/),OBJ%FRAME%RDEFL)
-      ! get shift of the origin due to deflection, in incident coord.
-        DX=0.5*OBJ%RHO(1)*OBJ%FRAME%SIZE(3)**2
-        DY=0.5*OBJ%RHO(2)*OBJ%FRAME%SIZE(3)**2
-        LL0=(/0.D0,0.D0,OBJ%FRAME%SIZE(3)/)
-        call M3XV3(-1,OBJ%FRAME%RDEFL,LL0,LL)
-        OBJ%FRAME%TDEFL=(/DX-LL(1),DY-LL(2),OBJ%FRAME%SIZE(3)-LL(3)/)
-      endif
-      call FRAME_UPDATE_LAB(OBJ%FRAME,RLAB,TLAB)
-
-      end SUBROUTINE SGUIDE_UPDATE_LAB
 
 
       end MODULE SGUIDES

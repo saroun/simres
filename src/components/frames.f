@@ -42,6 +42,7 @@ C SLIT:
         REAL(KIND(1.D0)) :: REXI(3,3)           ! rotation from incident to exit axis coordinates
         REAL(KIND(1.D0)) :: RLAB(3,3)           ! rotation matrix: incident axis to lab. coordinates
         real(kind(1.D0)) :: RDEFL(3,3)          ! deflection rotation matrix
+        REAL(KIND(1.D0)) :: TEXI(3)             ! translation to exit frame origin (rel. to incident axis)
         REAL(KIND(1.D0)) :: TLAB(3)             ! transition vector: incident axis to lab. coordinates
         real(kind(1.D0)) :: TDEFL(3)            ! deflection translation vector
         REAL(KIND(1.D0)) :: DM(3)               ! misalignment [mm]
@@ -278,15 +279,20 @@ C SLIT:
         OBJ%ISMOVED=0
         OBJ%ISDEFL=.false.
         OBJ%ISHOLLOW=.false.
-        OBJ%TDEFL=0.D0
         OBJ%REGISTRY=0
         OBJ%TRANSPARENT=0
         OBJ%DM=0.0
+        OBJ%TEXI=0.0
+        OBJ%TDEFL=0.0
+        OBJ%TLAB=0.0
+        call UNIMAT(OBJ%RLOC,3,3)
+        call UNIMAT(OBJ%REXI,3,3)
         call UNIMAT(OBJ%RDEFL,3,3)
+        call UNIMAT(OBJ%RLAB,3,3)
       END SUBROUTINE FRAME_CLEAR
 
 !-----------------------------------------------------------
-! Set exit axis angles and update transformation matrix.
+! Set exit axis angles and update transformation matrices.
 ! Incident axis is (0,0,1)
 ! INPUT:
 !   AX   .. (y,x,y) Euler angles (!! changed from y,x,z system !!)
@@ -298,15 +304,18 @@ C SLIT:
       integer :: i
       OBJ%AX(1:3)=AX(1:3)
   ! rot. matrix for lower y-axis (horizontal, usually scattering angle)
-      call MK_ROT3(2,OBJ%AX(1),R1)
+      !call MK_ROT3(2,OBJ%AX(1),R1)
   ! rot. matrix for sagital angle
-      call MK_ROT3(1,OBJ%AX(2),R2)
+      !call MK_ROT3(1,OBJ%AX(2),R2)
   ! rot. matrix for the upper y-axis (attached to the next component)
-      call MK_ROT3(2,OBJ%AX(3),R3)
+      !call MK_ROT3(2,OBJ%AX(3),R3)
   ! total rot. matrix from incident to exit axis coordinates
-      CALL M3XM3(1,R3,R2,R)
-      CALL M3XM3(1,R,R1,OBJ%REXI)
-  ! mask for avoiding unnecessary calls of rotation subroutines
+      !CALL M3XM3(1,R3,R2,R)
+      !CALL M3XM3(1,R,R1,OBJ%REXI)
+
+! use SIMATH library:
+      call getRotYXY(AX,OBJ%REXI)
+! flag for avoiding unnecessary calls of transformation subroutines
       OBJ%MEXI=0
       do i=1,3
         if (OBJ%REXI(i,i).NE.1.D0) OBJ%MEXI=1
@@ -340,6 +349,14 @@ C SLIT:
       real(kind(1.D0)) :: R1(3,3),R2(3,3),R3(3,3),R(3,3)
       call UNIMAT(R1,3,3)
       MLOC=0
+
+      !! this is equivalent to
+      !call getRotYXY(GON,RLOC)
+      !do i=1,3
+      !  if (RLOC(i,i).NE.1.D0) MLOC=1
+      !enddo
+      !! but we keep following as more efficient
+
   ! RLOC=R3.R2.R1
       if (GON(1).ne.0.D0) then
         call MK_ROT3(2,GON(1),R1)
@@ -549,11 +566,18 @@ C SLIT:
 !-------------------------------------------------
       SUBROUTINE FRAME_INIT_MAT(OBJ)
 ! initialize transformation matrices
+! for beam deflecting components, call FRAME_DEFLECTION afterwards
 !-------------------------------------------------
       TYPE(TFRAME),intent(out) :: OBJ
       REAL(KIND(1.D0)) :: Z
-      ! set EXIT AXIS, (y,x,y) matrix
+      ! set EXIT AXIS, (y,x,y) matrix (REXI) and translation (TEXI)
         call SetAxisAngles(OBJ,OBJ%AX)
+      ! Centers of the incident and exit frames are identical.
+      ! No deflection by default,
+      ! But this can be changed for deflecting components calling FRAME_DEFLECTION
+        OBJ%TEXI = 0.D0  ! centre of the exit reference frame (incident frame)
+        OBJ%TDEFL = 0.D0 ! beam centre at the exit (incident frame)
+        call UNIMAT(OBJ%RDEFL,3,3) ! deflection matrix
       ! set GONIOMETER, Euler craddle, (y,x,y) matrix
         call SetGonioAngles(OBJ,OBJ%GON)
         Z=abs(OBJ%MLOC)
@@ -561,8 +585,41 @@ C SLIT:
         Z=Z+OBJ%VEL(1)**2+OBJ%VEL(2)**2+OBJ%VEL(3)**2
         OBJ%ISMOVED=0
         if (Z>1.D-10) OBJ%ISMOVED=1
-        !write(*,*) 'FRAME_INIT_MAT ',trim(OBJ%ID),' ',OBJ%MLOC,z,OBJ%ISMOVED
+        !write(*,*) 'FRAME_INIT_MAT ',trim(OBJ%ID),' ',OBJ%MEXI,OBJ%REXI(1,3)
       end SUBROUTINE FRAME_INIT_MAT
+
+!-------------------------------------------------
+      SUBROUTINE FRAME_DEFLECTION(OBJ, RHO)
+! Add deflection due to bending to transformation matrices
+! Used by objects like curved guides or neutron benders
+! RHO(2) is the horizontal and vertical curvature in 1/mm
+! recalculates OBJ%REXI and OBJ%TEXI so that transformation from
+! incident to exit frame has the form:
+! R' = REXI.(R - TEXI)
+!-------------------------------------------------
+      TYPE(TFRAME),intent(out) :: OBJ
+      REAL(KIND(1.D0)),intent(in) :: RHO(2)
+      REAL(KIND(1.D0)) :: ADEF(3), DV(3),DX,DY,ALPHA,BETA
+      ! recalculate REXI, including deflection angles
+        call SetAxisAngles(OBJ,OBJ%AX)
+      ! get deflection angles
+        ALPHA=RHO(1)*OBJ%SIZE(3)
+        BETA=RHO(2)*OBJ%SIZE(3)
+        ADEF = (/ALPHA,-BETA,0.D0/)
+      ! correct REXI matrix for deflection
+        call getRotYXY(OBJ%AX+ADEF,OBJ%REXI)
+        OBJ%MEXI = 1
+      ! calculate deflection matrix
+        call getRotYXY(ADEF,OBJ%RDEFL)
+      ! calculate deflection vector =  beam centre at the exit (incident frame)
+        DX=0.5*RHO(1)*OBJ%SIZE(3)**2
+        DY=0.5*RHO(2)*OBJ%SIZE(3)**2
+        OBJ%TDEFL = (/DX,DY,OBJ%SIZE(3)/)
+      ! get origin of the exit reference frame, shifted due to deflection (incident frame)
+      ! TEXI = exit centre (TDEFL), minus length along exit axis converted to incident frame
+        call M3XV3(-1, OBJ%RDEFL,(/0.D0,0.D0,OBJ%SIZE(3)/),DV)
+        OBJ%TEXI = OBJ%TDEFL - DV
+      end SUBROUTINE FRAME_DEFLECTION
 
 !---------------------------------------------------------
       SUBROUTINE FRAME_INP_INST(INST,PNAME,ARG,NARG)
@@ -789,11 +846,11 @@ C velocity [m/s] - convert to wavevector
       INTEGER,intent(in) :: IT
       REAL(KIND(1.D0)) :: V(3),VK(3)
       logical :: dbg=.false.
-1     format(a,': ',6(1x,G10.4))
+1     format(a,': ',7(1x,G10.4))
       !dbg=((trace_cnt>1990).and.(OBJ%ISMOVED>0))
       !if (OBJ%ISMOVED==0) return
-      if (dbg) write(*,1) 'FRAME_LOCAL '//trim(OBJ%ID)
-      if (dbg) write(*,1) '   ',NEU%R,NEU%K
+      if (dbg) write(*,1) 'FRAME_LOCAL '//trim(OBJ%ID), IT
+      if (dbg) write(*,1) '  in ',NEU%R, NEU%K, NEU%T
 
       select case(OBJ%ORDER)
       case(top_stage)
@@ -825,7 +882,7 @@ C velocity [m/s] - convert to wavevector
           CALL M3XV3(OBJ%MLOC,OBJ%RLOC,VK,NEU%K)
         end select
       end select
-      if (dbg) write(*,1) '   ',NEU%R,NEU%K
+      if (dbg) write(*,1) '   out',NEU%R, NEU%K, NEU%T
       END SUBROUTINE FRAME_LOCAL
 
 !---------------------------------------------------------------------
@@ -962,64 +1019,70 @@ C velocity [m/s] - convert to wavevector
 
 
 !-------------------------------------------------------------
-! Update transformation matrix for laboratory system for given object.
-! Must be called in sequence so that RLAB and TLAB contain
+! Update transformation TLAB(3), RLAB(3,3) for conversion to laboratory system.
+! Given position R in the OBJ's incident axis frame, conversion to lab. frame is
+! RL = OBJ%RLAB . R + OBJ%TLAB
+! This subr. must be called in sequence so that RLAB and TLAB contain
 ! values corresponding to the preceding component
-! OBJ%TLAB: translation to incident coord. in laboratory system
-! OBJ%RLAB: rotation from incident coord. to previous component exit coord.
+! OBJ%TLAB: transition to OBJ entry centre (=incident frame origin) in laboratory system
+! OBJ%RLAB: rotation from incident frame to laboratory frame
 !-------------------------------------------------------------
       subroutine FRAME_UPDATE_LAB(OBJ,RLAB,TLAB)
       TYPE(TFRAME),intent(out) :: OBJ
       REAL(KIND(1.D0)),intent(inout) :: RLAB(3,3),TLAB(3)
       REAL(KIND(1.D0)) :: T(3),R(3,3)
       integer :: i,j,k
-        if (.not.OBJ%ISDEFL) then
-          OBJ%TDEFL=0.D0
-          call UNIMAT(OBJ%RDEFL,3,3)
-        endif
+
+  ! Rotation matrix as calculated by preceding call
         OBJ%RLAB=RLAB
-  ! TLAB=TLAB+RLAB.(0,0,DIST)^T
+  ! for translation, add path to entry from preceding component
+  ! TLAB = TLAB + RLAB^T . (0,0,DIST)
         T=(/0.D0,0.D0,OBJ%DIST/)
         do i=1,3
           do k=1,3
             TLAB(i)=TLAB(i)+RLAB(i,k)*T(k)
           enddo
         enddo
-        OBJ%TLAB=TLAB
-  ! calculate transformation for a next component
-  ! RLAB=RLAB.REXI^T
-        do i=1,3
-          do j=1,3
-            RLAB(i,j)=0.D0
-            do k=1,3
-              RLAB(i,j)=RLAB(i,j)+OBJ%RLAB(i,k)*OBJ%REXI(j,k)
-            enddo
-          enddo
-        enddo
+        OBJ%TLAB = TLAB
 
-        if (OBJ%ISDEFL) then
-      ! convert TDEFL to the laboratory coordinates and add it to the
-      ! position of the component origin
-          do i=1,3
-            do k=1,3
-              TLAB(i)=TLAB(i)+OBJ%RLAB(i,k)*OBJ%TDEFL(k)
-            enddo
-          enddo
-      ! add deflection to the rotation matrix
-      ! RLAB=RLAB.RDEFL^T
-          R=RLAB
+!1       format(a,': ',6(1x,G13.7))
+        !write(*,1) 'FRAME_UPDATE_LAB '//trim(OBJ%ID), OBJ%TLAB, OBJ%RLAB(1,3)
+
+  ! Calculate rotation matrix for the next component
+  ! RLAB = RLAB.REXI^T
+        if (OBJ%MEXI.NE.0) then
           do i=1,3
             do j=1,3
               RLAB(i,j)=0.D0
               do k=1,3
-                RLAB(i,j)=RLAB(i,j)+R(i,k)*OBJ%RDEFL(j,k)
+                RLAB(i,j) = RLAB(i,j) + OBJ%RLAB(i,k)*OBJ%REXI(j,k)
               enddo
             enddo
           enddo
         endif
+  ! Add shift of the exit frame origin due to deflection
+        if (OBJ%ISDEFL) then
+      ! convert TEXI to the laboratory coordinates and add it to TLAB
+          call M3XV3(1,OBJ%RLAB,OBJ%TEXI,T)
+          TLAB = TLAB + T
+          !write(*,1) '        TDEFL', OBJ%TDEFL
+          !write(*,1) '   added TEXI', OBJ%TEXI
+          !write(*,1) '     lab TEXI', T
+          !write(*,1) '     new TLAB', TLAB
 
+      ! Already included in REXI
+      ! add deflection to the rotation matrix
+      ! RLAB=RLAB.RDEFL^T
+      !    R=RLAB
+      !    do i=1,3
+      !      do j=1,3
+      !        RLAB(i,j)=0.D0
+      !        do k=1,3
+      !          RLAB(i,j)=RLAB(i,j)+R(i,k)*OBJ%RDEFL(j,k)
+      !        enddo
+      !      enddo
+      !    enddo
+        endif
       end subroutine FRAME_UPDATE_LAB
-
-
 
       end module FRAMES

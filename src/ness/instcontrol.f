@@ -250,9 +250,9 @@
       TYPE(PCRYSTAL) :: CR
       TYPE(PXTAL) :: XT
       REAL(KIND(1.D0)) :: K0,kmin,kmax
-1     format(a,': ',6(G12.5,1x))
+!1     format(a,': ',6(G12.5,1x))
       !REAL(KIND(1.D0)) :: dtdef,t0,tmin,tmax
-      character(32) :: CNUM,CNUM1
+      !character(32) :: CNUM,CNUM1
 ! PRIMARY beam
 ! adjust Generator k-range if required (no monochromator)
       call SOURCE_GET(BEAMSOURCE%INST,PSRC)
@@ -267,9 +267,9 @@
           call FLUX_RANGE(300.D0,kmin,kmax)
         endif
         call GENERATOR_SETK(K0,kmin,kmax)
-        call FLOAT2STR(TWOPI/kmax,CNUM)
-        call FLOAT2STR(TWOPI/kmin,CNUM1)
-        write(*,1) 'No monochromator: wavelength range set to '//trim(CNUM)//' .. '//trim(CNUM1)
+        !call FLOAT2STR(TWOPI/kmax,CNUM)
+        !call FLOAT2STR(TWOPI/kmin,CNUM1)
+        !write(*,1) 'No monochromator: wavelength range set to '//trim(CNUM)//' .. '//trim(CNUM1)
       else
     ! no clip range if there is a monochromator on the beam
         call FLUX_SET_RANGE(K0,0.D0)

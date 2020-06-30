@@ -114,32 +114,13 @@
       integer,intent(out) :: IERR
       integer :: i,is
       TYPE(SGUIDE),POINTER :: OBJ
-1     format(a,': ',7(1x,G12.6))
       if (.not.SGUIDE_isValid(INST)) return
       OBJ => ASGUIDES(INST)%X
-      ! call SGUIDE_ADJUST_SEGMENTS(INST)
-      call SGUIDE_SET_PROFILE(INST,1)
-      call SGUIDE_SET_PROFILE(INST,2)
-      call SGUIDE_CALC_PARAM(INST)
-      call FRAME_INIT_MAT(OBJ%FRAME)
       call SLIT_PRE(OBJ%FRAME)
+      call FRAME_TRACE0(OBJ%FRAME)
       call SLIT_POST(OBJ%FRAME)
-      dbgcnt=0
-      is=0
-      do i=1, 4
-        if (OBJ%MONITOR(i)) is = is+1
-      enddo
-      if (is>0) then
-        write(*,1) trim(OBJ%FRAME%ID)//' has monitors: ',is
-      endif
 
-      !if (OBJ%dbg_NSUM(3)>0) then
-      !  write(*,1) 'Events sum, '//trim(OBJ%FRAME%ID)
-      !  WRITE(*,1) 'reflected: ', OBJ%dbg_SUM(1), OBJ%dbg_NSUM(1)
-      !  WRITE(*,1) 'transmitted: ', OBJ%dbg_SUM(2), OBJ%dbg_NSUM(2)
-      !  WRITE(*,1) 'captured: ', OBJ%dbg_SUM(3), OBJ%dbg_NSUM(3)
-      !  WRITE(*,1) 'scattered: ', OBJ%dbg_SUM(4), OBJ%dbg_NSUM(4)
-      !endIF
+      dbgcnt=0
       OBJ%dbg_SUM=0.D0
       OBJ%dbg_NSUM=0
       end SUBROUTINE SGUIDE_ADJUST
@@ -212,7 +193,7 @@
       !dbg = ((dbgcnt<1050).and.(dbgcnt>1000))
       ! dbg = (trim(OBJ%FRAME%ID).eq.'GEX1'.and.(NINT(trace_tot)==5))
 ! Convert to local coordinate system
-      CALL FRAME_PRE(OBJ%FRAME)
+      CALL SLIT_PRE(OBJ%FRAME)
 ! move to the guide entry window
       call FRAME_ENTRY(OBJ%FRAME)
       ! call SGUIDE_PRE(OBJ)
@@ -320,8 +301,8 @@
   ! register event
       TMPN(INST)=NEUT
       if (TRACING_UP) TMPN(INST)%K=-TMPN(INST)%K
-  ! post-transformation to exit coordinates, correct for deflection
-      CALL FRAME_POST(OBJ%FRAME)
+  ! post-transformation to exit coordinates
+      CALL SLIT_POST(OBJ%FRAME)
       call incCounter(OBJ%FRAME%COUNT)
       SGUIDE_GO_INST=.TRUE.
       END FUNCTION SGUIDE_GO_INST

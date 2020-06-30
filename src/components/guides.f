@@ -297,11 +297,37 @@
 !------------------------------------
       integer,intent(in) :: INST
       integer,intent(out) :: IERR
+      integer :: SS
+      REAL(KIND(1.D0)) :: ROPT
+      REAL(KIND(1.D0)) :: V(3), DV(3), R(3,3), ALPHA, BETA, DX, DY
       TYPE(GUIDE),POINTER :: OBJ
-        IERR=0
-        if (.not.GUIDE_isValid(INST)) return
-        OBJ => AGUIDES(INST)%X
-        call FRAME_INIT_MAT(OBJ%FRAME)
+1     format(a,': ',7(1x,G12.6))
+      IERR=0
+      if (.not.GUIDE_isValid(INST)) return
+      OBJ => AGUIDES(INST)%X
+! adjust curvature of a curved guide if requiered
+      if ((OBJ%TYP == 1).and.(OBJ%NODIR).and.(OBJ%FRAME%SIZE(3)>0.D0)) then
+        if (abs(OBJ%ROH)>0.D0) then
+          SS=NINT(sign(1.D0,OBJ%ROH))
+          ROPT=4.D0*(OBJ%FRAME%SIZE(1)+OBJ%W2)/OBJ%FRAME%SIZE(3)**2
+          if (abs(OBJ%ROH)<ROPT) OBJ%ROH=SS*ROPT
+        else if (abs(OBJ%ROV)>0.D0) then
+          SS=NINT(sign(1.D0,OBJ%ROV))
+          ROPT=4.D0*(OBJ%FRAME%SIZE(2)+OBJ%H2)/OBJ%FRAME%SIZE(3)**2
+          if (abs(OBJ%ROV)<ROPT) OBJ%ROV=SS*ROPT
+        endif
+      endif
+      if (OBJ%TYP<=0) OBJ%LOGBNC=0
+      ! translucent material is allowed only for straight guides
+      if (OBJ%TYP.ne.1) OBJ%MATER=0
+      if (OBJ%MONITOR) then
+        write(*,1) trim(OBJ%FRAME%ID)//' is monitor'
+      endif
+! initialize transformation matrices
+      call FRAME_INIT_MAT(OBJ%FRAME)
+! for curved guides, add deflection
+      OBJ%FRAME%ISDEFL=(ABS(OBJ%ROH)+ABS(OBJ%ROV)>1.D-9)
+      if (OBJ%FRAME%ISDEFL) call FRAME_DEFLECTION(OBJ%FRAME, (/OBJ%ROH, OBJ%ROV/))
       END SUBROUTINE GUIDE_PREPARE
 
 !-------------------------------------------------------------
@@ -311,7 +337,6 @@
       integer,intent(in) :: INST
       GUIDE_isValid= ((INST.gt.0).and.(INST.le.GUIDES_DIM).and.associated(AGUIDES(INST)%X))
       end function GUIDE_isValid
-
 
 !-------------------------------------------------------------
       SUBROUTINE GUIDE_GET(INST,OBJ)
@@ -590,36 +615,5 @@
       END SELECT
       NARG=LR
       END SUBROUTINE GUIDE_OUT_R
-
-!---------------------------------------------------------
-      SUBROUTINE GUIDE_UPDATE_LAB(INST,RLAB,TLAB)
-! See FRAME_UPDATE_LAB.
-! Guide must account for deflection due to bending
-!---------------------------------------------------------
-      integer,intent(in) :: INST
-      REAL(KIND(1.D0)),intent(inout) :: RLAB(3,3),TLAB(3)
-      TYPE(GUIDE),POINTER :: OBJ
-      REAL(KIND(1.D0)) :: ALPHA,BETA,DX,DY,LL(3),LL0(3)
-!2     format(a,2x,10(1x,g10.4))
-      if (.not.GUIDE_isValid(INST)) return
-      OBJ => AGUIDES(INST)%X
-
-      ALPHA=OBJ%ROH*OBJ%FRAME%SIZE(3)
-      BETA=OBJ%ROV*OBJ%FRAME%SIZE(3)
-      OBJ%FRAME%ISDEFL=(ABS(ALPHA)+ABS(BETA)>0.D0)
-      OBJ%FRAME%ISDEFL=(OBJ%FRAME%ISDEFL.and.(OBJ%TYP==1))
-      if (OBJ%FRAME%ISDEFL) then
-      ! get deflection angles and matrix
-        call getRotYXY((/ALPHA,-BETA,0.D0/),OBJ%FRAME%RDEFL)
-      ! get shift of the origin due to deflection, in incident coord.
-        DX=0.5*OBJ%ROH*OBJ%FRAME%SIZE(3)**2
-        DY=0.5*OBJ%ROV*OBJ%FRAME%SIZE(3)**2
-        LL0=(/0.D0,0.D0,OBJ%FRAME%SIZE(3)/)
-        call M3XV3(-1,OBJ%FRAME%RDEFL,LL0,LL)
-        OBJ%FRAME%TDEFL=(/DX-LL(1),DY-LL(2),OBJ%FRAME%SIZE(3)-LL(3)/)
-      endif
-      call FRAME_UPDATE_LAB(OBJ%FRAME,RLAB,TLAB)
-      end SUBROUTINE GUIDE_UPDATE_LAB
-
 
       end MODULE GUIDES

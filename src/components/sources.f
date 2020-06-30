@@ -150,6 +150,7 @@
         if (.not.SOURCE_isValid(INST)) return
         OBJ => ASOURCES(INST)%X
         call FRAME_INIT_MAT(OBJ%FRAME)
+        OBJ%is_pulsed=SOURCE_TABLE_IS_PULSED().or.(OBJ%PULSW>0.D0)
       END SUBROUTINE SOURCE_PREPARE
 
 !-------------------------------------------------------------

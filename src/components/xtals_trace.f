@@ -145,6 +145,7 @@
   ! calculate B-matrix, DHKL, G
       call CalBMatrix(CDATA%LAT,OBJ%A,OBJ%B,OBJ%CHI,OBJ%PSI,OBJ%T,OBJ%BMAT)
   ! cal. coordinate transformations for actual gonio and axis angles
+  ! TODO: this call is probably duplicit, already done in _PREPARE:
       call FRAME_INIT_MAT(OBJ%FRAME)
   ! adjust axis and gonio
       if (OBJ%AUTOADJ) call XTAL_ORIENT(OBJ,ierr)

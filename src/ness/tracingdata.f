@@ -249,7 +249,7 @@
       real(kind(1.D0)),intent(in) :: K0,R(3,3)
       TYPE(NEUTRON),intent(out) :: NEU
       call generate_nom_1(K0,NEU)
-      CALL M3XV3(1,R,(/0.D0, 0.D0, K0/),NEU%K)
+      CALL M3XV3(-1,R,(/0.D0, 0.D0, K0/),NEU%K)
       end SUBROUTINE generate_nom_2
 
 !---------------------------------------------------

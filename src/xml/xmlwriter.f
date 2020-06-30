@@ -67,7 +67,7 @@ C---------------------------------------------------------
         if (.not.info%error) call xml_options(info,report_lun=XML_STDOUT,report_details=.false.)
         if (.not.info%error) call EXPORT2XML(info,(.not.std))
         call xml_close(info)
-      !  write(*,*) 'save_config OK 3 ',info%error
+        if (std) write(*,*) 'cfg updated'
         if ((.not.info%error).and.(.not.std)) call MSG_INFO('Instrument setup saved to '//trim(FRES),1)
       endif
       end subroutine save_config

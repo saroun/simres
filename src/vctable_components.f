@@ -481,15 +481,15 @@
       TYPE(TCOMOBJ) :: CLS
       REAL(KIND(1.D0)),intent(inout) :: RLAB(3,3),TLAB(3)
       TYPE(PFRAME) :: F
-        select case(CLS%CCLS)
-        case(CCLS_GUIDE)
-          call GUIDE_UPDATE_LAB(CLS%INST,RLAB,TLAB)
-        case(CCLS_SGUIDE)
-          call SGUIDE_UPDATE_LAB(CLS%INST,RLAB,TLAB)
-        case DEFAULT
+!        select case(CLS%CCLS)
+!        case(CCLS_GUIDE)
+!          call GUIDE_UPDATE_LAB(CLS%INST,RLAB,TLAB)
+!        case(CCLS_SGUIDE)
+!          call SGUIDE_UPDATE_LAB(CLS%INST,RLAB,TLAB)
+!        case DEFAULT
           call PCOMOBJ_GET(CLS,F)
           call FRAME_UPDATE_LAB(F%X,RLAB,TLAB)
-        end select
+!        end select
       end SUBROUTINE PCOMOBJ_UPDATE_LAB
 
 

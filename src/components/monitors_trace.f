@@ -177,9 +177,10 @@
       if (.not.MONITOR_isValid(INST)) return
       OBJ => AMONITORS(INST)%X
       IERR=0
-      call FRAME_INIT_MAT(OBJ%FRAME)
+      !call FRAME_INIT_MAT(OBJ%FRAME)
       !write(*,1) 'Move from '//trim(OBJ%FRAME%ID),NEUT%K0*NEUT%T
       call SLIT_PRE(OBJ%FRAME)
+      !write(*,1) 'Inside '//trim(OBJ%FRAME%ID),NEUT%K0*NEUT%T, NEUT%R
       call SLIT_POST(OBJ%FRAME)
       OBJ%K0=NEUT%K0
       !write(*,1) 'Move to '//trim(OBJ%FRAME%ID),NEUT%K0*NEUT%T, OBJ%FRAME%DIST
