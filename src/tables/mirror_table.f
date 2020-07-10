@@ -190,7 +190,7 @@
         if (mirror_dbg) write(*,1) 'WAVEP0   ',th1,erfp1,dnom,g0,gn
       endif
       WAVEP0=SQRT2PI*gn*th1
-      
+
       end function WAVEP0
 
 !---------------------------------------------------------
@@ -231,23 +231,35 @@
       REAL(KIND(1.D0)),intent(in) :: theta
       REAL(KIND(1.D0)),intent(out) :: a,w
       integer :: loop
-      REAL(KIND(1.D0)) ::  th0
+      REAL(KIND(1.D0)) ::  th0,th1
+      REAL(KIND(1.D0)), parameter ::  inf=5.D0
+      REAL(KIND(1.D0)), parameter ::  eps=1.D-6
 1     format(a,': ',6(1x,G12.5))
       th0=theta
-      a=GASDEV2(-th0,5.D0)
-      w=WAVEP0(th0,a)
+      a=GASDEV2(-theta)
+      w=WAVEP0(theta,a)
       if (mirror_dbg) write(*,1) 'WAVE_GEN_ANGLE',th0,a,w
-      if (w<=0.D0) return
+      if (w<=eps) return
       loop=0
-      do while ((a.le.-0.5D0*th0).and.(loop<10).and.(w>1.D-6))
-        th0=th0+2*a
-        a=GASDEV2(-th0,5.D0)
-        w=w*WAVEP0(th0,a)
-        loop=loop+1
-        if (mirror_dbg) write(*,1) '      loop ',loop,th0,a,w
-      enddo
-      if (loop==10) w=0.D0
+      ! exit angle
+      th1 = theta + 2*a
+      if (th1.lt.eps) then
+        do while ((th1.le.0.D0).and.(loop<10).and.(w>eps))
+          ! next incidence angle
+          th0=-th1
+          a=GASDEV2(-th0)
+          w=w*WAVEP0(th0,a)
+          ! new exit angle
+          th1 = th0 + 2*a
+          loop=loop+1
+        enddo
+        a = 0.5D0*(th1-theta)
+        if (loop==10) w=0.D0
+
+      endif
+      if (mirror_dbg) write(*,1) '    end with',loop, a, w
       end subroutine WAVE_GEN_ANGLE
+
 
 !---------------------------------------------------------
       subroutine WAVE_GEN_ANGLE1(theta,a,w)
@@ -265,7 +277,7 @@
       REAL(KIND(1.D0)) ::  th0
 1     format(a,': ',6(1x,G12.5))
       th0=theta
-      a=GASDEV2(-th0/2.D0,5.D0)
+      a=GASDEV2(-th0/2.D0)
       w=WAVEP01(th0,a)
       if (mirror_dbg) write(*,1) 'WAVE_GEN_ANGLE1',th0,a,w
       if (w<=0.D0) return
@@ -293,8 +305,8 @@
       integer,parameter :: ID(4)=(/1,1,2,2/)
       integer,parameter :: IDINV(4)=(/2,2,1,1/)
       REAL(KIND(1.D0)),parameter :: THMIN=1.D-6
+      REAL(KIND(1.D0)), parameter ::  eps=1.D-6
 1     format(a,': ',6(1x,G14.7))
-
       !mirror_dbg=(mirror_idbg<30)
       !mirror_idbg=mirror_idbg+1
 
@@ -350,6 +362,7 @@
       DO i=1,3
         KG(i)=KG(i)*K0/KG0
       enddo
+      if (W.lt.eps) W=0.D0
       P=W
       end subroutine MIRROR_REFLECT
 
@@ -367,18 +380,23 @@
 !---------------------------------------------------------------
       real(kind(1.D0)), intent(in) :: sigma,theta,K(3),N(3)
       real(kind(1.D0)), intent(out) :: NW(3),P
-      real(kind(1.D0)) :: a,b,Y(3),Z(3),N0,SG
+      real(kind(1.D0)) :: a,b,Y(3),Z(3),SG
       integer :: i
 1     format(a,': ',6(1x,G14.7))
       ! generate waviness angles
       call WAVE_GEN_ANGLE(theta/sigma,a,P)
       if (mirror_dbg) write(*,1) 'MIRROR_NWAVY theta/sigma,a,P',theta/sigma,a,P
       a=sigma*a
-      b=sigma*GASDEV2(-5.D0,5.D0)
+      if (abs(theta+2*a)<1D-6) then
+        P=0.D0
+        NW=N
+        return
+      endif
+      b=sigma*GASDEV1(0.D0,5.D0)
       ! unit vector along Y (transverse direction)
       ! unit vector along Z (beam propagation)
       ! both normal to N !
-      if (mirror_dbg) write(*,1) 'MIRROR_NWAVY a,b',a, b
+      if (mirror_dbg) write(*,1) 'MIRROR_NWAVY a,b, N',a, b, N
       SG=SIGN(1.D0,K(3))
       if (ABS(N(1)).eq.1.D0) then
         Y=(/0.D0, 1.D0, 0.D0/)
@@ -392,11 +410,11 @@
         call V3cV3(N,Y,Z)
       endif
       ! NW = N - a*Z + b*Y
-      ! we need to normalize due to small-angle approximation
-      N0=sqrt(1.D0-a*a-b*b)
       do i=1,3
-        NW(i)=(N(i)-a*Z(i)+b*Y(i))/N0
+        NW(i)=N(i)-a*Z(i)+b*Y(i)
       enddo
+      ! we need to normalize due to small-angle approximation
+      call NORM(NW)
       end subroutine MIRROR_NWAVY
 
 

@@ -118,7 +118,7 @@
       integer :: i
       do i=1,2
         if (OBJ%MISALIGN(i).ne.0.D0) then
-          OBJ%FRAME%DM(i)=OBJ%MISALIGN(i)*GASDEV2(-3.D0,3.D0)
+          OBJ%FRAME%DM(i)=OBJ%MISALIGN(i)*GASDEV1(0.D0,3.D0)
         endif
       enddo
       END SUBROUTINE GUIDE_MISALIGN

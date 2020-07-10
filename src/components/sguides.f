@@ -94,10 +94,10 @@ C---------------------------------------------------------
       DR0=(/0.D0,0.D0/)
       do i=1,2
         if (OBJ%MISALIGN(i).ne.0.D0) then
-          OBJ%DX(i,0)=OBJ%MISALIGN(i)*GASDEV2(-3.D0,3.D0)
+          OBJ%DX(i,0)=OBJ%MISALIGN(i)*GASDEV1(0.D0,3.D0)
           Do iseg=1,OBJ%NSEG
             L=OBJ%WIN(3,iseg)-OBJ%WIN(3,iseg-1)
-            OBJ%DX(i,iseg)=OBJ%MISALIGN(i)*GASDEV2(-3.D0,3.D0)
+            OBJ%DX(i,iseg)=OBJ%MISALIGN(i)*GASDEV1(0.D0,3.D0)
             ! modified 2018-08-28: consider only spatial misalignment
             ! OBJ%DA(i,iseg)=(OBJ%DX(i,iseg)-DR0(i))/L
             OBJ%DA(i,iseg)=0.D0

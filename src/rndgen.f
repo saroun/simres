@@ -142,27 +142,34 @@
 
 
 !----------------------------------------------
-! GASDEV with limits ***
+! GASDEV with centre and limits
+! scaled in units sigma=1
       REAL(kind(1.D0)) FUNCTION GASDEV1(centre,limits)
 !----------------------------------------------
       REAL(kind(1.D0)), intent(in) :: limits,centre
-      REAL(kind(1.D0)) :: Z
-1     format(a,1x,3(1x,G12.5))
-      Z=2.*limits
-      DO 10 WHILE (ABS(Z).GT.ABS(limits))
-10       Z=GASDEV()
-      	GASDEV1=Z+centre
-        if (rndgen_dbg) write(*,1) 'GASDEV1=',Z,centre,limits
+      REAL(kind(1.D0)) :: Z, zlim
+      REAL(kind(1.D0)), parameter :: eps=1.D-8
+      zlim = abs(limits)
+      if (zlim<eps) then
+        Z = 0.D0
+      else
+        Z=GASDEV()
+        DO WHILE (ABS(Z).GT.zlim)
+          Z=GASDEV()
+        enddo
+      endif
+      GASDEV1=Z+centre
       END FUNCTION GASDEV1
 
 !----------------------------------------------
-! GASDEV in given interval
-      REAL(kind(1.D0)) FUNCTION GASDEV2(xmin,xmax)
+! GASDEV on interval (xmin, INF)
+! scaled in units sigma=1
+      REAL(kind(1.D0)) FUNCTION GASDEV2(xmin)
 !----------------------------------------------
-      REAL(kind(1.D0)), intent(in) :: xmin,xmax
+      REAL(kind(1.D0)), intent(in) :: xmin
       REAL(kind(1.D0)) :: Z
       Z=GASDEV()
-      DO WHILE ((Z<xmin).or.(Z>xmax))
+      DO WHILE (Z<xmin)
         Z=GASDEV()
       enddo
       GASDEV2=Z
