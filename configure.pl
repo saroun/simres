@@ -37,7 +37,7 @@ my $DOMAKE="yes";   # set to "no" if you don't want to create makefile
 my $DBGOPT="no";   # compile with debugging options
 #------------  DEFINE VERSION HERE  ------------
 my $PGMNAME="simres";      # program name
-my $VERSION="6.5.0";       # version
+my $VERSION="6.5.1";       # version
 my $LPGPLOT="";            # PGPLOT link option (if empty,  it will be set by this script)
 my $LMCPL="";              # MCPL link option (if empty,  it will be set by this script)
 #--------------------------------------------
