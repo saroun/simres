@@ -4,7 +4,8 @@ SIMRES is an application for simulation of neutron beams using Monte Carlo ray-t
 
 Homepage: http://neutron.ujf.cas.cz/restrax   
 SIMRES repository: https://github.com/saroun/simres  
-User guide: http://neutron.ujf.cas.cz/restrax/download/simres-guide.pdf
+User guide: http://neutron.ujf.cas.cz/restrax/download/simres-guide.pdf  
+Download: see [DOWNLOAD.md](DOWNLOAD.md).  
 
 -----------------------------------------------------------------
 
@@ -33,6 +34,8 @@ http://www.java3d.org/
 `Jama` - Java Matrix Package.   
 http://math.nist.gov/javanumerics/jama/  
 *License*: public domain
+
+-----------------------------------------------------------------
 
 ## System requirements
 
