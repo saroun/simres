@@ -18,6 +18,7 @@ backup
 doc
 tmp*
 test*
+resources/demo/simres_mcstas/mcstas/*.c
 
 # Lazarus generated files:
 *.lps

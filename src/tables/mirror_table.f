@@ -762,7 +762,7 @@
 88    m_n(itab)=nrow
 ! JS5/19       call CLOSEFILE_READ(IU)
       CLOSE(IU)
-      if ((ierr==0).and.(nrow>2)) then
+      if ((ierr<=0).and.(nrow>2)) then
     ! write message
         m_num=max(itab,m_num)
         call INT2STR(itab,CNUM1)
