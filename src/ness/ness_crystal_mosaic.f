@@ -228,7 +228,7 @@ C--------------------------------------------------------------------
       real(kind(1.D0)) :: Z,G01,G02
       INTEGER :: I,J
       real(kind(1.D0)) :: ri(3),rf(3),G1(3),G2(3),CTHB,SCHI,CCHI,THB
-      
+
       THB=ASIN(CR%LAMBDA/2.D0/CR%DHKL)
       CTHB=cos(THB-CR%CHI)
       ri(1)=0.5*CTHB*CR%FRAME%SIZE(3)
@@ -306,6 +306,7 @@ C//  sig2 .... single-phonon
 
 C//  sigmaa ... absorption for 1A neutrons [barn*A^-1]
 C//  sigmab ... bound-atom scattering cross-section [barn]
+C//  sigmai ... incoherent scattering cross-section [barn]
 C//  V0 .... volume [A^3]/atom
 C//  A  .... atomic number
 C//  thetaD .... Debye temperature (K)
@@ -349,7 +350,7 @@ C--------------------------------------------------------
       call DWFACT(CR,T,lambda,B0,BT)
       CR%DW=GETDW(B0,BT,CR%DHKL)
       DWMF=1.D0-exp(-(B0+BT)*CR%C2*E)
-      sig0=CR%sigmaa*lambda
+      sig0=CR%sigmaa*lambda + CR%sigmai
       sig1=CR%sigmab*(CR%A/(CR%A+1))**2*DWMF
       sig2=3*CR%sigmab/CR%A*SQRT(k_B*CR%thetaD/E)*R
       sigtot=(sig0+sig1+sig2)/CR%VOL

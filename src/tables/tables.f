@@ -28,6 +28,7 @@
         real(kind(1.D0)) ::  QML      !   4*PI*(F*dhkl/V0)**2 [ A^-1 cm^-1] (Maier-Leibnitz reflectivity)
         real(kind(1.D0)) ::  sigmab   !   bound-atom scattering cross-section [barn]
         real(kind(1.D0)) ::  sigmaa   !   absorption for 1A neutrons [barn*A^-1]
+		real(kind(1.D0)) ::  sigmai   !   incoherent scattering cross-section [barn]
         real(kind(1.D0)) ::  VOL      !   volume [A^3]/atom
         real(kind(1.D0)) ::  A        !   atomic number
         real(kind(1.D0)) ::  thetaD   !   Debye temperature (K)
@@ -91,11 +92,11 @@
       integer :: ITYPE,IORD
 1     FORMAT(a)
 2     FORMAT('Format error in the crystal library, line ',I5 )
-4     FORMAT('Cannot open crystal.dat' )
+4     FORMAT('Cannot open crystal.tab' )
 5     FORMAT('WARNING: Incompatible crystal library, ',a,' is not defined in ',a )
 
       ! CALL DLG_FILEOPEN('crystal','|'//trim(RESPATH)//'|'//trim(CFGPATH),'lib',0,0,IRES,FRES)
-      CALL DLG_FILEOPEN('crystal',trim(RESPATH)//'/tables|'//trim(CFGPATH)//'/tables','dat',0,0,IRES,FRES)
+      CALL DLG_FILEOPEN('crystal',trim(RESPATH)//'/tables|'//trim(CFGPATH)//'/tables','tab',0,0,IRES,FRES)
       if (IRES.gt.0) then
         IU=OPENFILEUNIT(FRES,.true.)
         if (IU.le.0) then
@@ -127,7 +128,7 @@
               call MSG_WARN(trim(LINE),0)
             ELSE
               if (IORD.lt.100) then
-                READ(LINE(9:),*,iostat=ie) R%DHKL,R%QML,R%sigmab,R%sigmaa,R%VOL,R%A,R%thetaD,R%C2,R%poi
+                READ(LINE(9:),*,iostat=ie) R%DHKL,R%QML,R%sigmab,R%sigmaa,R%sigmai,R%VOL,R%A,R%thetaD,R%C2,R%poi
                 R%C2=R%C2/1000  ! from eV^-1 to meV^-1
                 if (ie.eq.0) then
                   N_TABLE=MAX(N_TABLE,IORD+1)

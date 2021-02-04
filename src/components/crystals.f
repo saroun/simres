@@ -55,7 +55,7 @@
         REAL*8 P0    !  reflection probability along K=(0,0,1) through R=(0,0,0) (without absorption)
         REAL*8 MAG !  magnetization
         REAL*8 RH,RV,RB,DH,DV,DB ! curvatures, segemnts spacing (H,V,z)
-        REAL*8 SIGMAB, SIGMAA, A, THETAD,C2 ! Freund parameters for absorption (see crystals.lib)
+        REAL*8 SIGMAB, SIGMAA, SIGMAI, A, THETAD,C2 ! Freund parameters for absorption (see crystals.lib)
         REAL*8 DLAM,DEXT,EXT1,DELTA         ! extinction parameters: lamellae thickness, ext. length, primary ext., Darwin box
         REAL*8 LAMBDA,QHKL,REF ! wavelength, kin. refl., ...
         REAL*8 DG_DR(3,3),G(3),GAMA(3),GTOT,DGR,DGA ! deformation gradient, diff. vector, d-gradient, gradient orientation
@@ -377,6 +377,7 @@
           CR%QML= PARAM%QML
           CR%sigmab=PARAM%sigmab
           CR%sigmaa=PARAM%sigmaa
+          CR%sigmai=PARAM%sigmai
           CR%VOL=PARAM%VOL
           CR%A=PARAM%A
           CR%thetaD=PARAM%thetaD
