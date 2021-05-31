@@ -44,7 +44,7 @@
       CHARACTER(LEN_LINE) :: CmdLine
       character(4) :: Space='    '
 
-      integer, PARAMETER :: RES_NCMD=25   	! Number of commands
+      integer, PARAMETER :: RES_NCMD=26   	! Number of commands
       CHARACTER*5 RES_NAM(RES_NCMD)         ! command names
       CHARACTER*60 RES_HLP(RES_NCMD)        ! command hints
 
@@ -236,6 +236,7 @@ C// process execution commands
           CASE('REPRE'); call REPORT_MIRROR_REF(RETSTR)
           CASE('REPXT'); call MKUPCASE(RETSTR); call REPXTAL(RETSTR)
           CASE('REPBM'); call MKUPCASE(RETSTR); call REPORT_BEAMLINE(RETSTR)
+          CASE('REPSA'); call REPORT_SAMPLE(RETSTR)
           case('BREF'); call SET_BMONITOR(RETSTR); call NSTORE_XML_LIST(SMES,BMONITOR_REF)
           case('MCPL'); call REPORT_MCPL(RETSTR)
           case('MCPIN'); call LOAD_MCPL(RETSTR)
@@ -416,7 +417,10 @@ C// process execution commands
       RES_HLP(i)='fname mval angle lambda; report mirror reflectivity'
       i = i+1
       RES_NAM(i)='REPBM'
-      RES_HLP(i)='fname write a table with all components coordinates '
+      RES_HLP(i)='fname; write a table with all components coordinates '
+      i = i+1
+      RES_NAM(i)='REPSA'
+      RES_HLP(i)='fname [lmin, lmax, nl]; write sample cross-sections '
       i = i+1
       RES_NAM(i)='XML'
       RES_HLP(i)='load XML definition from console (GUI only)'

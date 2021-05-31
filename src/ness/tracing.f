@@ -216,6 +216,7 @@ C------------------------------------------------------------------------
         return
       endif
       call XML_STATUS(SMES, "RUNNING", " ", " ")
+      call XML_SWITCH(SMES,'MCRUN',1)
       NS1=CSUBSET(1)
       NS2=CSUBSET(2)
       ND=DSET_ISEL
@@ -223,7 +224,6 @@ C------------------------------------------------------------------------
       MCVOLI(1:2,NS1,ND)=0.D0
       MCVOLF(1:2,NS2,ND)=0.D0
       TWOSTEPS = ((TROPT%DBC).and.(TROPT%IMODE.eq.tr_all).and.(SAMOBJ%ICLS.gt.0))
-      call XML_SWITCH(SMES,'MCRUN',1)
       if (TWOSTEPS) then
     ! save mode
       !  TMPREP=REPOPT

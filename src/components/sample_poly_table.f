@@ -23,7 +23,7 @@
       private
 
 ! reflections table
-      integer,parameter :: PCRYST_MAXREF=256
+      integer,parameter :: PCRYST_MAXREF=512
       character(27),parameter :: DEFREFPAR='SIGA:SIGI:SIGF:SIGS:BT:BMPH'
       ! reflection parameters:
       ! dhkl,jhkl,Fhkl = dhkl[A], multiplicity, FHKL/cell_volume [fm/A^3]
@@ -47,24 +47,34 @@
       contains
 
 !---------------------------------------------------------
-      subroutine REPORT_SIGTOT(IU, lmin,lmax,nlam)
+      subroutine REPORT_SIGTOT(IU, lmin, lmax, nlam)
 !---------------------------------------------------------
       REAL(KIND(1.D0)), intent(in) :: lmin,lmax
       integer,intent(in) :: IU,nlam
-      REAL(KIND(1.D0)) :: dlam,lam,suma
+      REAL(KIND(1.D0)) :: dlam,lam
+      REAL(KIND(1.D0)) :: stot, sdif, sinc, sabs, ssph, smph
+      REAL(KIND(1.D0)) :: row(7)
       integer:: i,j
 1     format(G13.6,2x,G13.6)
 2     format(a)
       dlam = (lmax-lmin)/(nlam-1)
-      write(IU,2) '# total removal cross-section, 1/cm'
-      write(IU,2) '# wavelength, sigma'
+      write(IU,2) '# Interaction cross-sections, 1/cm'
+      write(IU,2) '# lambda, stot, sdif, sinc, sabs, ssph, smph'
       do i=1, nlam
         lam = lmin + dlam*i
-        suma = 0.D0
+        stot = 0.D0
+        sdif = 0.D0
+        sabs = 0.D0
+        sinc = 0.D0
+        ssph = 0.D0
+        smph = 0.D0
         do j=1,PCRYST_NREF
-          suma = suma + REF_TABLE_SSCATT(j,lam)*10
+          sdif = sdif + REF_TABLE_SSCATT(j,lam)
         enddo
-        write(IU,1) lam,suma+REF_TABLE_SABS(lam)*10
+        call SABS_COMPONENTS(lam, sinc, sabs, ssph, smph)
+        stot = sdif+sinc+sabs+ssph+smph
+        row = 10.0*(/0.1*lam, stot, sdif, sinc, sabs, ssph, smph/)
+        write(IU,"(6(G13.6,a),G13.6)") (row(j),achar(9),j=1,6),row(7)
       enddo
       end subroutine REPORT_SIGTOT
 
@@ -84,6 +94,21 @@
         REF_TABLE_SSCATT=SIG
       end function REF_TABLE_SSCATT
 
+
+!---------------------------------------------------------
+      subroutine SABS_COMPONENTS(lambda, SINC, SABS, SSPH, SMPH)
+! total removal cross-section except diffraction (capture, incoherent, TDS)
+!---------------------------------------------------------
+        REAL(KIND(1.D0)), intent(in) :: lambda
+        REAL(KIND(1.D0)), intent(out) :: SINC, SABS, SSPH, SMPH
+        REAL(KIND(1.D0)) :: DW_AVE, Z
+        Z = 8*BT/lambda**2
+        DW_AVE = (1.D0 - exp(-Z))/Z
+        SINC = SIGI*DW_AVE
+        SABS = SIGA*lambda
+        SSPH = SIGS*lambda
+        SMPH = SIGF*(1.D0 - exp(-BMPH/lambda**2))
+      end subroutine SABS_COMPONENTS
 
 !---------------------------------------------------------
       REAL(KIND(1.D0)) function REF_TABLE_SABS(lambda)
@@ -216,7 +241,7 @@
       CHARACTER*128 :: S,MSG
       character*32 :: CNUM1
 
-      IERR=0
+      IERR=i_OK
       ilin=0
 ! empty string => clear table and exit
       if (LEN_TRIM(FNAME).eq.0) then
@@ -227,7 +252,6 @@
       if (IDCOMPARE(REF_TABLE_NAME,FNAME).eq.0) then
         return
       endif
-      IERR=0
       ilin=1 ! to raise report mesage later
 ! from now, assume that a new table will be read
       call CLEAR_REF_TABLE
@@ -242,7 +266,7 @@
       IF(IERR.NE.0) GOTO 100
       call READ_REFS(IU,ilin,ierr)
       select case (ierr)
-      case(0,i_EOF)
+      case(i_OK,i_EOF,i_VALID)
         goto 30
       case(i_ERR)
         goto 50

@@ -57,6 +57,8 @@
       ERRORS=0.D0
       valFM=0.D0
       errFM=0.D0
+      FM=0.D0
+      EFM=0.D0
 ! run simulation
       call TRACING_PROC
 ! start of FM calculation
@@ -95,8 +97,6 @@
           VALUES(1:3)=PAR(1:3)
           ERRORS(1:3)=dPAR(1:3)
       end select
-      FM=0.D0
-      EFM=0.D0
       if ((VALUES(1)>0.D0).and.(VALUES(2)>0.D0)) then
         select case (fml)
         case(fmerit_int)

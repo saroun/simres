@@ -46,7 +46,7 @@
 
       PUBLIC REPORT_PROG,REPORT_VARI,REPORT_VOL,REPORT_STAT,REPORT_RES,TCOUNT_ESTIM,REPORT_GUIDE_PROF
       public REPORT_GUIDE_REC,REPORT_MCPL,LOAD_MCPL,SAVE_MCPL
-      public REPORT_MIRROR_REF, REPORT_BEAMLINE
+      public REPORT_MIRROR_REF, REPORT_BEAMLINE, REPORT_SAMPLE
 
 
       contains
@@ -537,7 +537,7 @@ c console output
 ! Write reflectivity data for given m-value and angle or wavelength
 ! Input:
 ! FNAME = filename without extension. Suffix _mx.x will be added.
-! CM format is "filename mval angle lambda"
+! CMD format is "filename mval angle lambda"
 ! mval = m-value of the supermirror
 ! angle = incidence angle [rad]
 ! lambda = wavelength
@@ -582,5 +582,42 @@ c console output
       endif
       end subroutine REPORT_BEAMLINE
 
+!-------------------------------------------------------------
+      subroutine REPORT_SAMPLE(CMD)
+! Write a report with sample scattering cross-sections in 1/cm
+! The table columns:
+! wavelength, sig_tot, sig_abs, sig_diff, sig_inc, sig_sph, sig_mph
+! Input:
+! FNAME = filename for output.
+!-------------------------------------------------------------
+      character*(*) :: CMD
+      integer :: IO, IS, IL, NA
+      character*(MAX_FNAME_LENGTH) :: FNAME
+      REAL(KIND(1.D0)) :: A(3), lmin, lmax
+      integer :: nlam
+
+      call FINDSTRPAR(CMD,' ',1,IS,IL)
+      FNAME=CMD(IS:IS+IL-1)
+      lmin = 0.5D0
+      lmax = 5.5D0
+      nlam = 501
+      if (IL<len_trim(CMD)) then
+        call READ_ARRAY8(CMD(IS+IL:),3,A,NA)
+        if (NA>2) then
+          lmin = A(1)
+          lmax = A(2)
+          nlam = nint(A(3))
+        endif
+      endif
+      ! open output file
+      IO=6
+      if (len_trim(FNAME)>0) IO=OPENFILEOUT_SFX(CMD(IS:IS+IL-1),' ')
+      call REPORT_SIGTOT(IO, lmin, lmax, nlam)
+      if (IO.ne.6) then
+        close(IO)
+      ! info to GUI that the file was saved.
+        call MSG_INFO('Sample report saved in '//trim(fname),1)
+      endif
+      end subroutine REPORT_SAMPLE
 
       end module REPORTS

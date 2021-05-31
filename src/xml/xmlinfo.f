@@ -546,7 +546,7 @@ C format value string
       END SUBROUTINE XML_VALUE
 
 C----------------------------------------------------------------------
-      SUBROUTINE XML_FVALUE(IU,VALNAME,VALUNI,FLOATVAL,ERRVAL)
+      SUBROUTINE XML_FVALUE(IU,VALNAME,VALUNI,FLOATVAL,ERRVAL, NDEC, NDIG)
 C Print XML output tag: floating value with error
 C <FVALUE name="" units="" >value</FVALUE>
 C or if ERRVAL<>0
@@ -561,13 +561,16 @@ C   VALUNI      ... data units (any string, e.g. meV, deg, ...)
 C   FLOTVAL     ... float value
 C   ERRVAL      ... error value
 C----------------------------------------------------------------------
-      INTEGER :: IU
-      CHARACTER(*) :: VALNAME,VALUNI
-      REAL(KIND(1.D0)) :: FLOATVAL,ERRVAL
+      INTEGER, intent(in) :: IU
+      CHARACTER(*), intent(in) :: VALNAME,VALUNI
+      REAL(KIND(1.D0)), intent(in) :: FLOATVAL,ERRVAL
+      integer, optional, intent(in) :: NDEC, NDIG
       CHARACTER(256) :: CHVAL,CHERR
+      CHARACTER(20) :: FMTS,FMTSE
 
 1     FORMAT(G12.5)
 
+2     format('(G',I0,'.',I0,')')
 5     FORMAT(a,'=',a,$)
 6     FORMAT(' +- ',a,$)
 7     FORMAT(' [',a,']')
@@ -577,11 +580,21 @@ C----------------------------------------------------------------------
 12    FORMAT('<ERROR>',a,'</ERROR>',$)
 13    FORMAT('</FVALUE>')
 
+
+! create format string
+      if ((present(NDEC)).and.(present(NDIG))) then
+        write(FMTS, 2) NDEC, NDIG
+        write(FMTSE, 2) max(NDEC-3,9), max(NDIG-3,2)
+      else
+        FMTS = "(G12.5)"
+        FMTSE = "(G9.2)"
+      endif
+
 C format value string
       CHVAL=' '
       CHERR=' '
-      write(CHVAL,1) FLOATVAL
-      IF (ERRVAL.GT.0.D0) write(CHERR,1) ERRVAL
+      write(CHVAL,FMTS) FLOATVAL
+      IF (ERRVAL.GT.0.D0) write(CHERR,FMTSE) ERRVAL
 
       IF (XMLOUT.GT.0) THEN
         call PARSE_ENTITY(CHVAL)

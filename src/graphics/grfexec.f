@@ -277,7 +277,7 @@
 23    FORMAT('fwhm: ',G10.4)
 24    FORMAT('spread: ',G10.4)
 25    FORMAT('center: ',G10.4)
-26    FORMAT('mean: ',G10.4)
+26    FORMAT('mean: ',G14.7)
 27    FORMAT('chi2: ',G10.4)
 28    FORMAT('peaks: ',I3)
 29    FORMAT('test version')

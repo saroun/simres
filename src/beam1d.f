@@ -375,7 +375,7 @@
             endif
             call XML_FVALUE(SOUT,'Integrated intensity',' ',PAR(1),dPAR(1))
             call XML_FVALUE(SOUT,'Peak width',' ',PAR(2),dPAR(2))
-            call XML_FVALUE(SOUT,'Peak center',' ',PAR(3),dPAR(3))
+            call XML_FVALUE(SOUT,'Peak center',' ',PAR(3),dPAR(3), 14, 7)
             call XML_RSXDUMP(SOUT,' ',0)
         !  endif
       endif
