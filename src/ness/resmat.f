@@ -120,7 +120,7 @@
       CON(3,3)=CON(3,3)+1.D0
 
 ! Set TOF mode on if there is a time-limited component
-      write(*,1) 'Evaluating transmission matrix, dim=',NTRM 
+      write(*,1) 'Evaluating transmission matrix, dim=',NTRM
       if (TRM(7,7).gt.1.D-11) then
         if (TROPT%IMODE.ne.tr_secondary) IXRND(7)=7
         if (.not.TOF_MODE) then
@@ -208,7 +208,7 @@
         IUDBG=6
         write(*,*) 'RESMAT_EVAL OK'
       endif
-      write(*,1) 'Transmission matrix reduced to dim=',NTRM 
+      write(*,1) 'Transmission matrix reduced to dim=',NTRM
 
 
       TRACING_VARID=MATLEG
@@ -551,7 +551,7 @@
       case(FRAME_SHAPE_DISC,FRAME_SHAPE_ELLIPSOID)
             S=s_circ
       case default
-            S=s_step        
+            S=s_step
       end select
   ! width x height
       T(1,1)=1.D0/(S*OBJ%SIZE(1))**2
@@ -736,7 +736,7 @@
       case(FRAME_SHAPE_DISC,FRAME_SHAPE_ELLIPSOID)
             S=s_circ
       CASE DEFAULT
-            S=s_step        
+            S=s_step
       end select
       T=0.D0
       T(1,1)=1.D0/(S*OBJ%FRAME%SIZE(1))**2
@@ -751,7 +751,10 @@
       isLast=(isLast.and.(TROPT%IMODE.eq.tr_primary))
       LOG1=(OBJ%BLOCKAREA.and.(OBJ%CNTMODE==monit_mode_inner))
       !write(*,1) 'RESMAT_ADDMONITOR',COMIDX,IBEAM,isLast,LOG1
-      if (LOG1) then
+      !if (LOG1) then
+
+      ! disable this, it does not work well
+      if (.FALSE.) then
         select case(OBJ%IX)
         case(1,2,4,5)
           T(OBJ%IX,OBJ%IX)=1.D0/(s_step*OBJ%DX)**2
@@ -1313,7 +1316,7 @@
         if (GL.gt.0.D0) GV=GV+ABS(OBJ%FRAME%SIZE(2)-H)/GL
         NTRM=NTRM+1
         NX=NX+1
-        NV=NX        
+        NV=NX
         INDX(NX)=NTRM
         T(NX,NX)=(1.D0/s_step/GV)**2
         T(5,5)=1.D0/(1.D0/T(NX,NX)+1.D0/T(5,5))
