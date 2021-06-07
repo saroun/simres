@@ -1,5 +1,27 @@
+==========================
 Change log for SIMRES
---------------------------
+==========================
+
+------------------------
+update 6.5.3, 4/6/2021
+------------------------
+- updated crystal.tab by adding incoherent scattering cross-sections
+- increased peak position precission on output
+- added REPSA command to print information about polycrystalline sample
+- bug fix: program stays in "non ready" state after SCAN1D or FMERIT commads
+- added Python script for generating the sample tables from NCrystal (https://github.com/mctools/ncrystal)
+- polycrystal sample tables replaced by those generated using NCrystal
+- updated manual
+
+
+------------------------
+update 6.5.1, 17/7/2020
+------------------------
+- added REPBM console command to print beamline geometry report
+- source code cleanup (centralized coordinate transformation handling, 
+- UI erase added to the clean targets in makefile
+- fixed #6: ray-tracing hangs 
+- fixed problems with running SIMRES as console command
 
 ========================
 version 6.5, 20/2/2020
