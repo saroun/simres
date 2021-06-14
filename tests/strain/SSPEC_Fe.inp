@@ -1,0 +1,29 @@
+# Through surface-scan in ferrite sample, 10 mm thick plate
+# Scan for Fe 211
+# To be used with configuration: SSPEC-Fe.xml
+# ----------------------------------------------------------
+# adjust scan command parameters:
+
+# adjust sample data for 211 reflection at 90 deg
+set INST LAMBDA 1.6535
+set SAM SIGI 0.68
+set SAM DHKL 1.169
+set SAM JHKL 24
+
+# adjust d-range for the DET1D plot as automatic
+cmd DET1D X 1
+cmd DET1D XAUTO 1
+XML UPDATE
+
+
+# set sample orientation  for transmission
+set SAM GON(3) 225
+XML UPDATE
+
+#-----------------------------------------------
+# simulate one peak and see the profile:
+DO MC
+DO DET1D
+cmd GRSAVE FILE Fe211.dat
+cmd GRSAVE OVER no
+do GRSAVE

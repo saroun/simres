@@ -1,0 +1,317 @@
+# SIMRES input script
+# Setting of reference operation modes
+# Gererated by beer.simres
+# Version: 1.6
+# Template: BEER_modes.inp
+# Date: July 10, 2020, 20:35:18
+#---------------------------------------------------------
+
+
+# Set source tables
+#----------------------------------------------------------------------
+set SOURCE FLUXTAB ESS2016_W2_thermal_5ms.tab:ESS2016_W2_cold_5ms.tab
+set SOURCE OVERLAP 0
+set SOURCE DELAY 0.9
+XML SOURCE
+
+
+# Set wavelength range, 0.2 .. 10.2
+#----------------------------------------------------------------------
+set INST LAMBDA 5.2
+set SOURCE LAMW 1.92308
+XML UPDATE
+
+#-----------------
+# OPTIONS
+#-----------------
+
+# Set misalignment 0.02 mm
+#----------------------------------------------------------------------
+SET NBOA MISALIGN 0.02 0.02
+SET BBG MISALIGN 0.02 0.02
+SET GSW MISALIGN 0.02 0.02
+SET GCA1 MISALIGN 0.02 0.02
+SET GCA2 MISALIGN 0.02 0.02
+SET GCA3 MISALIGN 0.02 0.02
+SET GCA4 MISALIGN 0.02 0.02
+SET GCB MISALIGN 0.02 0.02
+SET GCC MISALIGN 0.02 0.02
+SET GCE MISALIGN 0.02 0.02
+SET GCF MISALIGN 0.02 0.02
+SET GCG MISALIGN 0.02 0.02
+SET GE1 MISALIGN 0.02 0.02
+SET GN1 MISALIGN 0.02 0.02
+SET GN2 MISALIGN 0.02 0.02
+SET GSH2 MISALIGN 0.02 0.02
+SET GE2AS MISALIGN 0.02 0.02
+SET GE2A MISALIGN 0.02 0.02
+SET GE2B MISALIGN 0.02 0.02
+SET GT1 MISALIGN 0.02 0.02
+SET GT2 MISALIGN 0.02 0.02
+SET GF1 MISALIGN 0.02 0.02
+SET GF2 MISALIGN 0.02 0.02
+SET GMINI MISALIGN 0.02 0.02
+SET GEX1 MISALIGN 0.02 0.02
+SET GEX2 MISALIGN 0.02 0.02
+
+
+# Set waviness 0.2 mrad
+#----------------------------------------------------------------------
+SET NBOA WAV 0.2
+SET BBG WAV 0.2
+SET GSW WAV 0.2
+SET GCA1 WAV 0.2
+SET GCA2 WAV 0.2
+SET GCA3 WAV 0.2
+SET GCA4 WAV 0.2
+SET GCB WAV 0.2
+SET GCC WAV 0.2
+SET GCE WAV 0.2
+SET GCF WAV 0.2
+SET GCG WAV 0.2
+SET GE1 WAV 0.2
+SET GN1 WAV 0.2
+SET GN2 WAV 0.2
+SET GSH2 WAV 0.2
+SET GE2AS WAV 0.2
+SET GE2A WAV 0.2
+SET GE2B WAV 0.2
+SET GT1 WAV 0.2
+SET GT2 WAV 0.2
+SET GF1 WAV 0.2
+SET GF2 WAV 0.2
+SET GMINI WAV 0.2
+SET GEX1 WAV 0.2
+SET GEX2 WAV 0.2
+
+
+# Set chopper overlapping off
+#----------------------------------------------------------------------
+# To ignore  frame overlaps and speed up simulation, set choppers like this:
+SET PSC1 OVERLAP 0
+SET PSC2 OVERLAP 0
+SET PSC3 OVERLAP 0
+SET FC1A OVERLAP 0
+SET FC1B OVERLAP 0
+SET MCA OVERLAP 0
+SET MCB OVERLAP 0
+SET MCC OVERLAP 0
+SET FC2A OVERLAP 0
+SET FC2B OVERLAP 0
+
+#----------------------------------------------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------------------------------
+# REFERENCE OPERATION MODES
+# Start always with fully open beam, F0, then use the setting below
+#----------------------------------------------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------------------------------
+
+# Stop resolution choppers
+
+# PSC1 off
+set PSC1 FRQ 0
+set PSC1 TIMING 0:1
+set PSC1 T0 0
+set PSC1 LOCKT0 0
+set PSC1 ADJ 1
+XML PSC1
+
+# PSC2 off
+set PSC2 FRQ 0
+set PSC2 TIMING 0:1
+set PSC2 T0 0
+set PSC2 LOCKT0 0
+set PSC2 ADJ 1
+XML PSC2
+
+# PSC3 off
+set PSC3 FRQ 0
+set PSC3 TIMING 0:1
+set PSC3 T0 0
+set PSC3 LOCKT0 0
+set PSC3 ADJ 1
+XML PSC3
+
+# MCA off
+set MCA FRQ 0
+set MCA TIMING 0:1:0.125:1:0.25:1:0.375:1:0.5:1:0.625:1:0.75:1:0.875:1
+set MCA T0 0
+set MCA LOCKT0 0
+set MCA ADJ 1
+XML MCA
+
+# MCB off
+set MCB FRQ 0
+set MCB TIMING 0:1:0.0625:1:0.125:1:0.1875:1:0.25:1:0.3125:1:0.375:1:0.4375:1:0.5:1:0.5625:1:0.625:1:0.6875:1:0.75:1:0.8125:1:0.875:1:0.9375:1
+set MCB T0 0
+set MCB LOCKT0 0
+set MCB ADJ 1
+XML MCB
+
+# MCC off
+set MCC FRQ 0
+set MCC TIMING 0:45:0.3125:1:0.375:1:0.4375:1:0.5:1:0.5625:1:0.625:1:0.6875:1
+set MCC T0 0
+set MCC LOCKT0 0
+set MCC ADJ 1
+XML MCC
+
+# Stop wavelength selection choppers
+
+# FC1A off
+set FC1A FRQ 0
+set FC1A TIMING 0:1
+set FC1A T0 0
+set FC1A LOCKT0 0
+set FC1A ADJ 1
+XML FC1A
+
+# FC1B off
+set FC1B FRQ 0
+set FC1B TIMING 0:1
+set FC1B T0 0
+set FC1B LOCKT0 0
+set FC1B ADJ 1
+XML FC1B
+
+# FC2A off
+set FC2A FRQ 0
+set FC2A TIMING 0:1
+set FC2A T0 0
+set FC2A LOCKT0 0
+set FC2A ADJ 1
+XML FC2A
+
+# FC2B off
+set FC2B FRQ 0
+set FC2B TIMING 0:1
+set FC2B T0 0
+set FC2B LOCKT0 0
+set FC2B ADJ 1
+XML FC2B
+
+# Setting slits for mode=0
+set SL1 SIZE(1) 100
+set SL1 SIZE(2) 100
+XML SL1
+set SL2 SIZE(1) 100
+set SL2 SIZE(2) 100
+XML SL2
+set SL3 SIZE(1) 100
+set SL3 SIZE(2) 100
+XML SL3
+set GEX1 ACTIVE 1 1 1 1
+XML GEX1
+
+#----------------------------------------------------------------------
+# 8, M1, High flux, modulation, MC, high flux, single frame
+#----------------------------------------------------------------------
+
+# Adjust choppers for wavelength 2.1
+
+# MCA on
+set MCA FRQ 70
+set MCA TIMING 0:1:0.125:1:0.25:1:0.375:1:0.5:1:0.625:1:0.75:1:0.875:1
+set MCA T0 1
+set MCA LOCKT0 0
+set MCA OVERLAP 1
+XML MCA
+
+# FC1A on
+set FC1A FRQ 28
+set FC1A TIMING 0:1
+XML FC1A
+
+# FC2A on
+set FC2A FRQ 14
+set FC2A TIMING 0:1
+XML FC2A
+
+# Set auto-adjust on
+set MCA ADJ 1 
+XML MCA 
+set FC1A ADJ 1 
+XML FC1A 
+set FC2A ADJ 1 
+XML FC2A 
+
+set INST LAMBDA 2.1
+set SOURCE LAMW 7.71429
+XML UPDATE
+
+# Setting slits for mode=8
+set SL1 SIZE(1) 100
+set SL1 SIZE(2) 100
+XML SL1
+set SL2 SIZE(1) 25
+set SL2 SIZE(2) 100
+XML SL2
+set SL3 SIZE(1) 2
+set SL3 SIZE(2) 5
+XML SL3
+set GEX1 ACTIVE 1 1 1 1
+XML GEX1
+
+set TR DIR 1
+
+set TR CNT 200000
+
+DO MC
+
+cmd BEAM1D X 0
+cmd BEAM1D XAUTO 1
+cmd BEAM1D NP 100
+cmd BEAM1D COM mode M1
+do BEAM1D
+cmd GRSAVE FILE M1_x.dat
+cmd GRSAVE OVER no
+do GRSAVE
+
+cmd BEAM1D X 1
+cmd BEAM1D XAUTO 1
+cmd BEAM1D NP 100
+cmd BEAM1D COM mode M1
+do BEAM1D
+cmd GRSAVE FILE M1_y.dat
+cmd GRSAVE OVER no
+do GRSAVE
+
+cmd BEAM1D X 3
+cmd BEAM1D XAUTO 1
+cmd BEAM1D NP 100
+cmd BEAM1D COM mode M1
+do BEAM1D
+cmd GRSAVE FILE M1_kx.dat
+cmd GRSAVE OVER no
+do GRSAVE
+
+cmd BEAM1D X 4
+cmd BEAM1D XAUTO 1
+cmd BEAM1D NP 100
+cmd BEAM1D COM mode M1
+do BEAM1D
+cmd GRSAVE FILE M1_ky.dat
+cmd GRSAVE OVER no
+do GRSAVE
+
+cmd BEAM1D X 8
+cmd BEAM1D X0 5.2
+cmd BEAM1D DX 10
+cmd BEAM1D XAUTO 0
+cmd BEAM1D NP 100
+cmd BEAM1D COM mode M1
+do BEAM1D
+cmd GRSAVE FILE M1_lam.dat
+cmd GRSAVE OVER no
+do GRSAVE
+
+cmd BEAM1D X 6
+cmd BEAM1D XAUTO 1
+cmd BEAM1D NP 100
+cmd BEAM1D COM mode M1
+do BEAM1D
+cmd GRSAVE FILE M1_t.dat
+cmd GRSAVE OVER no
+do GRSAVE
+
+

@@ -8,7 +8,7 @@
 #define DEMO "crystals,DCSANS,guides,PWD,PWD-TOF,multichannel_guides,TAS"
 #define MyAppName "Simres"
 #define MyAppPublisher "Nuclear Physics Institute, ASCR, Øež"
-#define MyAppExeName "startGUI_win32.bat"
+#define MyAppExeName "simres.bat"
 ;#define MyAppExeName "Simres.exe"
 #define MyAppSrc "."
 #define MyAppNotes "simres-release-notes.pdf"
@@ -49,6 +49,8 @@ Name: quicklaunchicon; Description: "Create icon in start menu"; GroupDescriptio
 ; root files
 Source: {#MyAppSrc}\resources\simres.ico; DestDir: {app}; Flags: ignoreversion
 ; Source: {#MyAppSrc}\motd; DestDir: {app}; Flags: ignoreversion
+Source: {#MyAppSrc}\templates\simres.bat.in; DestDir: {app}; Flags: ignoreversion
+Source: {#MyAppSrc}\templates\simres_console.bat.in; DestDir: {app}; Flags: ignoreversion
 Source: {#MyAppSrc}\templates\startGUI_win32.bat.in; DestDir: {app}; Flags: ignoreversion
 Source: {#MyAppSrc}\templates\startCON_win32.bat.in; DestDir: {app}; Flags: ignoreversion
 Source: {#MyAppSrc}\README.md; DestDir: {app}; Flags: ignoreversion
@@ -77,6 +79,8 @@ Source: {#MyAppSrc}\templates\GUI\restraxCON.ini.in; DestDir: {app}\GUI; Flags: 
 Source: {#MyAppSrc}\submodules\simresUI\dist\simresGUI.jar; DestDir: {app}\GUI; Flags: ignoreversion
 Source: {#MyAppSrc}\submodules\simresUI\dist\simresCON.jar; DestDir: {app}\GUI; Flags: ignoreversion
 Source: {#MyAppSrc}\submodules\simresUI\dist\j3d-jre\*; DestDir: {app}\GUI\j3d-jre; Flags: ignoreversion recursesubdirs
+; test projects
+Source: {#MyAppSrc}\tests\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; DestDir: {app}\tests; Flags: ignoreversion recursesubdirs
 ; demo projects
 Source: {#MyAppSrc}\resources\demo\BEER\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; DestDir: {app}\demo\BEER; Flags: ignoreversion recursesubdirs
 Source: {#MyAppSrc}\resources\demo\STRESSSPEC\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; DestDir: {app}\demo\STRESSSPEC; Flags: ignoreversion recursesubdirs
@@ -89,6 +93,7 @@ Source: {#MyAppSrc}\resources\demo\multiple_reflections\*; Excludes: CVS\*,*.ini
 Source: {#MyAppSrc}\resources\demo\simres_mcstas\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; DestDir: {app}\demo\simres_mcstas; Flags: ignoreversion recursesubdirs
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; WorkingDir: {app}; IconFilename: {app}\simres.ico
+Name: {group}\Simres console; Filename: {app}\simres_console.bat; WorkingDir: {app}; IconFilename: {app}\simres.ico
 Name: {group}\Release notes; Filename: {app}\doc\{#MyAppNotes}
 Name: {group}\User guide; Filename: {app}\doc\{#MyAppGuide}
 Name: {group}\{cm:ProgramOnTheWeb,{#MyAppName}}; Filename: {#HOMEPAGE}

@@ -1,0 +1,1932 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SIMRES version="6.5.3">
+<COMMANDS>
+	<COMMAND class="SAVE" id="SAVE" name="save configuration">
+		<FILE name="file name">default.xml</FILE>
+		<OVER name="overwrite" value="1">yes</OVER>
+	</COMMAND>
+	<COMMAND class="MC" id="MC" name="run MC simulation">
+	</COMMAND>
+	<COMMAND class="GRFDEV" id="GRFDEV" name="set grapic device">
+		<FILE name="file name">restrax.ps</FILE>
+		<DEVICE name="device ID">/JSDRIV</DEVICE>
+	</COMMAND>
+	<COMMAND class="GRSAVE" id="GRSAVE" name="save graphics">
+		<FILE name="file name">PS2_bcg_-45.dat</FILE>
+		<OVER name="overwrite" value="0">no</OVER>
+	</COMMAND>
+	<COMMAND class="LOAD" id="LOAD" name="load configuration">
+		<FILE name="file name"></FILE>
+	</COMMAND>
+	<COMMAND class="CLOAD" id="CLOAD" name="load component">
+		<ID name="component ID">ID</ID>
+		<FILE name="file name">mono.xml</FILE>
+	</COMMAND>
+	<COMMAND class="CSAVE" id="CSAVE" name="save component">
+		<ID name="component ID">MON</ID>
+		<FILE name="file name">csave.xml</FILE>
+		<OVER name="overwrite" value="1">yes</OVER>
+	</COMMAND>
+	<COMMAND class="CMDSAVE" id="CMDSAVE" name="save commands">
+		<FILE name="file name">cmdsave.xml</FILE>
+		<OVER name="overwrite" value="1">yes</OVER>
+	</COMMAND>
+	<COMMAND class="BEAM1D" id="BEAM1D" name="beam profile 1D">
+		<X name="x-variable" value="6">t</X>
+		<NP name="points">80</NP>
+		<X0 name="center" units=" ">4.2</X0>
+		<DX name="range" units=" ">8.0</DX>
+		<XAUTO name="x-autoscale" value="1">yes</XAUTO>
+		<CAUTO name="ctr-autoscale" value="0">no</CAUTO>
+		<YLOG name="y-logscale" value="0">no</YLOG>
+		<ERR name="errors" value="1">yes</ERR>
+		<GFIT name="fit gaussian" value="0">no</GFIT>
+		<APPEND name="append" value="0">no</APPEND>
+		<COORD name="reference frame" value="0">incident axis</COORD>
+		<FILT name="filter events">-1</FILT>
+		<COM name="comment">DS1 mode</COM>
+	</COMMAND>
+	<COMMAND class="DET1D" id="DET1D" name="detector data 1D">
+		<X name="x-variable" value="2">dhkl-TOF</X>
+		<NP name="points">3000</NP>
+		<X0 name="center" units=" ">1.4</X0>
+		<DX name="range" units=" ">1.5</DX>
+		<XAUTO name="x-autoscale" value="0">no</XAUTO>
+		<CAUTO name="ctr-autoscale" value="0">no</CAUTO>
+		<YLOG name="y-logscale" value="0">no</YLOG>
+		<ERR name="errors" value="1">yes</ERR>
+		<GFIT name="fit gaussian" value="0">no</GFIT>
+		<APPEND name="append" value="0">no</APPEND>
+		<FILT name="filter events">-1</FILT>
+		<COM name="comment">background, PS2, -45 cm</COM>
+	</COMMAND>
+	<COMMAND class="BEAM2D" id="BEAM2D" name="beam map 2D">
+		<X name="x-variable" value="0">x</X>
+		<Y name="y-variable" value="2">z</Y>
+		<NX name="x-pixels">100</NX>
+		<NY name="y-pixels">100</NY>
+		<X0 name="x-center" units=" ">0.0</X0>
+		<DX name="x-range" units=" ">10.0</DX>
+		<Y0 name="y-center" units=" ">0.0</Y0>
+		<DY name="y-range" units=" ">10.0</DY>
+		<AUTO name="autoscale" value="1">yes</AUTO>
+		<MINZ name="minimum z" value="2">minimum positive</MINZ>
+		<ZLOG name="z-logscale" value="0">no</ZLOG>
+		<APPEND name="append" value="0">no</APPEND>
+		<COORD name="reference frame" value="0">incident axis</COORD>
+		<FILT name="filter events">-1</FILT>
+		<COM name="comment">xy</COM>
+	</COMMAND>
+	<COMMAND class="GAUGE2D" id="GAUGE2D" name="gauge map 2D">
+		<X name="x-variable" value="0">x</X>
+		<Y name="y-variable" value="2">z</Y>
+		<Z name="z-variable" value="0">intensity</Z>
+		<NX name="x-pixels">256</NX>
+		<NY name="y-pixels">256</NY>
+		<X0 name="x-center" units=" ">0.0</X0>
+		<DX name="x-range" units=" ">10.0</DX>
+		<Y0 name="y-center" units=" ">0.0</Y0>
+		<DY name="y-range" units=" ">10.0</DY>
+		<AUTO name="autoscale" value="0">no</AUTO>
+		<MINZ name="minimum z" value="0">minimum</MINZ>
+		<ZLOG name="z-logscale" value="0">no</ZLOG>
+		<APPEND name="append" value="0">no</APPEND>
+		<COORD name="reference frame" value="0">incident axis</COORD>
+		<FILT name="filter events">-1</FILT>
+		<COM name="comment">x,y profile for z-scan</COM>
+	</COMMAND>
+	<COMMAND class="DET2D" id="DET2D" name="detector data 2D">
+		<X name="x-variable" value="0">scattering angle</X>
+		<Y name="y-variable" value="3">TOF</Y>
+		<NX name="x-pixels">512</NX>
+		<NY name="y-pixels">512</NY>
+		<X0 name="x-center" units=" ">90.0</X0>
+		<DX name="x-range" units=" ">35.0</DX>
+		<Y0 name="y-center" units=" ">6.7E4</Y0>
+		<DY name="y-range" units=" ">3.0E4</DY>
+		<AUTO name="autoscale" value="1">yes</AUTO>
+		<MINZ name="minimum z" value="0">minimum</MINZ>
+		<ZLOG name="z-logscale" value="0">no</ZLOG>
+		<APPEND name="append" value="0">no</APPEND>
+		<FILT name="filter events">-1</FILT>
+		<COM name="comment">lam=1.42,  low  resolution,  det=90</COM>
+	</COMMAND>
+	<COMMAND class="RES1D" id="RES1D" name="resolution profile 1D">
+		<X name="x-variable" value="0">dQ/Q</X>
+		<NP name="points">128</NP>
+		<X0 name="center" units=" ">0.0</X0>
+		<DX name="range" units=" ">200.0</DX>
+		<XAUTO name="x-autoscale" value="0">no</XAUTO>
+		<YLOG name="y-logscale" value="0">no</YLOG>
+		<ERR name="errors" value="1">yes</ERR>
+		<GFIT name="fit gaussian" value="1">yes</GFIT>
+		<COM name="comment">user's comment</COM>
+	</COMMAND>
+	<COMMAND class="RES2D" id="RES2D" name="resolution map 2D">
+		<X name="x-variable" value="3">QX</X>
+		<Y name="y-variable" value="2">E</Y>
+		<NX name="x-pixels">128</NX>
+		<NY name="y-pixels">128</NY>
+		<X0 name="x-center" units=" ">0.0</X0>
+		<DX name="x-range" units=" ">0.3</DX>
+		<Y0 name="y-center" units=" ">0.0</Y0>
+		<DY name="y-range" units=" ">0.3</DY>
+		<AUTO name="autoscale" value="1">yes</AUTO>
+		<ZLOG name="z-logscale" value="0">no</ZLOG>
+		<COM name="comment">no comment</COM>
+	</COMMAND>
+	<COMMAND class="PLOT" id="PLOT" name="plot definition">
+		<TYPE name="type" value="6">DETECTOR 1D</TYPE>
+		<PRINT name="print" value="0">no</PRINT>
+		<ENABLED name="enabled" value="1">yes</ENABLED>
+	</COMMAND>
+	<COMMAND class="SCAN1D" id="SCAN1D" name="1D scan">
+		<VARS name="variables">RAD dist</VARS>
+		<START name="start">470</START>
+		<END name="end">510</END>
+		<NS name="steps">11</NS>
+		<IX name="x-coord">1</IX>
+		<IV name="value index">2</IV>
+		<TYPE name="result set" value="1">BEAM 1D</TYPE>
+		<FILE name="file name">RAD4_opt_dist.dat</FILE>
+	</COMMAND>
+	<COMMAND class="SCAN2D" id="SCAN2D" name="2D scan">
+		<XVAR name="x-variable">mon size(2)</XVAR>
+		<YVAR name="y-variable">mon ro(2)</YVAR>
+		<XMIN name="x-min" units=" ">100.0</XMIN>
+		<XMAX name="x-max" units=" ">200.0</XMAX>
+		<YMIN name="y-min" units=" ">0.4</YMIN>
+		<YMAX name="y-max" units=" ">0.9</YMAX>
+		<NX name="x-steps">32</NX>
+		<NY name="y-steps">32</NY>
+		<IV name="value index">1</IV>
+		<TYPE name="result set" value="0">BASIC</TYPE>
+		<FILE name="file name">scan2d.dat</FILE>
+	</COMMAND>
+	<COMMAND class="FMERIT" id="FMERIT" name="Figure of merit">
+		<COST name="cost" units=" ">1.0</COST>
+		<NORM name="norm" units=" ">1.0E8</NORM>
+		<CHI2LIM name="chi-square limit" units=" ">1.0</CHI2LIM>
+		<WEXP name="width exponent">1</WEXP>
+		<TYPE name="result set" value="0">BASIC</TYPE>
+		<FORMULA name="formula" value="0">Intensity</FORMULA>
+	</COMMAND>
+	<COMMAND class="SWARM" id="SWARM" name="Swarm optimizer">
+		<WCOST name="cost weight" units=" ">0.0</WCOST>
+		<ACC name="acceleration" units=" ">2.0</ACC>
+		<POWN name="individuality" units=" ">1.0E-1</POWN>
+		<PEXP name="explore probability" units=" ">1.0E-1</PEXP>
+		<SPREAD name="random spread" units="tol">10.0</SPREAD>
+		<NSPEC name="species">5</NSPEC>
+		<UPDLOOP name="update loops">0</UPDLOOP>
+		<AVE name="use average" value="0">no</AVE>
+		<TOUT name="timeout" units="hour">5.0</TOUT>
+		<NLOOPS name="loops">1000</NLOOPS>
+		<NSTOP name="stop limit">300</NSTOP>
+		<SPACE name="variable space type" value="0">all</SPACE>
+		<INPUT name="input parameters">swarm-feeder.psa</INPUT>
+		<OUTPUT name="output data">swarm-feeder.dat</OUTPUT>
+	</COMMAND>
+</COMMANDS>
+<OPTIONS>
+	<OPTION class="TRACING" id="TR" name="tracing options">
+		<DIR name="tracing direction" value="1">upstream</DIR>
+		<VARI name="variance reduction" value="1">yes</VARI>
+		<MAXV name="optimize limits" value="1">yes</MAXV>
+		<SWPOOL name="safety pool" value="1">yes</SWPOOL>
+		<CNT name="counts">500000</CNT>
+		<ELIMIT name="efficiency limit" units=" ">1.0E6</ELIMIT>
+		<PLIMIT name="precision limit" units=" ">1.0E-4</PLIMIT>
+		<DBC name="double cycle" value="0">no</DBC>
+		<MODE name="tracing mode" value="1">secondary</MODE>
+		<MCSTAS name="run McStas" value="0">no</MCSTAS>
+		<PATHIN name="path to sample" units="mm">0.0</PATHIN>
+		<PATHOUT name="path from sample" units="mm">0.0</PATHOUT>
+		<SPLIT name="split factor">10</SPLIT>
+		<STORE name="storage mode" value="0">detector</STORE>
+		<GRAVITY name="gravity" units="G">1.0</GRAVITY>
+		<PSMODE name="sampling space" value="1">lambda-space</PSMODE>
+		<ADJT0 name="adjust T0" value="0">no</ADJT0>
+		<SAMPLING name="sampling distribution" value="0">uniform</SAMPLING>
+	</OPTION>
+	<OPTION class="REPORTS" id="REP" name="reports options">
+		<ELOG name="events log" value="0">no</ELOG>
+		<NRAYS name="log count">40</NRAYS>
+		<STATS name="statistics" value="0">no</STATS>
+		<VOL name="sampling volume" value="0">no</VOL>
+		<VARI name="variance reduction" value="0">no</VARI>
+		<PROG name="progress" value="1">yes</PROG>
+		<RES name="results" value="1">yes</RES>
+		<MAXV name="limits" value="0">no</MAXV>
+		<TIME name="interval" units="s">1.0</TIME>
+	</OPTION>
+</OPTIONS>
+<INSTRUMENT>
+	<CFGTITLE>BEER with bi-spectral switch, ver. 2016</CFGTITLE>
+	<INTERFACE>
+		<SPECTROMETER class="SPECTROMETER" id="INST" name="basic instrument interface">
+			<INPSET name="input parameter set" value="0">diffraction</INPSET>
+			<FIX name="fixed K" value="0">Ki</FIX>
+			<KI name="Ki" units="A^-1">2.99199</KI>
+			<KF name="Kf" units="A^-1">2.99199</KF>
+			<Q0 name="Q" units="A^-1">4.23132</Q0>
+			<EN name="energy" units="meV">0.0</EN>
+			<LAMBDA name="wavelength" units="A">2.1</LAMBDA>
+			<THETA name="thetaS" units="deg">90.0</THETA>
+			<SS name="sign of thetaS" value="1">+1</SS>
+			<PSI name="psi" units="deg">0.0</PSI>
+			<ADJ name="auto-adjust instrument" value="0">no</ADJ>
+			<ORISAM name="auto-orient sample" value="0">no</ORISAM>
+			<KFMODE name="off-plane Kf mode" value="0">flat</KFMODE>
+			<QCONST name="Q constant" value="1">yes</QCONST>
+			<OFFPL name="Q off-plane" value="0">no</OFFPL>
+			<FLATCONE name="flat-cone analyzer" value="0">no</FLATCONE>
+		</SPECTROMETER>
+	</INTERFACE>
+	<SPECIMEN>
+		<FRAME class="PCRYST" id="PCRYST" name="duplex steel">
+			<DIST name="distance" units="mm">50.0</DIST>
+			<SHAPE name="shape" value="2">disc</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">8.0 8.0 30.0</SIZE>
+			<AX name="axis" units="deg">90.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">-45.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<SAMPLE>
+				<TYPE name="type" value="2">powder</TYPE>
+				<SGN name="sign" value="1">+1</SGN>
+				<THICK name="thickness" units="mm">0.0</THICK>
+				<SIGSC name="Sigma_s" units="cm^-1">1.0E-1</SIGSC>
+				<SIGA name="Sigma_a" units="cm^-1A^-1">0.121</SIGA>
+				<SIGI name="Sigma_i" units="cm^-1">3.4E-2</SIGI>
+				<TEMP name="temperature" units="K">300.0</TEMP>
+				<TRANS name="allow transmission" value="0">no</TRANS>
+				<SCATT name="allow scattering" value="1">yes</SCATT>
+				<MAG name="magnetic field" units="gauss">0.0 0.0 0.0</MAG>
+				<STRAIN name="strain" units=" ">0.0 0.0 0.0</STRAIN>
+				<PRESS name="isotropic pressure" units="MPa">0.0</PRESS>
+				<PCRYST>
+					<FHKL name="structure factor" units="fm.A^-3">0.802</FHKL>
+					<DHKL name="d-spacing" units="A">1.48492</DHKL>
+					<THETA name="scattering angle" units="deg">90.00033</THETA>
+					<DD name="d-spread" units=" ">0.0</DD>
+					<GRAIN name="grain size" units="um">0.0</GRAIN>
+					<JHKL name="plane multiplicity">12</JHKL>
+					<REFTAB name="reflections table">duplex_steel.dat</REFTAB>
+					<STRTAB name="strain table index">0</STRTAB>
+					<IREF name="reflection index">0</IREF>
+				</PCRYST>
+			</SAMPLE>
+		</FRAME>
+	</SPECIMEN>
+	<PRIMARY>
+		<FRAME class="SOURCE" id="SOURCE" name="source">
+			<DIST name="distance" units="mm">0.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="1">stage on gonio</ORDER>
+			<SIZE name="dimensions" units="mm">600.0 30.0 200.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.3</AX>
+			<STA name="stage" units="mm">30.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<SOURCE>
+				<FLUX name="flux" units="10^14/s/cm^2">1.0</FLUX>
+				<TEMP name="temperature" units="K">325.0</TEMP>
+				<LAMW name="wavelength band" units="rel">1.42857</LAMW>
+				<FLUXTAB name="flux table">ESS2016_W2_thermal_5ms.tab:ESS2016_W2_cold_5ms.tab</FLUXTAB>
+				<TYPE name="type" value="1">pulsed</TYPE>
+				<FRQ name="frequency" units="Hz">14.0</FRQ>
+				<DELAY name="delay time" units="ms">0.9</DELAY>
+				<OVERLAP name="allow overlap" value="0">no</OVERLAP>
+				<PULSW name="pulse width" units="ms">0.0</PULSW>
+			</SOURCE>
+		</FRAME>
+		<FRAME class="MONITOR" id="M0" name="monitor 0">
+			<DIST name="distance" units="mm">0.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">300.0 100.0 1.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">30.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<MONITOR>
+				<CMODE name="counting mode" value="0">sum</CMODE>
+				<IX name="x-variable" value="0">x</IX>
+				<IY name="y-variable" value="1">y</IY>
+				<X0 name="x-center" units=" ">0.0</X0>
+				<DX name="x-range" units=" ">10.0</DX>
+				<Y0 name="y-center" units=" ">0.0</Y0>
+				<DY name="y-range" units=" ">10.0</DY>
+				<BLOCK name="blocking area" value="0">no</BLOCK>
+			</MONITOR>
+		</FRAME>
+		<FRAME class="SGUIDE" id="NBOA" name="NBOA">
+			<DIST name="distance" units="mm">2030.5</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">84.93 35.0 3360.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">24.97 0.0 0.0</STA>
+			<GON name="gonio" units="deg">-0.3703 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<SGUIDE>
+				<NSEG name="segments">9</NSEG>
+				<RHO name="curvature" units="m^-1">0.0 0.0</RHO>
+				<GAP name="gap" units="mm">0.2</GAP>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<ACTIVE name="active">1 1 1 1</ACTIVE>
+				<SMOOTH name="smooth">0 0 0 0</SMOOTH>
+				<MONITOR name="monitor">0 0 0 0</MONITOR>
+				<REF0 name="r_0" units=" ">0.0</REF0>
+				<REFM name="r_m" units=" ">0.0</REFM>
+				<REFW name="width" units="Ni_nat">0.0</REFW>
+				<PROFH name="horizontal" value="1">flat</PROFH>
+				<PROFV name="vertical" value="0">manual</PROFV>
+				<EXIT name="exit window" units="mm">30.2 59.66</EXIT>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<FRONTMASK name="front mask" value="1">yes</FRONTMASK>
+				<GAPABS name="absorbing gaps" value="1">yes</GAPABS>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+				<SEG name="segments parameters" rows="9">
+					<ITEM>80.85783 37.72 249.9 2.5 2.5 4.0 4.0</ITEM>
+					<ITEM>76.78565 40.2 249.8 2.5 2.5 4.0 4.0</ITEM>
+					<ITEM>72.71348 42.5 249.8 2.5 2.5 4.0 4.0</ITEM>
+					<ITEM>68.64131 44.63 249.8 2.5 2.5 4.0 4.0</ITEM>
+					<ITEM>60.49696 48.51 499.8 2.5 2.5 4.0 4.0</ITEM>
+					<ITEM>52.35262 51.94 499.8 2.5 2.5 4.0 4.0</ITEM>
+					<ITEM>44.20827 55.02 499.8 2.5 2.5 4.0 4.0</ITEM>
+					<ITEM>36.06393 57.81 499.8 2.5 2.5 4.0 4.0</ITEM>
+					<ITEM>30.2 59.66 359.9 2.5 2.5 4.0 4.0</ITEM>
+				</SEG>
+			</SGUIDE>
+		</FRAME>
+		<FRAME class="GUIDE" id="BBG" name="BBG">
+			<DIST name="distance" units="mm">3380.3</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">29.87 59.76 483.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">3.12 0.0 0.0</STA>
+			<GON name="gonio" units="deg">-0.3703 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="1">guide or bender</TYPE>
+				<EXIT name="exit window" units="mm">22.0 62.04</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">5.0E-2 5.0E-2</DL>
+				<M name="m-value" units="Ni_nat">2.5 4.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="0">absorbing</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+				<OSC name="oscillate" value="0">no</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="GUIDE" id="GSW" name="bi-spectral switch">
+			<DIST name="distance" units="mm">521.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">22.5 65.0 15.1</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">-0.57 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="1">guide or bender</TYPE>
+				<EXIT name="exit window" units="mm">22.5 62.06</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">149 1</N>
+				<DL name="lamella thickness" units="mm">0.15 1.0E-2</DL>
+				<M name="m-value" units="Ni_nat">3.0 0.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="2">Si</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.00562E-2</MU>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="1">yes</TRFRONT>
+				<OSC name="oscillate" value="0">no</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="GUIDE" id="GCA1" name="chopper guide A1">
+			<DIST name="distance" units="mm">35.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">20.0 62.37 458.2</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="1">guide or bender</TYPE>
+				<EXIT name="exit window" units="mm">20.0 64.33</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-2 1.0E-2</DL>
+				<M name="m-value" units="Ni_nat">4.0 3.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="0">absorbing</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+				<OSC name="oscillate" value="0">no</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="DCHOPPER" id="PSC1" name="PS chopper 1">
+			<DIST name="distance" units="mm">483.2</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">30.0 80.0 50.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<DCHOPPER>
+				<FRQ name="frequency" units="Hz">168.0</FRQ>
+				<PHASE name="phase" units="2PI">-0.59305</PHASE>
+				<RAD name="radius" units="mm">300.0</RAD>
+				<WIN name="window width" units="2PI">0.4</WIN>
+				<NWIN name="number of windows">1</NWIN>
+				<TIMING name="timing">0.2:1</TIMING>
+				<PROF name="profile" value="0">V-shape</PROF>
+				<ORI name="orientation" value="0">vertical</ORI>
+				<ADJ name="auto adjust" value="1">yes</ADJ>
+				<OVERLAP name="overlap" value="0">no</OVERLAP>
+				<T0 name="T0" value="1">yes</T0>
+				<LOCKT0 name="lock to T0" value="1">yes</LOCKT0>
+			</DCHOPPER>
+		</FRAME>
+		<FRAME class="GUIDE" id="GCA2" name="chopper guide A2">
+			<DIST name="distance" units="mm">25.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">20.0 64.53 73.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="1">guide or bender</TYPE>
+				<EXIT name="exit window" units="mm">20.0 64.82</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-2 1.0E-2</DL>
+				<M name="m-value" units="Ni_nat">4.0 3.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="0">absorbing</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+				<OSC name="oscillate" value="0">no</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="GUIDE" id="GCA3" name="chopper guide A3">
+			<DIST name="distance" units="mm">277.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">20.0 65.63 73.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="1">guide or bender</TYPE>
+				<EXIT name="exit window" units="mm">20.0 65.91</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-2 1.0E-2</DL>
+				<M name="m-value" units="Ni_nat">4.0 3.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="0">absorbing</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+				<OSC name="oscillate" value="0">no</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="DCHOPPER" id="PSC2" name="PS chopper 2">
+			<DIST name="distance" units="mm">98.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">30.0 80.0 50.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<DCHOPPER>
+				<FRQ name="frequency" units="Hz">-168.0</FRQ>
+				<PHASE name="phase" units="2PI">0.59305</PHASE>
+				<RAD name="radius" units="mm">300.0</RAD>
+				<WIN name="window width" units="2PI">0.4</WIN>
+				<NWIN name="number of windows">1</NWIN>
+				<TIMING name="timing">0.2:1</TIMING>
+				<PROF name="profile" value="0">V-shape</PROF>
+				<ORI name="orientation" value="0">vertical</ORI>
+				<ADJ name="auto adjust" value="1">yes</ADJ>
+				<OVERLAP name="overlap" value="0">no</OVERLAP>
+				<T0 name="T0" value="1">yes</T0>
+				<LOCKT0 name="lock to T0" value="1">yes</LOCKT0>
+			</DCHOPPER>
+		</FRAME>
+		<FRAME class="GUIDE" id="GCA4" name="chopper guide A4">
+			<DIST name="distance" units="mm">25.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">20.0 66.1 73.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="1">guide or bender</TYPE>
+				<EXIT name="exit window" units="mm">20.0 66.37</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-2 1.0E-2</DL>
+				<M name="m-value" units="Ni_nat">4.0 3.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="0">absorbing</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+				<OSC name="oscillate" value="0">no</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="GUIDE" id="GCB" name="chopper guide B">
+			<DIST name="distance" units="mm">87.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">20.0 66.42 388.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="1">guide or bender</TYPE>
+				<EXIT name="exit window" units="mm">20.0 67.82</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-2 1.0E-2</DL>
+				<M name="m-value" units="Ni_nat">4.0 3.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="0">absorbing</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+				<OSC name="oscillate" value="0">no</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="DCHOPPER" id="PSC3" name="PS chopper 3">
+			<DIST name="distance" units="mm">413.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">30.0 80.0 50.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<DCHOPPER>
+				<FRQ name="frequency" units="Hz">0.0</FRQ>
+				<PHASE name="phase" units="2PI">0.0</PHASE>
+				<RAD name="radius" units="mm">300.0</RAD>
+				<WIN name="window width" units="2PI">0.4</WIN>
+				<NWIN name="number of windows">1</NWIN>
+				<TIMING name="timing">0:1</TIMING>
+				<PROF name="profile" value="0">V-shape</PROF>
+				<ORI name="orientation" value="0">vertical</ORI>
+				<ADJ name="auto adjust" value="1">yes</ADJ>
+				<OVERLAP name="overlap" value="0">no</OVERLAP>
+				<T0 name="T0" value="0">no</T0>
+				<LOCKT0 name="lock to T0" value="0">no</LOCKT0>
+			</DCHOPPER>
+		</FRAME>
+		<FRAME class="GUIDE" id="GCC" name="chopper guide C">
+			<DIST name="distance" units="mm">25.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">20.0 67.99 850.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="1">guide or bender</TYPE>
+				<EXIT name="exit window" units="mm">20.0 70.7</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-2 1.0E-2</DL>
+				<M name="m-value" units="Ni_nat">4.0 3.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="0">absorbing</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+				<OSC name="oscillate" value="0">no</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="DCHOPPER" id="FC1A" name="frame chopper 1A">
+			<DIST name="distance" units="mm">875.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">30.0 80.0 50.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<DCHOPPER>
+				<FRQ name="frequency" units="Hz">28.0</FRQ>
+				<PHASE name="phase" units="2PI">-0.12299</PHASE>
+				<RAD name="radius" units="mm">300.0</RAD>
+				<WIN name="window width" units="2PI">0.2</WIN>
+				<NWIN name="number of windows">1</NWIN>
+				<TIMING name="timing">0.0166667:1</TIMING>
+				<PROF name="profile" value="0">V-shape</PROF>
+				<ORI name="orientation" value="0">vertical</ORI>
+				<ADJ name="auto adjust" value="1">yes</ADJ>
+				<OVERLAP name="overlap" value="0">no</OVERLAP>
+				<T0 name="T0" value="0">no</T0>
+				<LOCKT0 name="lock to T0" value="0">no</LOCKT0>
+			</DCHOPPER>
+		</FRAME>
+		<FRAME class="DCHOPPER" id="FC1B" name="frame chopper 1B">
+			<DIST name="distance" units="mm">50.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">30.0 80.0 50.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<DCHOPPER>
+				<FRQ name="frequency" units="Hz">0.0</FRQ>
+				<PHASE name="phase" units="2PI">0.0</PHASE>
+				<RAD name="radius" units="mm">300.0</RAD>
+				<WIN name="window width" units="2PI">0.5</WIN>
+				<NWIN name="number of windows">1</NWIN>
+				<TIMING name="timing">0:1</TIMING>
+				<PROF name="profile" value="0">V-shape</PROF>
+				<ORI name="orientation" value="0">vertical</ORI>
+				<ADJ name="auto adjust" value="1">yes</ADJ>
+				<OVERLAP name="overlap" value="0">no</OVERLAP>
+				<T0 name="T0" value="0">no</T0>
+				<LOCKT0 name="lock to T0" value="0">no</LOCKT0>
+			</DCHOPPER>
+		</FRAME>
+		<FRAME class="GUIDE" id="GCE" name="chopper guide E">
+			<DIST name="distance" units="mm">25.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">20.0 70.99 925.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="1">guide or bender</TYPE>
+				<EXIT name="exit window" units="mm">20.0 73.43</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-2 1.0E-2</DL>
+				<M name="m-value" units="Ni_nat">4.0 3.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="0">absorbing</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+				<OSC name="oscillate" value="0">no</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="DCHOPPER" id="MCA" name="modulation chopper A">
+			<DIST name="distance" units="mm">950.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">20.0 80.0 50.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<DCHOPPER>
+				<FRQ name="frequency" units="Hz">0.0</FRQ>
+				<PHASE name="phase" units="2PI">0.0</PHASE>
+				<RAD name="radius" units="mm">300.0</RAD>
+				<WIN name="window width" units="2PI">1.1111E-2</WIN>
+				<NWIN name="number of windows">8</NWIN>
+				<TIMING name="timing">0:1:0.125:1:0.25:1:0.375:1:0.5:1:0.625:1:0.75:1:0.875:1</TIMING>
+				<PROF name="profile" value="0">V-shape</PROF>
+				<ORI name="orientation" value="0">vertical</ORI>
+				<ADJ name="auto adjust" value="1">yes</ADJ>
+				<OVERLAP name="overlap" value="0">no</OVERLAP>
+				<T0 name="T0" value="0">no</T0>
+				<LOCKT0 name="lock to T0" value="0">no</LOCKT0>
+			</DCHOPPER>
+		</FRAME>
+		<FRAME class="DCHOPPER" id="MCB" name="modulation chopper B">
+			<DIST name="distance" units="mm">50.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">20.0 80.0 50.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<DCHOPPER>
+				<FRQ name="frequency" units="Hz">0.0</FRQ>
+				<PHASE name="phase" units="2PI">0.0</PHASE>
+				<RAD name="radius" units="mm">300.0</RAD>
+				<WIN name="window width" units="2PI">1.1111E-2</WIN>
+				<NWIN name="number of windows">8</NWIN>
+				<TIMING name="timing">0:1:0.125:1:0.25:1:0.375:1:0.5:1:0.625:1:0.75:1:0.875:1</TIMING>
+				<PROF name="profile" value="0">V-shape</PROF>
+				<ORI name="orientation" value="0">vertical</ORI>
+				<ADJ name="auto adjust" value="1">yes</ADJ>
+				<OVERLAP name="overlap" value="0">no</OVERLAP>
+				<T0 name="T0" value="0">no</T0>
+				<LOCKT0 name="lock to T0" value="0">no</LOCKT0>
+			</DCHOPPER>
+		</FRAME>
+		<FRAME class="GUIDE" id="GCF" name="chopper guide F">
+			<DIST name="distance" units="mm">25.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">20.0 73.67 475.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="1">guide or bender</TYPE>
+				<EXIT name="exit window" units="mm">20.0 74.73</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-2 1.0E-2</DL>
+				<M name="m-value" units="Ni_nat">4.0 3.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="0">absorbing</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+				<OSC name="oscillate" value="0">no</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="DCHOPPER" id="MCC" name="modulation chopper C">
+			<DIST name="distance" units="mm">500.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">20.0 80.0 50.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<DCHOPPER>
+				<FRQ name="frequency" units="Hz">0.0</FRQ>
+				<PHASE name="phase" units="2PI">0.0</PHASE>
+				<RAD name="radius" units="mm">300.0</RAD>
+				<WIN name="window width" units="2PI">1.1111E-2</WIN>
+				<NWIN name="number of windows">8</NWIN>
+				<TIMING name="timing">0:45:0.3125:1:0.375:1:0.4375:1:0.5:1:0.5625:1:0.625:1:0.6875:1</TIMING>
+				<PROF name="profile" value="0">V-shape</PROF>
+				<ORI name="orientation" value="0">vertical</ORI>
+				<ADJ name="auto adjust" value="1">yes</ADJ>
+				<OVERLAP name="overlap" value="0">no</OVERLAP>
+				<T0 name="T0" value="0">no</T0>
+				<LOCKT0 name="lock to T0" value="0">no</LOCKT0>
+			</DCHOPPER>
+		</FRAME>
+		<FRAME class="GUIDE" id="GCG" name="chopper guide G">
+			<DIST name="distance" units="mm">25.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">20.0 74.83 86.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="1">guide or bender</TYPE>
+				<EXIT name="exit window" units="mm">20.0 75.01</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-2 1.0E-2</DL>
+				<M name="m-value" units="Ni_nat">4.0 3.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="0">absorbing</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+				<OSC name="oscillate" value="0">no</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="SGUIDE" id="GE1" name="bent guide, v-expanding">
+			<DIST name="distance" units="mm">100.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">20.0 75.04 4999.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<SGUIDE>
+				<NSEG name="segments">10</NSEG>
+				<RHO name="curvature" units="m^-1">-5.0E-4 0.0</RHO>
+				<GAP name="gap" units="mm">0.2</GAP>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<ACTIVE name="active">1 1 1 1</ACTIVE>
+				<SMOOTH name="smooth">0 0 0 0</SMOOTH>
+				<MONITOR name="monitor">0 0 0 0</MONITOR>
+				<REF0 name="r_0" units=" ">0.0</REF0>
+				<REFM name="r_m" units=" ">0.0</REFM>
+				<REFW name="width" units="Ni_nat">0.0</REFW>
+				<PROFH name="horizontal" value="1">flat</PROFH>
+				<PROFV name="vertical" value="0">manual</PROFV>
+				<EXIT name="exit window" units="mm">20.0 80.0</EXIT>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<FRONTMASK name="front mask" value="1">yes</FRONTMASK>
+				<GAPABS name="absorbing gaps" value="1">yes</GAPABS>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+				<SEG name="segments parameters" rows="10">
+					<ITEM>20.0 76.01 499.9 3.0 2.5 3.0 3.0</ITEM>
+					<ITEM>20.0 76.86 499.8 3.0 2.5 3.0 3.0</ITEM>
+					<ITEM>20.0 77.61 499.8 3.0 2.5 3.0 3.0</ITEM>
+					<ITEM>20.0 78.25 499.8 3.0 2.5 3.0 3.0</ITEM>
+					<ITEM>20.0 78.79 499.8 3.0 2.5 3.0 3.0</ITEM>
+					<ITEM>20.0 79.23 499.8 3.0 2.5 3.0 3.0</ITEM>
+					<ITEM>20.0 79.57 499.8 3.0 2.5 3.0 3.0</ITEM>
+					<ITEM>20.0 79.81 499.8 3.0 2.5 3.0 3.0</ITEM>
+					<ITEM>20.0 79.95 499.8 3.0 2.5 3.0 3.0</ITEM>
+					<ITEM>20.0 80.0 498.9 3.0 2.5 3.0 3.0</ITEM>
+				</SEG>
+			</SGUIDE>
+		</FRAME>
+		<FRAME class="SGUIDE" id="GN1" name="bent guide, in bunker">
+			<DIST name="distance" units="mm">5000.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">20.0 80.0 9499.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<SGUIDE>
+				<NSEG name="segments">19</NSEG>
+				<RHO name="curvature" units="m^-1">-5.0E-4 0.0</RHO>
+				<GAP name="gap" units="mm">0.2</GAP>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<ACTIVE name="active">1 1 1 1</ACTIVE>
+				<SMOOTH name="smooth">0 0 0 0</SMOOTH>
+				<MONITOR name="monitor">0 0 0 0</MONITOR>
+				<REF0 name="r_0" units=" ">0.0</REF0>
+				<REFM name="r_m" units=" ">0.0</REFM>
+				<REFW name="width" units="Ni_nat">0.0</REFW>
+				<PROFH name="horizontal" value="1">flat</PROFH>
+				<PROFV name="vertical" value="1">flat</PROFV>
+				<EXIT name="exit window" units="mm">20.0 80.0</EXIT>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<FRONTMASK name="front mask" value="1">yes</FRONTMASK>
+				<GAPABS name="absorbing gaps" value="1">yes</GAPABS>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+				<SEG name="segments parameters" rows="19">
+					<ITEM>20.0 80.0 499.9 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 498.9 3.0 2.5 2.0 2.0</ITEM>
+				</SEG>
+			</SGUIDE>
+		</FRAME>
+		<FRAME class="SGUIDE" id="GN2" name="bent guide, bunker wall">
+			<DIST name="distance" units="mm">9500.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">20.0 80.0 3498.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<SGUIDE>
+				<NSEG name="segments">7</NSEG>
+				<RHO name="curvature" units="m^-1">-5.0E-4 0.0</RHO>
+				<GAP name="gap" units="mm">0.2</GAP>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<ACTIVE name="active">1 1 1 1</ACTIVE>
+				<SMOOTH name="smooth">0 0 0 0</SMOOTH>
+				<MONITOR name="monitor">0 0 0 0</MONITOR>
+				<REF0 name="r_0" units=" ">0.0</REF0>
+				<REFM name="r_m" units=" ">0.0</REFM>
+				<REFW name="width" units="Ni_nat">0.0</REFW>
+				<PROFH name="horizontal" value="1">flat</PROFH>
+				<PROFV name="vertical" value="1">flat</PROFV>
+				<EXIT name="exit window" units="mm">20.0 80.0</EXIT>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<FRONTMASK name="front mask" value="1">yes</FRONTMASK>
+				<GAPABS name="absorbing gaps" value="1">yes</GAPABS>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+				<SEG name="segments parameters" rows="7">
+					<ITEM>20.0 80.0 499.9 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 499.8 3.0 2.5 2.0 2.0</ITEM>
+					<ITEM>20.0 80.0 497.9 3.0 2.5 2.0 2.0</ITEM>
+				</SEG>
+			</SGUIDE>
+		</FRAME>
+		<FRAME class="GUIDE" id="GSH2" name="shutter">
+			<DIST name="distance" units="mm">3513.5</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">20.0 80.0 599.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="1">guide or bender</TYPE>
+				<EXIT name="exit window" units="mm">20.0 80.0</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">5.0E-2 5.0E-2</DL>
+				<M name="m-value" units="Ni_nat">2.5 2.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="0">absorbing</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+				<OSC name="oscillate" value="0">no</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="GUIDE" id="GE2AS" name="shutter short  guide">
+			<DIST name="distance" units="mm">614.5</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">20.0 80.0 371.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="1">guide or bender</TYPE>
+				<EXIT name="exit window" units="mm">20.0 80.0</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-2 1.0E-2</DL>
+				<M name="m-value" units="Ni_nat">2.5 2.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="0">absorbing</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+				<OSC name="oscillate" value="0">no</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="SGUIDE" id="GE2A" name="horizontal expansion, shutter pit">
+			<DIST name="distance" units="mm">372.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">20.0 80.0 2357.9</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<SGUIDE>
+				<NSEG name="segments">3</NSEG>
+				<RHO name="curvature" units="m^-1">0.0 0.0</RHO>
+				<GAP name="gap" units="mm">0.2</GAP>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<ACTIVE name="active">1 1 1 1</ACTIVE>
+				<SMOOTH name="smooth">0 0 0 0</SMOOTH>
+				<MONITOR name="monitor">0 0 0 0</MONITOR>
+				<REF0 name="r_0" units=" ">0.0</REF0>
+				<REFM name="r_m" units=" ">0.0</REFM>
+				<REFW name="width" units="Ni_nat">0.0</REFW>
+				<PROFH name="horizontal" value="0">manual</PROFH>
+				<PROFV name="vertical" value="1">flat</PROFV>
+				<EXIT name="exit window" units="mm">29.99 80.0</EXIT>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<FRONTMASK name="front mask" value="1">yes</FRONTMASK>
+				<GAPABS name="absorbing gaps" value="1">yes</GAPABS>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+				<SEG name="segments parameters" rows="3">
+					<ITEM>25.06 80.0 999.9 2.5 2.5 2.0 2.0</ITEM>
+					<ITEM>28.84 80.0 999.8 2.5 2.5 2.0 2.0</ITEM>
+					<ITEM>29.99 80.0 357.8 2.5 2.5 2.0 2.0</ITEM>
+				</SEG>
+			</SGUIDE>
+		</FRAME>
+		<FRAME class="SGUIDE" id="GE2B" name="horizontal expansion">
+			<DIST name="distance" units="mm">2360.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">29.99 80.0 7637.7</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<SGUIDE>
+				<NSEG name="segments">8</NSEG>
+				<RHO name="curvature" units="m^-1">0.0 0.0</RHO>
+				<GAP name="gap" units="mm">0.2</GAP>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<ACTIVE name="active">1 1 1 1</ACTIVE>
+				<SMOOTH name="smooth">0 0 0 0</SMOOTH>
+				<MONITOR name="monitor">0 0 0 0</MONITOR>
+				<REF0 name="r_0" units=" ">0.0</REF0>
+				<REFM name="r_m" units=" ">0.0</REFM>
+				<REFW name="width" units="Ni_nat">0.0</REFW>
+				<PROFH name="horizontal" value="0">manual</PROFH>
+				<PROFV name="vertical" value="1">flat</PROFV>
+				<EXIT name="exit window" units="mm">40.0 80.0</EXIT>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<FRONTMASK name="front mask" value="1">yes</FRONTMASK>
+				<GAPABS name="absorbing gaps" value="1">yes</GAPABS>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+				<SEG name="segments parameters" rows="8">
+					<ITEM>32.72 80.0 999.9 2.5 2.5 2.0 2.0</ITEM>
+					<ITEM>34.9 80.0 999.8 2.5 2.5 2.0 2.0</ITEM>
+					<ITEM>36.63 80.0 999.8 2.5 2.5 2.0 2.0</ITEM>
+					<ITEM>37.96 80.0 999.8 2.5 2.5 2.0 2.0</ITEM>
+					<ITEM>38.94 80.0 999.8 2.5 2.5 2.0 2.0</ITEM>
+					<ITEM>39.59 80.0 999.8 2.5 2.5 2.0 2.0</ITEM>
+					<ITEM>39.94 80.0 999.8 2.5 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 637.6 2.5 2.5 2.0 2.0</ITEM>
+				</SEG>
+			</SGUIDE>
+		</FRAME>
+		<FRAME class="SGUIDE" id="GT1" name="transport guide 1">
+			<DIST name="distance" units="mm">7641.3</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">40.0 80.0 4.09487E4</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<SGUIDE>
+				<NSEG name="segments">21</NSEG>
+				<RHO name="curvature" units="m^-1">5.0E-5 0.0</RHO>
+				<GAP name="gap" units="mm">0.2</GAP>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<ACTIVE name="active">1 1 1 1</ACTIVE>
+				<SMOOTH name="smooth">1 1 0 0</SMOOTH>
+				<MONITOR name="monitor">0 0 0 0</MONITOR>
+				<REF0 name="r_0" units=" ">0.0</REF0>
+				<REFM name="r_m" units=" ">0.0</REFM>
+				<REFW name="width" units="Ni_nat">0.0</REFW>
+				<PROFH name="horizontal" value="1">flat</PROFH>
+				<PROFV name="vertical" value="1">flat</PROFV>
+				<EXIT name="exit window" units="mm">40.0 80.0</EXIT>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<FRONTMASK name="front mask" value="1">yes</FRONTMASK>
+				<GAPABS name="absorbing gaps" value="1">yes</GAPABS>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+				<SEG name="segments parameters" rows="21">
+					<ITEM>40.0 80.0 1999.9 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 948.6 2.0 2.5 2.0 2.0</ITEM>
+				</SEG>
+			</SGUIDE>
+		</FRAME>
+		<FRAME class="DCHOPPER" id="FC2A" name="frame chopper 2A">
+			<DIST name="distance" units="mm">4.09737E4</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">50.0 85.0 50.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<DCHOPPER>
+				<FRQ name="frequency" units="Hz">14.0</FRQ>
+				<PHASE name="phase" units="2PI">-0.59435</PHASE>
+				<RAD name="radius" units="mm">300.0</RAD>
+				<WIN name="window width" units="2PI">0.48611</WIN>
+				<NWIN name="number of windows">1</NWIN>
+				<TIMING name="timing">0:1</TIMING>
+				<PROF name="profile" value="0">V-shape</PROF>
+				<ORI name="orientation" value="0">vertical</ORI>
+				<ADJ name="auto adjust" value="1">yes</ADJ>
+				<OVERLAP name="overlap" value="0">no</OVERLAP>
+				<T0 name="T0" value="0">no</T0>
+				<LOCKT0 name="lock to T0" value="0">no</LOCKT0>
+			</DCHOPPER>
+		</FRAME>
+		<FRAME class="DCHOPPER" id="FC2B" name="frame chopper 2B">
+			<DIST name="distance" units="mm">50.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">50.0 85.0 50.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<DCHOPPER>
+				<FRQ name="frequency" units="Hz">0.0</FRQ>
+				<PHASE name="phase" units="2PI">0.0</PHASE>
+				<RAD name="radius" units="mm">300.0</RAD>
+				<WIN name="window width" units="2PI">0.23611</WIN>
+				<NWIN name="number of windows">1</NWIN>
+				<TIMING name="timing">0:1</TIMING>
+				<PROF name="profile" value="0">V-shape</PROF>
+				<ORI name="orientation" value="0">vertical</ORI>
+				<ADJ name="auto adjust" value="1">yes</ADJ>
+				<OVERLAP name="overlap" value="0">no</OVERLAP>
+				<T0 name="T0" value="0">no</T0>
+				<LOCKT0 name="lock to T0" value="0">no</LOCKT0>
+			</DCHOPPER>
+		</FRAME>
+		<FRAME class="SGUIDE" id="GT2" name="transport guide 2">
+			<DIST name="distance" units="mm">30.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">40.0 80.0 6.44431E4</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<SGUIDE>
+				<NSEG name="segments">33</NSEG>
+				<RHO name="curvature" units="m^-1">5.0E-5 0.0</RHO>
+				<GAP name="gap" units="mm">0.2</GAP>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<ACTIVE name="active">1 1 1 1</ACTIVE>
+				<SMOOTH name="smooth">1 1 0 0</SMOOTH>
+				<MONITOR name="monitor">0 0 0 0</MONITOR>
+				<REF0 name="r_0" units=" ">0.0</REF0>
+				<REFM name="r_m" units=" ">0.0</REFM>
+				<REFW name="width" units="Ni_nat">0.0</REFW>
+				<PROFH name="horizontal" value="1">flat</PROFH>
+				<PROFV name="vertical" value="1">flat</PROFV>
+				<EXIT name="exit window" units="mm">40.0 80.0</EXIT>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<FRONTMASK name="front mask" value="1">yes</FRONTMASK>
+				<GAPABS name="absorbing gaps" value="1">yes</GAPABS>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+				<SEG name="segments parameters" rows="33">
+					<ITEM>40.0 80.0 1999.9 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 1999.8 2.0 2.5 2.0 2.0</ITEM>
+					<ITEM>40.0 80.0 443.0 2.0 2.5 2.0 2.0</ITEM>
+				</SEG>
+			</SGUIDE>
+		</FRAME>
+		<FRAME class="SGUIDE" id="GF1" name="focusing guide 1">
+			<DIST name="distance" units="mm">6.4445E4</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">40.0 80.0 7479.9</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<SGUIDE>
+				<NSEG name="segments">15</NSEG>
+				<RHO name="curvature" units="m^-1">0.0 0.0</RHO>
+				<GAP name="gap" units="mm">0.2</GAP>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<ACTIVE name="active">1 1 1 1</ACTIVE>
+				<SMOOTH name="smooth">0 0 0 0</SMOOTH>
+				<MONITOR name="monitor">0 0 0 0</MONITOR>
+				<REF0 name="r_0" units=" ">0.0</REF0>
+				<REFM name="r_m" units=" ">0.0</REFM>
+				<REFW name="width" units="Ni_nat">0.0</REFW>
+				<PROFH name="horizontal" value="1">flat</PROFH>
+				<PROFV name="vertical" value="0">manual</PROFV>
+				<EXIT name="exit window" units="mm">40.0 66.56</EXIT>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<FRONTMASK name="front mask" value="1">yes</FRONTMASK>
+				<GAPABS name="absorbing gaps" value="1">yes</GAPABS>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+				<SEG name="segments parameters" rows="15">
+					<ITEM>40.0 79.94 499.9 2.5 2.5 3.0 3.0</ITEM>
+					<ITEM>40.0 79.78 499.8 2.5 2.5 3.0 3.0</ITEM>
+					<ITEM>40.0 79.5 499.8 2.5 2.5 3.0 3.0</ITEM>
+					<ITEM>40.0 79.12 499.8 2.5 2.5 3.0 3.0</ITEM>
+					<ITEM>40.0 78.61 499.8 2.5 2.5 3.0 3.0</ITEM>
+					<ITEM>40.0 77.99 499.8 2.5 2.5 3.0 3.0</ITEM>
+					<ITEM>40.0 77.26 499.8 2.5 2.5 3.0 3.0</ITEM>
+					<ITEM>40.0 76.4 499.8 2.5 2.5 3.0 3.0</ITEM>
+					<ITEM>40.0 75.41 499.8 2.5 2.5 3.0 3.0</ITEM>
+					<ITEM>40.0 74.3 499.8 2.5 2.5 3.0 3.0</ITEM>
+					<ITEM>40.0 73.04 499.8 2.5 2.5 3.0 3.0</ITEM>
+					<ITEM>40.0 71.64 499.8 2.5 2.5 3.0 3.0</ITEM>
+					<ITEM>40.0 70.09 499.8 2.5 2.5 3.0 3.0</ITEM>
+					<ITEM>40.0 68.38 499.8 2.5 2.5 3.0 3.0</ITEM>
+					<ITEM>40.0 66.56 479.8 2.5 2.5 3.0 3.0</ITEM>
+				</SEG>
+			</SGUIDE>
+		</FRAME>
+		<FRAME class="FRAME" id="SL1" name="slit 1">
+			<DIST name="distance" units="mm">7500.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">35.0 100.0 1.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+		</FRAME>
+		<FRAME class="SGUIDE" id="GF2" name="focusing guide 2">
+			<DIST name="distance" units="mm">24.95</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">40.0 66.38 2955.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<SGUIDE>
+				<NSEG name="segments">6</NSEG>
+				<RHO name="curvature" units="m^-1">0.0 0.0</RHO>
+				<GAP name="gap" units="mm">0.2</GAP>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<ACTIVE name="active">1 1 1 1</ACTIVE>
+				<SMOOTH name="smooth">0 0 0 0</SMOOTH>
+				<MONITOR name="monitor">0 0 0 0</MONITOR>
+				<REF0 name="r_0" units=" ">0.0</REF0>
+				<REFM name="r_m" units=" ">0.0</REFM>
+				<REFW name="width" units="Ni_nat">0.0</REFW>
+				<PROFH name="horizontal" value="1">flat</PROFH>
+				<PROFV name="vertical" value="0">manual</PROFV>
+				<EXIT name="exit window" units="mm">40.0 50.34</EXIT>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<FRONTMASK name="front mask" value="1">yes</FRONTMASK>
+				<GAPABS name="absorbing gaps" value="1">yes</GAPABS>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+				<SEG name="segments parameters" rows="6">
+					<ITEM>40.0 64.29 499.9 2.5 2.5 4.0 4.0</ITEM>
+					<ITEM>40.0 61.98 499.8 2.5 2.5 4.0 4.0</ITEM>
+					<ITEM>40.0 59.44 499.8 2.5 2.5 4.0 4.0</ITEM>
+					<ITEM>40.0 56.63 499.8 2.5 2.5 4.0 4.0</ITEM>
+					<ITEM>40.0 53.5 499.8 2.5 2.5 4.0 4.0</ITEM>
+					<ITEM>40.0 50.34 454.9 0.0 0.0 4.0 4.0</ITEM>
+				</SEG>
+			</SGUIDE>
+		</FRAME>
+		<FRAME class="FRAME" id="SL2" name="slit 2">
+			<DIST name="distance" units="mm">2975.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">20.0 100.0 1.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+		</FRAME>
+		<FRAME class="GUIDE" id="GMINI" name="mini guide">
+			<DIST name="distance" units="mm">24.9</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">40.0 50.01 93.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="1">guide or bender</TYPE>
+				<EXIT name="exit window" units="mm">40.0 49.31</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">1 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-2 1.0E-2</DL>
+				<M name="m-value" units="Ni_nat">0.0 5.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="0">absorbing</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+				<OSC name="oscillate" value="0">no</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="SGUIDE" id="GEX1" name="focusing guide on exchanger">
+			<DIST name="distance" units="mm">108.1</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">40.0 49.2 1867.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<SGUIDE>
+				<NSEG name="segments">8</NSEG>
+				<RHO name="curvature" units="m^-1">0.0 0.0</RHO>
+				<GAP name="gap" units="mm">0.2</GAP>
+				<WAV name="waviness" units="mrad">0.2</WAV>
+				<MISALIGN name="misalignment" units="mm">2.0E-2 2.0E-2</MISALIGN>
+				<ACTIVE name="active">1 1 1 1</ACTIVE>
+				<SMOOTH name="smooth">0 0 0 0</SMOOTH>
+				<MONITOR name="monitor">0 0 0 0</MONITOR>
+				<REF0 name="r_0" units=" ">0.0</REF0>
+				<REFM name="r_m" units=" ">0.0</REFM>
+				<REFW name="width" units="Ni_nat">0.0</REFW>
+				<PROFH name="horizontal" value="1">flat</PROFH>
+				<PROFV name="vertical" value="0">manual</PROFV>
+				<EXIT name="exit window" units="mm">40.0 30.0</EXIT>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<FRONTMASK name="front mask" value="1">yes</FRONTMASK>
+				<GAPABS name="absorbing gaps" value="1">yes</GAPABS>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+				<SEG name="segments parameters" rows="8">
+					<ITEM>40.0 46.27 366.9 0.0 0.0 5.0 5.0</ITEM>
+					<ITEM>40.0 44.1 249.8 0.0 0.0 5.0 5.0</ITEM>
+					<ITEM>40.0 41.77 249.8 0.0 0.0 5.0 5.0</ITEM>
+					<ITEM>40.0 39.25 249.8 0.0 0.0 5.0 5.0</ITEM>
+					<ITEM>40.0 36.49 249.8 0.0 0.0 5.0 5.0</ITEM>
+					<ITEM>40.0 34.07 199.8 0.0 0.0 5.0 5.0</ITEM>
+					<ITEM>40.0 31.43 199.8 0.0 0.0 5.0 5.0</ITEM>
+					<ITEM>40.0 30.0 99.9 0.0 0.0 5.0 5.0</ITEM>
+				</SEG>
+			</SGUIDE>
+		</FRAME>
+		<FRAME class="FRAME" id="SL3" name="slit 3">
+			<DIST name="distance" units="mm">2817.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">4.0 4.0 1.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+		</FRAME>
+	</PRIMARY>
+	<SECONDARY>
+		<FRAME class="GUIDE" id="RAD" name="radial collimator">
+			<DIST name="distance" units="mm">490.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">273.7 340.3 350.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<GUIDE>
+				<TYPE name="type" value="0">soller or coarse</TYPE>
+				<EXIT name="exit window" units="mm">469.1 569.0</EXIT>
+				<RO name="curvature" units="m^-1">0.0 0.0</RO>
+				<N name="slits">160 1</N>
+				<DL name="lamella thickness" units="mm">1.0E-1 5.0E-2</DL>
+				<M name="m-value" units="Ni_nat">0.0 0.0</M>
+				<REF name="reflectivity" units=" ">0.0 0.0</REF>
+				<MATER name="blade material" value="0">absorbing</MATER>
+				<MU name="absorption" units="cm^-1A^-1">1.0E5</MU>
+				<WAV name="waviness" units="mrad">0.0</WAV>
+				<MISALIGN name="misalignment" units="mm">0.0 0.0</MISALIGN>
+				<MONITOR name="monitor" value="0">no</MONITOR>
+				<CLOSED name="closed" value="0">no</CLOSED>
+				<ONESIDE name="one-sided" value="0">no</ONESIDE>
+				<NODIR name="no direct view" value="0">no</NODIR>
+				<TRFRONT name="front transmission" value="0">no</TRFRONT>
+				<OSC name="oscillate" value="1">yes</OSC>
+				<LOGBNC name="log bounces" value="0">none</LOGBNC>
+			</GUIDE>
+		</FRAME>
+		<FRAME class="MONITOR" id="MOND" name="detecktor mask">
+			<DIST name="distance" units="mm">1480.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">1000.0 1000.0 1.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<MONITOR>
+				<CMODE name="counting mode" value="1">inner</CMODE>
+				<IX name="x-variable" value="0">x</IX>
+				<IY name="y-variable" value="1">y</IY>
+				<X0 name="x-center" units=" ">0.0</X0>
+				<DX name="x-range" units=" ">1000.0</DX>
+				<Y0 name="y-center" units=" ">0.0</Y0>
+				<DY name="y-range" units=" ">1000.0</DY>
+				<BLOCK name="blocking area" value="1">yes</BLOCK>
+			</MONITOR>
+		</FRAME>
+		<FRAME class="DETECTOR" id="DET" name="detector">
+			<DIST name="distance" units="mm">30.0</DIST>
+			<SHAPE name="shape" value="3">box</SHAPE>
+			<ORDER name="stage-gonio order" value="0">gonio on stage</ORDER>
+			<SIZE name="dimensions" units="mm">1000.0 1000.0 20.0</SIZE>
+			<AX name="axis" units="deg">0.0 0.0 0.0</AX>
+			<STA name="stage" units="mm">0.0 0.0 0.0</STA>
+			<GON name="gonio" units="deg">0.0 0.0 0.0</GON>
+			<VEL name="velocity" units="m.s^-1">0.0 0.0 0.0</VEL>
+			<DETECTOR>
+				<TYPE name="type" value="2">PSD</TYPE>
+				<RES name="resolution" units="mm">2.0 5.0</RES>
+				<ALPHA name="efficiency" units="A^-1.cm^-1">0.3</ALPHA>
+				<RAD name="radius" units="mm">2000.0</RAD>
+				<THMIN name="theta min." units="deg">75.0</THMIN>
+				<THMAX name="theta max." units="deg">105.0</THMAX>
+				<SPACE name="spacing" units="mm">0.0</SPACE>
+				<ND name="tubes">1</ND>
+			</DETECTOR>
+		</FRAME>
+	</SECONDARY>
+</INSTRUMENT>
+<SCRIPT type="command">
+# use with BEER_PS2_sample.xml
+#--------------------------------------------------
+
+# wavelength range 0.6 .. 3.6 A
+set INST LAMBDA 2.1
+set SOURCE LAMW 1.42857
+
+# adjust DET1D plot
+cmd DET1D NP  3000
+cmd DET1D X0 1.4
+cmd DET1D DX 1.5
+cmd DET1D XAUTO 0
+cmd DET1D CAUTO 0
+cmd DET1D ERR 1
+
+XML UPDATE
+
+# Simulate primary beam
+#----------------------------------------
+set TR MODE 0
+CNT 500000
+XML UPDATE
+DO MC
+
+# Plot and save ToF spectrum
+BREF SAMPLE_I
+cmd BEAM1D X 6
+cmd BEAM1D ERR 1
+DO BEAM1D
+cmd GRSAVE FILE PS2_spectrum.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# save input events 
+BREF SAMPLE_I
+MCPEX beam_inc_PS2.mcpl 1
+
+#--------------------------------------
+# simulate secondary beam
+#--------------------------------------
+set TR MODE 1
+set TR SPLIT 10
+XML UPDATE
+
+# optional: load input from mcpl 
+BREF SAMPLE_I
+MCPIN beam_inc_PS2.mcpl 1
+
+# important !
+BREF DET
+
+# whole detector
+#-----------------------
+set MOND X0 0.0
+set MOND DX 1000.0
+XML MOND
+set TR MODE 1
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+set TR MODE 1
+DO MC
+cmd DET1D COM duplex steel, PS2, full
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_full.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, full
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_full.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+#----------------------
+# partial detectors
+#-----------------------
+set TR SPLIT  10
+XML UPDATE
+
+#--------------------------------------------
+set MOND X0 -450
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, -45 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_-45.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, -45 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_-45.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+
+#--------------------------------------------
+set MOND X0 -350
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, -35 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_-35.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, -35 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_-35.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+#--------------------------------------------
+set MOND X0 -250
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, -25 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_-25.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, -25 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_-25.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+#--------------------------------------------
+set MOND X0 -150
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, -15 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_-15.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, -15 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_-15.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+#--------------------------------------------
+set MOND X0 -50
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, -5 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_-5.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, -5 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_-5.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+#--------------------------------------------
+set MOND X0 50
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, 5 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_5.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, 5 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_5.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+#--------------------------------------------
+set MOND X0 150
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, 15 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_15.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, 15 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_15.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+
+#--------------------------------------------
+set MOND X0 250
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, 25 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_25.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, 25 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_25.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+#--------------------------------------------
+set MOND X0 350
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, 35 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_35.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, 35 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_35.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+
+#--------------------------------------------
+set MOND X0 450
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, 45 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_45.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, 45 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_45.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+
+</SCRIPT>
+</SIMRES>

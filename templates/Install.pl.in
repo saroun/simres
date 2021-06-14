@@ -1,13 +1,15 @@
 #! /usr/bin/perl
 ##################################################################
-#  $Id$
+#  
 #  *****  Installation script for SIMRES  *****
-#  Usage: perl Install.pl <installation directory>
+#
+# Usage: perl Install.pl <installation directory>
+# 
 # Edit the "PROJECT DEFINITIONS" section below to modify the contents
 # of installation package.
 # The script is used to install SIMRES on Linux.
 # It also works on Windows, but the JRE variable in the startup script
-# startGUI_win32.bat has to be set manually.
+# simres.bat may need to be set manually.
 ##################################################################
 BEGIN {
   push @INC, '.';
@@ -88,14 +90,17 @@ my @DEMOS = (
 "resources/demo/MAUD");
 push @SOURCES,@DEMOS;
 
+# tests
+push @SOURCES,("tests");
+
 # template *.in files from ./templates subdiretory
 # (they will be parsed, not copied)
 my @TEMPLATES = ("GUI/restraxCON.ini.in", "GUI/restraxGUI.ini.in");
 push @TEMPLATES, ("motd.in", "Uninstall.pl.in");
 if ($SYSNAME eq "win32") {
-  push @TEMPLATES,("startGUI_win32.bat.in","startCON_win32.bat.in");
+  push @TEMPLATES,("simres_console.bat.in","simres.bat.in","startGUI_win32.bat.in","startCON_win32.bat.in","tests/runtest.bat.in");
 } else {
-  push @TEMPLATES,("startGUI.in","startCON.in");
+  push @TEMPLATES,("simres.in", "startGUI.in","startCON.in");
 };
 
 
@@ -118,12 +123,12 @@ my @GUI = ("$VARS{'UI'}/simresGUI.jar","$VARS{'UI'}/simresCON.jar","$VARS{'UI'}/
 # executable scripts and libraries: to set exec privileges on the target
 my $EXECSCR;
 if ($SYSNAME eq "win32") {
-  $EXECSCR="startGUI_win32.bat";
-  push @EXECS,("startGUI_win32.bat","startCON_win32.bat"); # launch scripts
-  push @EXECS,glob("GUI/$VARS{'J3DLIB'}/*.dll");           # Java 3D libraries
+  $EXECSCR="simres.bat";
+  push @EXECS,("simres_console.bat", "simres.bat", "startGUI_win32.bat","startCON_win32.bat"); # launch scripts
+  push @EXECS,glob("GUI/$VARS{'J3DLIB'}/*.dll");    # Java 3D libraries
 } else {
-  $EXECSCR="startGUI";
-  push @EXECS,("startGUI","startCON");              # launch scripts
+  $EXECSCR="simres";
+  push @EXECS,("simres","startGUI","startCON");     # launch scripts
   push @EXECS,glob("GUI/$VARS{'J3DLIB'}/*.so");     # Java 3D libraries
 };
 
@@ -278,10 +283,10 @@ sub EndTasks {
   printf("Run it by calling the script '%s/%s' \n\n",$TD,$EXECSCR);
   unless ($SYSNAME eq "win32") {
     if ($VARS{'INSTDIR'} eq "/opt/simres") {
-      if ( (-e "/usr/bin") and (-e "/opt/simres/startGUI")) { 
-        my $res = eval { symlink("/opt/simres/startGUI","/usr/bin/simres");1 };
+      if ( (-e "/usr/bin") and (-e "/opt/simres/simres")) { 
+        my $res = eval { symlink("/opt/simres/simres","/usr/bin/simres");1 };
         if ($res) {
-          printf("Symbolic link created at /usr/bin/simres.\n",$TD,$EXECSCR);  
+          printf("Symbolic link created at /usr/bin/simres.\n");  
         };
       };
     };

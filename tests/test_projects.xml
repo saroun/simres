@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SIMRES version="6.5.3">
+	<PROJECT current="yes" test="yes">
+		<CFGPATH>~TESTS~/strain</CFGPATH>
+		<OUTPATH>~TEMP~/strain</OUTPATH>
+		<CFGFILE>SSPEC_Fe.xml</CFGFILE>
+		<DESCR>Strain diffractometer, STRESSSPEC/FRMII</DESCR>
+	</PROJECT>
+	<PROJECT current="no" test="yes">
+		<CFGPATH>~TESTS~/beer</CFGPATH>
+		<OUTPATH>~TEMP~/beer</OUTPATH>
+		<CFGFILE>BEER_reference.xml</CFGFILE>
+		<DESCR>ToF diffractometer, BEER/ESS</DESCR>
+	</PROJECT>
+</SIMRES>

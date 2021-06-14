@@ -1,8 +1,5 @@
 @echo off
-rem Launcher for command mode.
-rem OBSOLETE: use simres.bat -con [options]
-rem for tests, use simres.bat -test number
-rem  Process command line arguments:
+rem  Command arguments for simresCON.jar:
 rem  -g [GUI configuration path]      ; directory with restraxCON.ini file 
 rem  -p [Project config. file]        ; XML file with current project description 
 rem  -s [Script]                      ; Script file to be executed on startup
@@ -14,15 +11,47 @@ rem  -q                               ; quiet (no console output)
 rem  -log [filename]                  ; print console output to the given file
 rem
 rem edit following line to define the options
-set opt=%1
-rem set this variable to the full path to java launcher: java.exe (@BITS@ bit version)
+
+SETLOCAL
+set INSTDIR=@INSTDIR@
+set TEST=%1
+set SCR=%2
+
+if [%TEST%]==[] goto ERR
+if [%SCR%]==[] goto ERR
+goto RUN
+
+:ERR
+echo Usage:
+echo    %0 [test number] [script name]
+echo Example:
+echo    %0 0 SSPEC_Fe
+goto END
+
+:RUN
+set TESTDIR=%INSTDIR%\tests
+set TPROJ=%INSTDIR%\tests\test_projects.xml
+if not exist %TESTDIR% (
+	echo Directory %TESTDIR%\tests does not exist.
+	goto END
+)
+if not exist %TPROJ% (
+	echo File %TPROJ% does not exist.
+	goto END
+)
+
+set opt=-g %INSTDIR%\GUI -test %TEST% -s %SCR%.inp -o test_%TEST%.html -log test_%TEST%.txt -e SCRIPT
+rem set this variable to the full path to java launcher: java.exe (64 bit version)
 set JRE=@JRE@
 if exist "%JRE%" (
   echo %0
   echo Starting Java launcher ...
-  "%JRE%" -jar "@INSTDIR@\GUI\simresCON.jar" %opt%
+  "%JRE%" -jar "%INSTDIR%\GUI\simresCON.jar" %opt%
 ) else (
-  echo Can't find java.exe for a @BITS@ bit platform. 
+  echo Can't find java.exe for a 64 bit platform. 
   echo Edit the JRE variable in the startup script:
   echo %0
 )
+
+:END
+ENDLOCAL

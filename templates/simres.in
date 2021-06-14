@@ -1,0 +1,67 @@
+#! /bin/sh
+# SIMRES launcher script for Windows
+# -----------------------------------
+# Usage:
+#
+# GUI mode:
+#   simres [options]
+# command (console) mode:
+# 	simres -con [options] 
+# test mode:
+# 	simres -test number
+# -----------------------------------
+# 
+#  options:
+#  -g [GUI configuration path]      ; directory with restraxCON.ini or restraxGUI.ini file 
+#  -p [Project config. file]        ; XML file with current project description 
+#  -s [Script]                      ; Script file to be executed on startup
+#  -c [Instrument config. file]     ; Instrument config. file in XML format
+#  -e [command]                     ; Command to be executed
+#  -test [int]                      ; Run given test (the list is defined in ./tests/test_projects.xml).
+#  -o [filename]                    ; Results output file in HTML format
+#  -q                               ; quiet (no console output)
+#  -log [filename]                  ; print console output to the given file
+#
+# -------------------------------------- 
+# Installation directory
+INSTDIR=@INSTDIR@
+# set this variable to the full path to java launcher: java.exe (64 bit version)
+JRE=@JRE@
+#
+pgm=$0
+com=$1
+# help mode
+if [ "$com" = "-help" ]; then 
+    cmd=simresCON.jar
+	opt=-con  -g "$INSTDIR/GUI"  -h
+elif [ "$com" = "-test" ]; then
+    cmd=simresCON.jar
+	opt=-test $2 -o test_$2.html -log test_$2.txt -e SCRIPT
+else
+	cmd=simresGUI.jar
+	opt=-g "$INSTDIR/GUI"
+
+GUI="$INSTDIR/GUI/$cmd" 
+echo "$GUI" $opt
+
+if [ -f "$INSTDIR/motd" ] ; then
+  cat "$INSTDIR/motd"
+fi
+
+if [ ! -f $GUI ] ; then
+  echo "JAR file not found: $GUI"
+  exit
+fi
+
+if exist "$JRE" (
+  echo $pgm
+  echo "Starting Java launcher ..."
+  "$JRE" -jar "$GUI" $opt
+) else (
+  echo "Can''t find java.exe for a 64 bit platform. "
+  echo "Edit the JRE variable in the startup script: "
+  echo $0
+)
+
+
+

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<SIMRES version="6.0.4">
+<INSTRUMENT redefine="no">
+  <SPECIMEN>
+    <FRAME class="PCRYST" id="SAM" name="a-Fe200">
+      <SAMPLE>
+        <TYPE name="type" enum="SAMPLE_TYPE" value="2">powder</TYPE>
+        <SIGSC name="Sigma_s" units="cm^-1">0.1</SIGSC>
+        <SIGA name="Sigma_a" units="cm^-1">0.7</SIGA>
+        <SIGI name="Sigma_i" units="cm^-1">0.034</SIGI>
+        <PCRYST>
+          <FHKL name="structure factor" units="fm.A^-3">0.802</FHKL>
+          <DHKL name="d-spacing" units="A">1.4332</DHKL>
+          <JHKL name="plane multiplicity">6</JHKL>
+        </PCRYST>
+      </SAMPLE>
+    </FRAME>
+  </SPECIMEN>
+</INSTRUMENT>
+</SIMRES>

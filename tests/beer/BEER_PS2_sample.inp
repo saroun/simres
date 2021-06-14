@@ -1,0 +1,351 @@
+# use with BEER_PS2_sample.xml
+#--------------------------------------------------
+
+# wavelength range 0.6 .. 3.6 A
+set INST LAMBDA 2.1
+set SOURCE LAMW 1.42857
+
+# adjust DET1D plot
+cmd DET1D NP  3000
+cmd DET1D X0 1.4
+cmd DET1D DX 1.5
+cmd DET1D XAUTO 0
+cmd DET1D CAUTO 0
+cmd DET1D ERR 1
+
+XML UPDATE
+
+# Simulate primary beam
+#----------------------------------------
+set TR MODE 0
+CNT 500000
+XML UPDATE
+DO MC
+
+# Plot and save ToF spectrum
+BREF SAMPLE_I
+cmd BEAM1D X 6
+cmd BEAM1D ERR 1
+DO BEAM1D
+cmd GRSAVE FILE PS2_spectrum.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# save input events 
+BREF SAMPLE_I
+MCPEX beam_inc_PS2.mcpl 1
+
+#--------------------------------------
+# simulate secondary beam
+#--------------------------------------
+set TR MODE 1
+set TR SPLIT 10
+XML UPDATE
+
+# optional: load input from mcpl 
+BREF SAMPLE_I
+MCPIN beam_inc_PS2.mcpl 1
+
+# important !
+BREF DET
+
+# whole detector
+#-----------------------
+set MOND X0 0.0
+set MOND DX 1000.0
+XML MOND
+set TR MODE 1
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+set TR MODE 1
+DO MC
+cmd DET1D COM duplex steel, PS2, full
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_full.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, full
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_full.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+#----------------------
+# partial detectors
+#-----------------------
+set TR SPLIT  10
+XML UPDATE
+
+#--------------------------------------------
+set MOND X0 -450
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, -45 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_-45.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, -45 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_-45.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+
+#--------------------------------------------
+set MOND X0 -350
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, -35 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_-35.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, -35 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_-35.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+#--------------------------------------------
+set MOND X0 -250
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, -25 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_-25.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, -25 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_-25.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+#--------------------------------------------
+set MOND X0 -150
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, -15 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_-15.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, -15 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_-15.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+#--------------------------------------------
+set MOND X0 -50
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, -5 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_-5.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, -5 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_-5.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+#--------------------------------------------
+set MOND X0 50
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, 5 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_5.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, 5 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_5.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+#--------------------------------------------
+set MOND X0 150
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, 15 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_15.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, 15 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_15.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+
+#--------------------------------------------
+set MOND X0 250
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, 25 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_25.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, 25 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_25.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+#--------------------------------------------
+set MOND X0 350
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, 35 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_35.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, 35 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_35.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+
+#--------------------------------------------
+set MOND X0 450
+set MOND DX 100.0
+XML MOND
+
+# diffractogram
+set PCRYST TYPE 2
+XML UPDATE
+DO MC
+cmd DET1D COM duplex steel, PS2, 45 cm
+DO DET1D
+cmd GRSAVE FILE PS2_duplex_45.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+# background
+set PCRYST TYPE 1
+set PCRYST SIGSC 0.1
+XML UPDATE
+DO MC
+cmd DET1D COM background, PS2, 45 cm
+DO DET1D
+cmd GRSAVE FILE PS2_bcg_45.dat
+cmd GRSAVE OVER no
+do GRSAVE 
+
+
+

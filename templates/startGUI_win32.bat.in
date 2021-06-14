@@ -1,4 +1,6 @@
 @echo off
+rem Launcher for GUI mode.
+rem OBSOLETE: use simres.bat
 rem set this variable to the full path to java launcher: java.exe (@BITS@ bit version)
 set JRE=@JRE@
 if exist "%JRE%" (

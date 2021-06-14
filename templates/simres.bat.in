@@ -1,0 +1,82 @@
+@echo off
+rem SIMRES launcher script for Windows
+rem -----------------------------------
+rem Usage:
+rem
+rem GUI mode:
+rem     simres [options]
+rem command (console) mode:
+rem 	simres -con [options] 
+rem test mode:
+rem 	simres -test number
+rem -----------------------------------
+rem 
+rem 
+rem  options:
+rem  -g [GUI configuration path]      ; directory with restraxCON.ini or restraxGUI.ini file 
+rem  -p [Project config. file]        ; XML file with current project description 
+rem  -s [Script]                      ; Script file to be executed on startup
+rem  -c [Instrument config. file]     ; Instrument config. file in XML format
+rem  -e [command]                     ; Command to be executed
+rem  -test [int]                      ; Run given test (the list is defined in ./tests/test_projects.xml).
+rem  -o [filename]                    ; Results output file in HTML format
+rem  -q                               ; quiet (no console output)
+rem  -log [filename]                  ; print console output to the given file
+rem
+rem edit following line to define the options
+
+SETLOCAL
+set INSTDIR=@INSTDIR@
+
+set pgm=%0
+set com=%1
+rem help mode
+if [%com%]==[-help] (
+    set cmd=simresCON.jar
+	set opt=-con  -g "%INSTDIR%\GUI" -h
+	goto RUN
+)
+rem test mode
+if [%com%]==[-test] (
+    set cmd=simresCON.jar
+	set opt=-test %2 -o test_%2.html -log test_%2.txt -e SCRIPT
+	goto RUN
+)
+
+rem collect parameters after the 1st one
+shift
+set params=%1
+:loop
+shift
+if [%1]==[] goto afterloop
+set params=%params% %1
+goto loop
+:afterloop
+
+rem console mode
+if [%com%]==[-con] (
+	set cmd=simresCON.jar
+	set opt=-g "%INSTDIR%\GUI" %params%
+	goto RUN
+)
+rem GUI mode
+set cmd=simresGUI.jar
+set opt=%cmd% -g "%INSTDIR%\GUI" %params%
+
+:RUN
+echo "%INSTDIR%\GUI\%cmd%" %opt%
+
+rem set this variable to the full path to java launcher: java.exe (64 bit version)
+set JRE=@JRE@
+if exist "%JRE%" (
+  echo %pgm%
+  echo Starting Java launcher ...
+  "%JRE%" -jar "%INSTDIR%\GUI\%cmd%" %opt%
+) else (
+  echo Can't find java.exe for a 64 bit platform. 
+  echo Edit the JRE variable in the startup script:
+  echo %0
+)
+
+:END
+ENDLOCAL

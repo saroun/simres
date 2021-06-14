@@ -1,0 +1,12 @@
+echo off
+set SIMRES=@INSTDIR@
+set PATH=%SIMRES%;%PATH%
+echo SIMRES is installaed in %SIMRES%
+echo Usage:
+echo ------------------------------------------------------
+echo simres -con [options]          ; run console command
+echo simres -test number [options]  ; run test
+echo simres -help                   ; print command options
+echo -------------------------------------------------------
+"C:\WINDOWS\system32\cmd.exe" 
+
