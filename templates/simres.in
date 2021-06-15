@@ -27,41 +27,41 @@
 INSTDIR=@INSTDIR@
 # set this variable to the full path to java launcher: java.exe (64 bit version)
 JRE=@JRE@
-#
 pgm=$0
 com=$1
+cmd=simresGUI.jar
+opt="-g \"$INSTDIR/GUI\""
 # help mode
 if [ "$com" = "-help" ]; then 
-    cmd=simresCON.jar
-	opt=-con  -g "$INSTDIR/GUI"  -h
+  cmd=simresCON.jar
+  opt="-con  -g \"$INSTDIR/GUI\"  -h"
 elif [ "$com" = "-test" ]; then
-    cmd=simresCON.jar
-	opt=-test $2 -o test_$2.html -log test_$2.txt -e SCRIPT
-else
-	cmd=simresGUI.jar
-	opt=-g "$INSTDIR/GUI"
-
-GUI="$INSTDIR/GUI/$cmd" 
-echo "$GUI" $opt
+  cmd=simresCON.jar
+  inp=""
+  if [ ! -z "$3" ]; then
+    inp="-s $3"
+  fi
+  opt="-seed 10003 -test $2 -o test_$2.html -log test_$2.txt $inp -e SCRIPT"
+fi
+JAR="$INSTDIR/GUI/$cmd" 
 
 if [ -f "$INSTDIR/motd" ] ; then
   cat "$INSTDIR/motd"
 fi
 
-if [ ! -f $GUI ] ; then
-  echo "JAR file not found: $GUI"
+if [ ! -f $JAR ] ; then
+  echo "JAR file not found: $JAR"
   exit
 fi
 
-if exist "$JRE" (
+if [ -f "$JRE" ] ; then
   echo $pgm
   echo "Starting Java launcher ..."
-  "$JRE" -jar "$GUI" $opt
-) else (
+  echo "$JAR $opt"
+  "$JRE" -jar "$JAR" $opt
+else
   echo "Can''t find java.exe for a 64 bit platform. "
   echo "Edit the JRE variable in the startup script: "
   echo $0
-)
-
-
+fi
 

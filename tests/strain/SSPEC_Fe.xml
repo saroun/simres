@@ -193,7 +193,7 @@
 		<VARI name="variance reduction" value="1">yes</VARI>
 		<MAXV name="optimize limits" value="1">yes</MAXV>
 		<SWPOOL name="safety pool" value="1">yes</SWPOOL>
-		<CNT name="counts">10000</CNT>
+		<CNT name="counts">100000</CNT>
 		<ELIMIT name="efficiency limit" units=" ">1.0E5</ELIMIT>
 		<PLIMIT name="precision limit" units=" ">1.0E-3</PLIMIT>
 		<DBC name="double cycle" value="0">no</DBC>

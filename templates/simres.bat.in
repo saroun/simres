@@ -39,7 +39,11 @@ if [%com%]==[-help] (
 rem test mode
 if [%com%]==[-test] (
     set cmd=simresCON.jar
-	set opt=-test %2 -o test_%2.html -log test_%2.txt -e SCRIPT
+	if NOT ["%3"]==[""] (
+		set opt=-seed 10003 -test %2 -o test_%2.html -log test_%2.txt -s %3 -e SCRIPT
+	) else (
+		set opt=-seed 10003 -test %2 -o test_%2.html -log test_%2.txt -e SCRIPT
+	)
 	goto RUN
 )
 
@@ -71,6 +75,7 @@ set JRE=@JRE@
 if exist "%JRE%" (
   echo %pgm%
   echo Starting Java launcher ...
+  echo "%INSTDIR%\GUI\%cmd%" %opt%
   "%JRE%" -jar "%INSTDIR%\GUI\%cmd%" %opt%
 ) else (
   echo Can't find java.exe for a 64 bit platform. 
