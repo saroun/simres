@@ -23,7 +23,7 @@ use vars qw/*dbg *SYSNAME *PROMPT *HOST/;
 # Note that *.in files are added automatically
 my @SOURCES=(
 # complete directories
-    "3rdparty","config","resources","src","licenses","templates",
+    "3rdparty","config","resources","src","licenses","templates","tests",
 # information files
    "*.md", "LICENSE", 
 # GUI
