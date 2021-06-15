@@ -276,6 +276,28 @@ sub ProcessInFiles {
     };
 };
 
+sub ForceSimlink {
+  my $src= shift  @_;  # input file
+  my $tgt= shift  @_;  # link file
+  my $ret=1;
+  if (!symlink($src, $tgt)) {
+    if ($!{EEXIST}) {
+      unlink($tgt) or do {
+        printf("Can't remove \"$tgt\": $!\n");
+        $ret=0;
+      };
+      symlink($src, $tgt) or do {
+        printf("Can't create symlink \"$tgt\": $!\n");
+        $ret=0;
+      };
+    } else {
+      printf("Can't create symlink \"$tgt\": $!\n");
+      $ret=0;
+    };
+  };
+  return($ret);
+}
+
 # message at the end
 sub EndTasks {
 # print final messages
@@ -284,7 +306,8 @@ sub EndTasks {
   unless ($SYSNAME eq "win32") {
     if ($VARS{'INSTDIR'} eq "/opt/simres") {
       if ( (-e "/usr/bin") and (-e "/opt/simres/simres")) { 
-        my $res = eval { symlink("/opt/simres/simres","/usr/bin/simres");1 };
+        my $res = ForceSimlink("/opt/simres/simres","/usr/bin/simres");
+        # my $res = eval { symlink("/opt/simres/simres","/usr/bin/simres");1 };
         if ($res) {
           printf("Symbolic link created at /usr/bin/simres.\n");  
         };
