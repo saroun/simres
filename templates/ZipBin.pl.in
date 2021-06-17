@@ -20,15 +20,6 @@ use vars qw/*dbg *SYSNAME *HOST *PROMPT/;
 
 # Executable files to be packed in addition to those installed
 my @EXECS=("Install.pl","Restrax.pm");
-
-# Template *.in files to be copied to the distribution
-# (they will be parsed by Install.pl during installation)
-my @TEMPLATES = ("setup","GUI","motd.in","Uninstall.in");
-if ($SYSNAME eq 'win32') {
- push @TEMPLATES,("startGUI_win32.bat.in","startCON_win32.bat.in");	
-} else {
- push @TEMPLATES,("startGUI.in","startCON.in");
-}
 	
 #-----------------------------------------------------------------------------
 

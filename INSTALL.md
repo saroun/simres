@@ -81,7 +81,7 @@ To build GUI:
 - `ant` builder
 - `Java3D` package, see `submodules/simresUI/README.md` for instructions. 
 
-Run `build.bat`. This will perform all necessary steps: configure, compile and install SIMRES to ./distr. See the content of `build.bat` for the make commands which can also be used to build the core, PGPLOT driver and GUI separately. After execution of the script, it should be possible to run SIMRES by executing `./distr/startGUI_win32.bat`. For building an installer, see the [last section](#"building-of-binary-distribution-packages") below. 
+Run `build.bat`. This will perform all necessary steps: configure, compile and install SIMRES to ./distr. See the content of `build.bat` for the make commands which can also be used to build the core, PGPLOT driver and GUI separately. After execution of the script, it should be possible to run SIMRES by executing `.\distr\simres.bat`. For running a test in command mode, execute e.g. `.\distr\simres.bat -test 0`. For building an installer, see the [last section](#"building-of-binary-distribution-packages") below. 
 
 ### Compile on Linux
 
@@ -97,7 +97,7 @@ Make sure that the required toolchain is available. Specifically, the following 
 - Java3D package  
 see `submodules/simresUI/README.md` for instructions.
 
-Run the script `build.sh`. This will perform all necessary steps: configure, compile and install SIMRES to ./distr. See the content of `build.sh` for the make commands which can also be used to build the core, PGPLOT driver and GUI separately. After execution of the script, it should be possible to run SIMRES by executing `./distr/startGUI`. For building a binary package, see the [last section](#"building-of-binary-distribution-packages") below. 
+Run the script `build.sh`. This will perform all necessary steps: configure, compile and install SIMRES to ./distr. See the content of `build.sh` for the make commands which can also be used to build the core, PGPLOT driver and GUI separately. After execution of the script, it should be possible to run SIMRES by executing `./distr/simres`.  For running a test in command mode, execute e.g. `./distr/simres -test 0`. For building a binary package, see the [last section](#"building-of-binary-distribution-packages") below. 
 
 ## Building of binary distribution packages
 

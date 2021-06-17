@@ -70,6 +70,7 @@ Source: {#MyAppSrc}\rtlib\windows\libgcc_s_seh-1.dll; DestDir: {app}\bin; Flags:
 Source: {#MyAppSrc}\rtlib\windows\libquadmath-0.dll; DestDir: {app}\bin; Flags: ignoreversion
 ; other directories
 Source: {#MyAppSrc}\resources\setup\*; DestDir: {app}\setup; Flags: ignoreversion recursesubdirs
+Source: {#MyAppSrc}\licenses\*; DestDir: {app}\licenses; Flags: ignoreversion recursesubdirs
 ;PGPLOT
 Source: {#MyAppSrc}\lib\pgplot\grfont.dat; DestDir: {app}\lib\pgplot; Flags: ignoreversion recursesubdirs
 Source: {#MyAppSrc}\lib\pgplot\rgb.txt; DestDir: {app}\lib\pgplot; Flags: ignoreversion recursesubdirs
@@ -91,6 +92,8 @@ Source: {#MyAppSrc}\resources\demo\TAS\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; De
 Source: {#MyAppSrc}\resources\demo\crystal_reflectivity\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; DestDir: {app}\demo\crystal_reflectivity; Flags: ignoreversion recursesubdirs
 Source: {#MyAppSrc}\resources\demo\multiple_reflections\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; DestDir: {app}\demo\multiple_reflections; Flags: ignoreversion recursesubdirs
 Source: {#MyAppSrc}\resources\demo\simres_mcstas\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; DestDir: {app}\demo\simres_mcstas; Flags: ignoreversion recursesubdirs
+; tools
+Source: {#MyAppSrc}\resources\tools\*; Excludes: CVS\*,*.ini,*.mcpl, *.tg; DestDir: {app}\tools; Flags: ignoreversion recursesubdirs
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; WorkingDir: {app}; IconFilename: {app}\simres.ico
 Name: {group}\Simres console; Filename: {app}\simres_console.bat; WorkingDir: {app}; IconFilename: {app}\simres.ico
@@ -99,6 +102,7 @@ Name: {group}\User guide; Filename: {app}\doc\{#MyAppGuide}
 Name: {group}\{cm:ProgramOnTheWeb,{#MyAppName}}; Filename: {#HOMEPAGE}
 Name: {group}\{cm:UninstallProgram,{#MyAppName}}; Filename: {uninstallexe}
 Name: {autodesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: desktopicon; WorkingDir: {app}; IconFilename: {app}\simres.ico
+Name: {autodesktop}\Simres console; Filename: {app}\simres_console.bat; Tasks: desktopicon; WorkingDir: {userdocs}; IconFilename: {app}\simres.ico
 Name: {autostartmenu}\Programs\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: quicklaunchicon; WorkingDir: {app}; IconFilename: {app}\simres.ico
 
 [UninstallDelete]

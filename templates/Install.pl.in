@@ -69,10 +69,13 @@ $VARS{'PWD'}=UX2DOS($CD);          # current directory
 # IMPORTANT: DO NOT add trailing slash to directory entries
 
 # readme and license info 
-my @SOURCES=("licenses", "README.md", "COPYING.md", "LICENSE", "INSTALL.md");
+my @SOURCES=("licenses", "README.md", "COPYING.md", "LICENSE", "INSTALL.md", "CHANGELOG.txt");
 
 # resources (setup files, docs)
-push @SOURCES,("resources/setup", "resources/doc/simres-guide.pdf", "resources/doc/simres-release-notes.pdf");
+push @SOURCES,("resources/setup", 
+"resources/doc/simres-guide.pdf", 
+"resources/doc/simres-release-notes.pdf",
+"resources/tools");
   
 # PGPLOT grfont
 push @SOURCES,("lib/pgplot/grfont.dat", "lib/pgplot/rgb.txt");
@@ -98,7 +101,7 @@ push @SOURCES,("tests");
 my @TEMPLATES = ("GUI/restraxCON.ini.in", "GUI/restraxGUI.ini.in");
 push @TEMPLATES, ("motd.in", "Uninstall.pl.in");
 if ($SYSNAME eq "win32") {
-  push @TEMPLATES,("simres_console.bat.in","simres.bat.in","startGUI_win32.bat.in","startCON_win32.bat.in","tests/runtest.bat.in");
+  push @TEMPLATES,("simres_console.bat.in","simres.bat.in","startGUI_win32.bat.in","startCON_win32.bat.in");
 } else {
   push @TEMPLATES,("simres.in", "startGUI.in","startCON.in");
 };

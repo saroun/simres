@@ -30,11 +30,11 @@ JRE=@JRE@
 pgm=$0
 com=$1
 cmd=simresGUI.jar
-opt="-g \"$INSTDIR/GUI\""
+opt="-g \"$INSTDIR/GUI\" "
 # help mode
 if [ "$com" = "-help" ]; then 
   cmd=simresCON.jar
-  opt="-con  -g \"$INSTDIR/GUI\"  -h"
+  opt="-g \"$INSTDIR/GUI\" -h"
 elif [ "$com" = "-test" ]; then
   cmd=simresCON.jar
   inp=""
@@ -42,6 +42,9 @@ elif [ "$com" = "-test" ]; then
     inp="-s $3"
   fi
   opt="-seed 10003 -test $2 -o test_$2.html -log test_$2.txt $inp -e SCRIPT"
+elif [ "$com" = "-con" ]; then 
+  cmd=simresCON.jar
+  opt="-g \"$INSTDIR/GUI\" $@" 
 fi
 JAR="$INSTDIR/GUI/$cmd" 
 

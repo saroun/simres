@@ -3,16 +3,15 @@ Change log for SIMRES
 ==========================
 
 ------------------------
-update 6.5.3, 4/6/2021
+update 6.5.3, 17/6/2021
 ------------------------
 - updated crystal.tab by adding incoherent scattering cross-sections
-- increased peak position precission on output
+- increased peak position precision on output
 - added REPSA command to print information about polycrystalline sample
-- bug fix: program stays in "non ready" state after SCAN1D or FMERIT commads
+- bug fix: program stays in "non ready" state after SCAN1D or FMERIT commands
 - added Python script for generating the sample tables from NCrystal (https://github.com/mctools/ncrystal)
 - polycrystal sample tables replaced by those generated using NCrystal
 - updated manual
-
 
 ------------------------
 update 6.5.1, 17/7/2020
@@ -79,7 +78,7 @@ version 6.2
 		manual or automatic (elliptic, parabolic) shape setting 
   MONITOR: beam monitor with mask area, shows successful rays at any place
 	         various modes of 2D mask in x,y,kx,... useful for instr. optimization
-- strain gradients for polycrytsalline samples			 
+- strain gradients for polycrystalline samples			 
 - choice of beam monitor to be used with BEAM1D,BEAM2D commands
 - list of mirror tables located in home/.simres/tables
 - without table, mirror reflectivity for SGUIDE is analytical (parameters are given in sguide dialog)

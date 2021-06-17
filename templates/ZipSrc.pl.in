@@ -25,7 +25,7 @@ my @SOURCES=(
 # complete directories
     "3rdparty","config","resources","src","licenses","templates","tests",
 # information files
-   "*.md", "LICENSE", 
+   "*.md", "LICENSE", "licenses", "CHANGELOG.txt",
 # GUI
     "submodules/simresUI",
 # JSDRIV server
@@ -35,16 +35,12 @@ my @SOURCES=(
 my $exclnames = "bin|lib|Java3D|dist|[.]gitignore|[.]gitmodules|tmp[.]txt|config[.]inc"; # excluded names (files or directories)
 my $exclext="exe|bin|dcu|lib|dpp|dll|so|res"; # excluded file extensions 		   
 
-# extra files that are missed by source collection:
-my @EXTRAS=(
-  "resources/setup/crystal.lib","resources/setup/tables/atoms.lib"
-);
-
 # executable scripts:
 my @EXECS=(
 # perl script system for configuration, installation and packaging
-    "Restrax.pm", "configure.pl", "fsym", "findJRE.pl", "build.bat"
-# batch files useful in win32
+    "Restrax.pm", "configure.pl", "fsym", "findJRE.pl", 
+# build scripts
+    "build.bat", "build.sh"
   );
 
 # Utils needed to run compiled SIMRES:
@@ -52,7 +48,7 @@ my @UTILS=(
 # Java 3D files:
     "GUI/j3d-jre",
 	# information files
-   "*.md", "LICENSE", "licenses"
+   "*.md", "LICENSE", "licenses", "CHANGELOG.txt"
 ); 
 if ($SYSNAME eq 'win32') {
 	push @UTILS,("bin/libpgplot.dll", "bin/jsdrivlib.dll", "lib/pgplot/jsdriv_server.exe",
@@ -130,18 +126,10 @@ if ($WHAT eq "util") {
 	close(OUTFILE);
 # collect source files
 } else {
-	# collect all resources defined in $SOURCES list
-															   
+	# collect all resources defined in $SOURCES list													   
 	@SRCFILES = CollectResourcesEx2("",$exclext,"",$exclnames,@SOURCES);
 	# copy sources to $TD
 	foreach my $F (@SRCFILES) {
-	  if ((my $res = FileCopyCmd($F,$TD,"0644")) eq "") {
-		push @notfound,("$res")
-	  };
-	};
-	# copy extras to $TD
-	my @EXTRAF = CollectResources("","",@EXTRAS);
-	foreach my $F (@EXTRAF) {
 	  if ((my $res = FileCopyCmd($F,$TD,"0644")) eq "") {
 		push @notfound,("$res")
 	  };

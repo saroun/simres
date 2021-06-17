@@ -33,7 +33,7 @@ set com=%1
 rem help mode
 if [%com%]==[-help] (
     set cmd=simresCON.jar
-	set opt=-con  -g "%INSTDIR%\GUI" -h
+	set opt=-h
 	goto RUN
 )
 rem test mode
@@ -60,15 +60,14 @@ goto loop
 rem console mode
 if [%com%]==[-con] (
 	set cmd=simresCON.jar
-	set opt=-g "%INSTDIR%\GUI" %params%
+	set opt=%params%
 	goto RUN
 )
 rem GUI mode
 set cmd=simresGUI.jar
-set opt=%cmd% -g "%INSTDIR%\GUI" %params%
+set opt=%params%
 
 :RUN
-echo "%INSTDIR%\GUI\%cmd%" %opt%
 
 rem set this variable to the full path to java launcher: java.exe (64 bit version)
 set JRE=@JRE@
