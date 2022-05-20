@@ -300,7 +300,7 @@
 					<DD name="d-spread" units=" ">0.0</DD>
 					<GRAIN name="grain size" units="um">0.0</GRAIN>
 					<JHKL name="plane multiplicity">6</JHKL>
-					<REFTAB name="reflections table">sample-duplex.dat</REFTAB>
+					<REFTAB name="reflections table">sample_duplex_steel.dat</REFTAB>
 					<STRTAB name="strain table index">0</STRTAB>
 					<IREF name="reflection index">0</IREF>
 				</PCRYST>

@@ -18,7 +18,7 @@ XML UPDATE
 # set sample type to "powder"
 set SAM TYPE 2
 # load reflections table
-set SAM REFTAB sample-duplex.dat
+set SAM REFTAB sample_duplex_steel.dat
 
 # First accumulate incoming neutrons in the sample
 # number of counts
