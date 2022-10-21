@@ -42,6 +42,7 @@
         character(1024) ::  FRAMES ! multi-frame data,  "phase1|width1|phase2|width2|..."
       ! calculated fields
         REAL (kind(1.D0)) :: T0 ! nominal TOF to the chopper
+		LOGICAL :: ACTIVE  ! Ignore the chopper if not
       ! data for multi-frame chopper
         REAL (kind(1.D0)) :: PHASES(MAXWINS)
         REAL (kind(1.D0)) :: WIDTHS(MAXWINS) ! widths as fractions of WIN
@@ -183,6 +184,7 @@
         OBJ%lockT0=.false.
         OBJ%OVERLAP=.false.
         OBJ%T0=0.D0
+		OBJ%ACTIVE=.true.
       END SUBROUTINE DCHOPPER_DEFAULT
 
 !-------------------------------------------------------------
@@ -371,7 +373,6 @@
       integer :: LR
       LR=0
       SELECT CASE (trim(PNAME))
-      ! backward compatibility requires TABNAME ...
         CASE('TIMING')
           SARG=' '
           if (len_trim(OBJ%FRAMES).gt.0) SARG=trim(OBJ%FRAMES)

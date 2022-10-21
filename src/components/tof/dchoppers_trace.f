@@ -69,12 +69,8 @@
 ! check passage through the entry and exit windows
       LOG1=TLIB_PASS_FRAME(NEUT%R,NEUT%K,OBJ%FRAME%SIZE,OBJ%FRAME%SHAPE)
 ! treat stopped choppers always in transparent position, regardless of actual phase
-      if (OBJ%FRQ.EQ.0) goto 10
-    !  Z=(NEUT%T-TOF_ZERO)/HOVM
-    !  dbg=((OBJ%FRAME%COUNT.lt.2000).and.LOG1.and.(abs(Z)<250.D0).and.(abs(Z).gt.130.D0))
-    !  dbg=((OBJ%FRAME%COUNT.lt.2000).and.LOG1)
+      if (.not.OBJ%ACTIVE) goto 10
 ! check passage through the chopper disc
-1     format(a,7(1x,G13.5))
       ! chopper orientation axis (2 for vertical, 1 for horizontal)
       IC=OR(OBJ%ORI+1)
       !NMAX=1
@@ -84,20 +80,20 @@
       i=0
       do while (LOG1.and.(i<NMAX).and.(.not.passed))
         i=i+1
-          !call TLIB_ROT_POS(NEUT%R,NEUT%K,OBJ%FRQ,OBJ%PHI+1.D0/OBJ%NW*(i-1),3,OBJ%RAD,IC,NEUT%T-TOF_ZERO,R1,K1)
           call TLIB_ROT_POS(NEUT%R,NEUT%K,OBJ%FRQ,OBJ%PHI+OBJ%PHASES(i),3,OBJ%RAD,IC,NEUT%T,R1,K1)
-          !dbg=(NEUT%T/HOVM>250000)
           passed=DCHOPPER_PASS(OBJ,i,R1(1:2))
-            if (dbg.and.passed.and.(OBJ%FRQ<200*1.D-6)) then
-            !if (dbg) then
-              !PHASE=OBJ%FRQ*(NEUT%T-TOF_ZERO)/HOVM+OBJ%PHI
-              PHASE=PHASE0+OBJ%PHASES(i)
-              if (i==1) write(*,*)
-              write(*,1) '    frame        i,R,K =',i,R1,K1
-              write(*,1) '    OM*T, PHASE =',PHASE0,PHASE
-              write(*,1) '    T,T0,TSAM =',NEUT%T/HOVM,TOF_ZERO/HOVM,TOF_SAMPLE/HOVM
-              dbg=.false.
-            endif
+!         !dbg=(NEUT%T/HOVM>250000)
+!            if (dbg.and.passed.and.(OBJ%FRQ<200*1.D-6)) then
+!            if (dbg) then
+!1     format(a,7(1x,G13.5))
+!              !PHASE=OBJ%FRQ*(NEUT%T-TOF_ZERO)/HOVM+OBJ%PHI
+!              PHASE=PHASE0+OBJ%PHASES(i)
+!              if (i==1) write(*,*)
+!              write(*,1) '    frame        i,R,K =',i,R1,K1
+!              write(*,1) '    OM*T, PHASE =',PHASE0,PHASE
+!              write(*,1) '    T,T0,TSAM =',NEUT%T/HOVM,TOF_ZERO/HOVM,TOF_SAMPLE/HOVM
+!              dbg=.false.
+!            endif
       enddo
       LOG1=passed
 ! post-transformation
@@ -160,7 +156,9 @@
       integer,intent(in) :: INST
       TYPE(DCHOPPER),POINTER :: OBJ
       integer :: i
-      real(kind(1.D0)) :: SGN
+      real(kind(1.D0)) :: SGN, wx, wy, w
+	  integer,parameter :: IX(2)=(/1,2/)
+      integer,parameter :: IY(2)=(/2,1/)
       if (.not.DCHOPPER_isValid(INST)) return
       OBJ => ADCHOPPERS(INST)%X
       do i=1,OBJ%NW
@@ -168,6 +166,18 @@
         if (OBJ%WIN*OBJ%WIDTHS(i)>0.5D0) SGN=-1.D0
         OBJ%TANWS(i)=SGN*abs(tan(0.5D0*OBJ%WIN*OBJ%WIDTHS(i)*TWOPI))
       enddo
+	  ! determine if the chopper is active
+	  OBJ%ACTIVE=.true.
+	  if ((OBJ%FRQ==0.D0).and.(OBJ%PHI+OBJ%PHASES(1)==0.D0)) then
+	    wx = OBJ%FRAME%SIZE(IX(OBJ%ORI+1)) ! chopper frame width
+		wy = OBJ%FRAME%SIZE(IY(OBJ%ORI+1))
+	    w = (2*OBJ%RAD-wy)*OBJ%TANWS(1) ! 1st window width at the bottom edge
+		OBJ%ACTIVE = (w<=wx) ! not active if the window width is bigger than the frame width
+		if (OBJ%ACTIVE) then
+			write(*,*) 'active chopper: '//trim(OBJ%FRAME%ID)
+		endif
+	  endif
+	  
       END SUBROUTINE DCHOPPER_INIT
 
 
