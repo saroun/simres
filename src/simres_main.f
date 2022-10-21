@@ -541,9 +541,9 @@ C-------------------------------------
       USE IO
       IMPLICIT NONE
       INCLUDE 'linp.inc'
-      CHARACTER*128 LINE
-      character*64 PRMPT
-      INTEGER*4 IRES,RESTRAX_HANDLE,IS,IL,PROCESS_BUFFER
+      CHARACTER(LEN_LINE) :: LINE
+      character(64) :: PRMPT
+      INTEGER :: IRES,RESTRAX_HANDLE,IS,IL,PROCESS_BUFFER
 
 2     FORMAT(a,$)
 C initialization

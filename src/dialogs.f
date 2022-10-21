@@ -361,11 +361,11 @@ C   idef    ... if >0, sprompt inlcudes the default value accepted by <enter>
 C RETURN:
 C   value  ...  return string value
 C--------------------------------------------------------------
-      CHARACTER*(*) label,value
-      INTEGER*4 idef
-      CHARACTER*128 S,sprompt
-      CHARACTER(LEN_LINE) LINE
-      INTEGER*4 IS1,IL,IL1,ILP,LL
+      CHARACTER*(*) label, value
+      INTEGER :: idef
+      CHARACTER(LEN_LINE) :: S,sprompt
+      CHARACTER(LEN_LINE) :: LINE
+      INTEGER :: IS1,IL,IL1,ILP,LL
 
 1     format(a,' : ',$)
 2     format(a,' [',a,']')
@@ -399,7 +399,7 @@ c// format sprompt
         sprompt=S(1:IL)
       endif
       ILP=LEN_TRIM(sprompt)
-      IF (ILP.GT.128) ILP=128
+      IF (ILP.GT.LEN_LINE) ILP=LEN_LINE
 c// read value
       WRITE(SOUT,1) sprompt(1:ILP)
       call RSXREAD(LINE)
