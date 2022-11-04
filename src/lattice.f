@@ -76,9 +76,8 @@
       subroutine LAT_INIT(LAT)
 ! calculate dependent fields in LAT (metric tensor, cell volume, ...)
 !-------------------------------------------------------------
-      TYPE (TCR_LATTICE)  :: LAT
-      LAT%VOL=GET_CELLVOL(LAT,298.D0)
-      call GET_METRIC(LAT,LAT%G)
+      TYPE (TCR_LATTICE) :: LAT
+      call GET_METRIC(LAT)
       end subroutine LAT_INIT
 
 !--------------------------------------------------------
@@ -226,32 +225,34 @@
       end function GET_CELLVOL
 
 !-------------------------------------------------------------
-      subroutine GET_METRIC(LAT,G)
+      subroutine GET_METRIC(LAT)
 ! calculate metric tensor for reciprocal lattice at T=298 K
 !-------------------------------------------------------------
-      TYPE (TCR_LATTICE),intent(in)  :: LAT
-      real(kind(1.D0)),intent(out) :: G(3,3)
+      TYPE (TCR_LATTICE) :: LAT
+      real(kind(1.D0)) :: G(3,3)
       integer :: k
-      real(kind(1.D0)) :: AX(3),SINA(3),COSA(3),VOL
-      VOL=GET_CELLVOL(LAT,298.D0)
-      if (VOL.gt.0.D0) then
+      real(kind(1.D0)) :: AX(3),SINA(3),COSA(3),VOL2
+	  LAT%VOL=GET_CELLVOL(LAT,298.D0)
+      if (LAT%VOL.gt.0.D0) then
+	    VOL2 = LAT%VOL**2
         do k=1,3
           COSA(k)=cos(LAT%ANG(k)*deg)
           SINA(k)=sin(LAT%ANG(k)*deg)
           AX(k)=LAT%AX(k)
         enddo
-        G(1,1)=(AX(2)*AX(3)*SINA(1))**2/VOL**2
-        G(2,2)=(AX(1)*AX(3)*SINA(2))**2/VOL**2
-        G(3,3)=(AX(1)*AX(2)*SINA(3))**2/VOL**2
-        G(1,2)=AX(1)*AX(2)*AX(3)**2*(COSA(1)*COSA(2)-COSA(3))/VOL**2
+        G(1,1)=(AX(2)*AX(3)*SINA(1))**2/VOL2
+        G(2,2)=(AX(1)*AX(3)*SINA(2))**2/VOL2
+        G(3,3)=(AX(1)*AX(2)*SINA(3))**2/VOL2
+        G(1,2)=AX(1)*AX(2)*AX(3)**2*(COSA(1)*COSA(2)-COSA(3))/VOL2
         G(2,1)=G(1,2)
-        G(1,3)=AX(1)*AX(3)*AX(2)**2*(COSA(1)*COSA(3)-COSA(2))/VOL**2
+        G(1,3)=AX(1)*AX(3)*AX(2)**2*(COSA(1)*COSA(3)-COSA(2))/VOL2
         G(3,1)=G(1,3)
-        G(2,3)=AX(2)*AX(3)*AX(1)**2*(COSA(2)*COSA(3)-COSA(1))/VOL**2
+        G(2,3)=AX(2)*AX(3)*AX(1)**2*(COSA(2)*COSA(3)-COSA(1))/VOL2
         G(3,2)=G(2,3)
       else
         G=0.D0
       endif
+	  LAT%G = G
       end subroutine GET_METRIC
 
 

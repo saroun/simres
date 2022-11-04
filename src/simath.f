@@ -90,7 +90,7 @@
         dx=x/100
         DO i=2,100
           ksi=(i-1)*dx
-          Z=Z+P(MOD(i,2))*ksi/(exp(ksi)-1.D0)
+          Z=Z+P(MOD(i,2)+1)*ksi/(exp(ksi)-1.D0)
         ENDDO
         DW_PHI1=Z*dx/3.D0
       endif
