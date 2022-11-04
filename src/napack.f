@@ -126,11 +126,12 @@ C     ---------------------------------------------
 10    L = L - O
       IF ( L .EQ. 4 ) GOTO 30
       S = 0.
-      DO 20 K = 1,N
+      DO K = 1,N
            J = L - K
            T = A(I+J)
            A(J) = T
-20         S = S + ABS(T)
+           S = S + ABS(T)
+      enddo
       IF ( R .LT. S ) R = S
       I = I + 1
       GOTO 10
@@ -145,13 +146,15 @@ C     ---------------------------------------------
       IF ( K .EQ. N ) GOTO 120
       E = N - K
       H = I
-      DO 50 M = I,Q,O
+      DO M = I,Q,O
            L = I + E
 C     --------------------
 C     |*** FIND PIVOT ***|
 C     --------------------
-           DO 50 J = M,L
-50              IF ( ABS(A(J)) .GT. ABS(A(H)) ) H = J
+           DO J = M,L
+             IF ( ABS(A(J)) .GT. ABS(A(H)) ) H = J
+           enddo
+      enddo
       C = (H-4)/O
       D = 4 + O*C + K
       G = H - D
@@ -161,11 +164,12 @@ C     --------------------
 C     -----------------------------
 C     |*** INTERCHANGE COLUMNS ***|
 C     -----------------------------
-      DO 60 J = F,L
-           T = A(J)
-           M = J + H
-           A(J) = A(M)
-60         A(M) = T
+      DO J = F,L
+        T = A(J)
+        M = J + H
+        A(J) = A(M)
+        A(M) = T
+      enddo
       J = I - K
       A(J) = G + K
       H = G + I
@@ -179,8 +183,9 @@ C     -----------------------------
 C     |*** COMPUTE MULTIPLIERS ***|
 C     -----------------------------
       M = I + 1
-      DO 70 J = M,L
-70         A(J) = A(J)/T
+      DO J = M,L
+        A(J) = A(J)/T
+      enddo
       F = I + E*O
 80    J = K + L
       H = J + G
@@ -194,8 +199,9 @@ C     ------------------------------
 C     |*** ELIMINATE BY COLUMNS ***|
 C     ------------------------------
       M = J + 1
-      DO 90 J = M,L
-90         A(J) = A(J) - T*A(J+H)
+      DO J = M,L
+        A(J) = A(J) - T*A(J+H)
+      enddo
 100   IF ( L .LT. F ) GOTO 80
       A(L+B) = C + 1
       GOTO 40
@@ -245,8 +251,9 @@ C------------------------------------------------
       I = I + H
       K = K + N
       L = L + N
-      DO 30 J = K,L
-30         A(J) = A(I+J)
+      DO J = K,L
+        A(J) = A(I+J)
+      enddo
       GOTO 20
       END
 
@@ -300,20 +307,23 @@ C     ---------------------------------------
       P = L
       Q = L
       S = ABS(V(L,L))
-      DO 20 H = L,N
-           DO 20 I = L,N
-                T = ABS(V(I,H))
-                IF ( T .LE. S ) GOTO 20
-                P = I
-                Q = H
-                S = T
-20    CONTINUE
+      DO H = L,N
+        DO I = L,N
+          T = ABS(V(I,H))
+          IF ( T .GT. S ) then
+            P = I
+            Q = H
+            S = T
+          endif
+        enddo
+      enddo
       W(N+L) = P
       W(O-L) = Q
-      DO 30 I = 1,N
-           T = V(I,L)
-           V(I,L) = V(I,Q)
-30         V(I,Q) = T
+      DO I = 1,N
+        T = V(I,L)
+        V(I,L) = V(I,Q)
+        V(I,Q) = T
+      enddo
       S = V(P,L)
       V(P,L) = V(L,L)
       IF ( S .EQ. 0.D0 ) GOTO 130
@@ -322,8 +332,9 @@ C     |*** COMPUTE MULTIPLIERS ***|
 C     -----------------------------
       V(L,L) = -1.D0
       S = 1.D0/S
-      DO 40 I = 1,N
-40         V(I,L) = -S*V(I,L)
+      DO I = 1,N
+        V(I,L) = -S*V(I,L)
+      enddo
       J = L
 50    J = J + 1
       IF ( J .GT. N ) J = 1
@@ -335,35 +346,40 @@ C     -----------------------------
 C     ------------------------------
 C     |*** ELIMINATE BY COLUMNS ***|
 C     ------------------------------
-      IF ( K .EQ. 0 ) GOTO 70
-      DO 60 I = 1,K
-60         V(I,J) = V(I,J) + T*V(I,L)
-70    V(L,J) = S*T
+      IF ( K .NE. 0 ) then
+        DO I = 1,K
+          V(I,J) = V(I,J) + T*V(I,L)
+        enddo
+      endif
+      V(L,J) = S*T
       IF ( M .GT. N ) GOTO 50
-      DO 80 I = M,N
-80         V(I,J) = V(I,J) + T*V(I,L)
+      DO I = M,N
+        V(I,J) = V(I,J) + T*V(I,L)
+      enddo
       GOTO 50
 C     -----------------------
 C     |*** PIVOT COLUMNS ***|
 C     -----------------------
 90    L = W(K+N)
-      DO 100 I = 1,N
-           T = V(I,L)
-           V(I,L) = V(I,K)
-100        V(I,K) = T
+      DO I = 1,N
+        T = V(I,L)
+        V(I,L) = V(I,K)
+        V(I,K) = T
+      enddo
       K = K - 1
       IF ( K .GT. 0 ) GOTO 90
 C     --------------------
 C     |*** PIVOT ROWS ***|
 C     --------------------
-      DO 110 J = 1,N
-           DO 110 I = 2,N
-                P = W(I)
-                H = O - I
-                T = V(P,J)
-                V(P,J) = V(H,J)
-                V(H,J) = T
-110   CONTINUE
+      DO J = 1,N
+        DO I = 2,N
+          P = W(I)
+          H = O - I
+          T = V(P,J)
+          V(P,J) = V(H,J)
+          V(H,J) = T
+        enddo
+      enddo
       KVERTD=0
       RETURN
 

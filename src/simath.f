@@ -25,7 +25,6 @@
         module procedure INVERT_R8
       end interface
 
-      private DIAG
       contains
 
 !------------------------------------------
@@ -242,7 +241,7 @@ C------------------------------------------
       real,intent(in) :: A(NA,NA)
       real,intent(out) :: B(NB,NB)
       integer,PARAMETER :: NMAX=256
-      real(KIND(1.D0)) :: A1(NMAX,NMAX),WK(2*NMAX)
+      real :: A1(NMAX,NMAX),WK(2*NMAX)
       INTEGER :: I,J,IRES,KVERTD
       if (N<1) then
             INVERT_R4=0
@@ -449,19 +448,22 @@ C--------------------------------------
 C     ------------------------------
       SUBROUTINE MXV(IT,N,NP,A,B,C)
 C     ------------------------------
-      INTEGER*4 IT,N,NP,I,J
-      REAL*8 A(NP,NP),B(NP),C(NP)
-      DO 10 J=1,N
+      integer, intent(in) :: IT,N,NP
+      REAL(KIND(1.D0)), intent(in) :: A(NP,NP),B(NP)
+      REAL(KIND(1.D0)), intent(out) :: C(NP)
+      INTEGER :: I,J
+      do J=1,N
          C(J)=0.
          IF (IT.GT.0) THEN
-           DO 20 I=1,N
-20         C(J)=C(J)+A(J,I)*B(I)
+           do I=1,N
+             C(J)=C(J)+A(J,I)*B(I)
+           enddo
          ELSE
-           DO 30 I=1,N
-30         C(J)=C(J)+A(I,J)*B(I)
+           do I=1,N
+             C(J)=C(J)+A(I,J)*B(I)
+           enddo
          ENDIF
-10    CONTINUE
-      RETURN
+      enddo
       END SUBROUTINE MXV
 
 C-----------------------------------------
@@ -490,53 +492,59 @@ C-----------------------------------------
       END SUBROUTINE MXM
 
 
-C     ------------------------------
+C--------------------------------
       SUBROUTINE M3XM3(IT,A,B,C)
-C     ------------------------------
-      INTEGER*4 IT,I,J,K
-      REAL*8 A(3,3),B(3,3),C(3,3)
-      DO 10 J=1,3
-      DO 10 K=1,3
+C--------------------------------
+      integer, intent(in) :: IT
+      REAL(KIND(1.D0)), intent(in) :: A(3,3),B(3,3)
+      REAL(KIND(1.D0)), intent(out) :: C(3,3)
+      INTEGER :: I,J,K
+      DO J=1,3
+      DO K=1,3
          C(J,K)=0.
          IF (IT.GT.0) THEN
-           DO 20 I=1,3
-20         C(J,K)=C(J,K)+A(J,I)*B(I,K)
+           DO I=1,3
+             C(J,K)=C(J,K)+A(J,I)*B(I,K)
+           enddo  
          ELSE
-           DO 30 I=1,3
-30         C(J,K)=C(J,K)+A(I,J)*B(I,K)
+           DO I=1,3
+             C(J,K)=C(J,K)+A(I,J)*B(I,K)
+           enddo
          ENDIF
-10    CONTINUE
-      RETURN
+      enddo
+      enddo
       END SUBROUTINE M3XM3
 
-C     ------------------------------
+C--------------------------------
       SUBROUTINE V3AV3(IT,A,B,C)
-C     ------------------------------
-      INTEGER*4 IT,I
-      REAL*8 A(3),B(3),C(3)
-
-      DO 10 I=1,3
-10      C(I)=A(I)+IT*B(I)
-      RETURN
+C--------------------------------
+      integer, intent(in) :: IT
+      REAL(KIND(1.D0)), intent(in) :: A(3),B(3)
+      REAL(KIND(1.D0)), intent(out) :: C(3)
+      INTEGER :: I
+      DO I=1,3
+        C(I)=A(I)+IT*B(I)
+      enddo
       END SUBROUTINE V3AV3
 
-C     ------------------------------
-      REAL*8 FUNCTION ABSV3(A)
-C     ------------------------------
-      REAL*8 A(3)
+C---------------------------------------
+      REAL(KIND(1.D0)) FUNCTION ABSV3(A)
+C---------------------------------------
+      REAL(KIND(1.D0)), intent(in) :: A(3)
       ABSV3=SQRT(V3XV3(A,A))
       END FUNCTION ABSV3
 
-C     ------------------------------
-      REAL*8   FUNCTION V3XV3(A,B)
-C     ------------------------------
-      INTEGER*4 I
-      REAL*8 A(3),B(3),Z
+C------------------------------------------
+      REAL(KIND(1.D0))  FUNCTION V3XV3(A,B)
+C------------------------------------------
+      REAL(KIND(1.D0)), intent(in) :: A(3),B(3)
+      REAL(KIND(1.D0)) :: Z
+      INTEGER :: I      
       Z=0
-      DO 10 I=1,3
-10      Z=Z+A(I)*B(I)
+      DO I=1,3
+        Z=Z+A(I)*B(I)
+      enddo
       V3XV3=Z
-      RETURN
       END FUNCTION V3XV3
 
 
@@ -544,7 +552,8 @@ C     ------------------------------
 ! cross product of 3-dim real vectors
 !----------------------------------
       SUBROUTINE V3cV3(A,B,C)
-      real(KIND(1.D0)) :: A(3),B(3),C(3)
+      REAL(KIND(1.D0)), intent(in) :: A(3),B(3)
+      REAL(KIND(1.D0)), intent(out) :: C(3)
       C(1)=A(2)*B(3)-A(3)*B(2)
       C(2)=A(3)*B(1)-A(1)*B(3)
       C(3)=A(1)*B(2)-A(2)*B(1)
@@ -586,315 +595,76 @@ C------------------------------------------------------
       ENDDO
       END SUBROUTINE GENROT
 
-c**************************************************************
-c
-      REAL*8 FUNCTION DETERM1(B,MD,N,A)
+C------------------------------------------------------
+      real(kind(1.D0)) FUNCTION DETERM1(B,MD,N,A)
 C     COMPUTES THE DETERMINANT OF THE MATRIX B
-      INTEGER*4 I,J,K,N1,N,I1,J1,K1,J2,K2,MD
-      real*8 A(MD,N),B(MD,N),X
-      DO 55 I=1,N
-      DO 55 J=1,N
-   55 A(I,J)=B(I,J)
+C------------------------------------------------------
+      integer, intent(in) :: MD, N
+      real(kind(1.D0)), intent(in) :: B(MD,N)
+      real(kind(1.D0)), intent(out) :: A(MD,N)
+      INTEGER :: I,J,K,N1,I1,J1,K1,J2,K2
+      real(kind(1.D0)) :: X
+      do I=1,N
+        do J=1,N
+          A(I,J)=B(I,J)
+        enddo
+      enddo
       N1=N-1
       DETERM1=1.
-      DO 1 I=1,N1
-      J1=I
-      K1=I
-      DO 10 J2=I,N
-      DO 10 K2=I,N
-      IF(ABS(A(J1,K1)).GE.ABS(A(J2,K2)))GO TO 10
-      J1=J2
-      K1=K2
-10    CONTINUE
-      IF(ABS(A(J1,K1)).GT.1.E-30)GO TO 11
-      DETERM1=0.
-      RETURN
-11    CONTINUE
-      IF(J1.EQ.I)GO TO 12
-      DO 5 K=I,N
-      X=A(I,K)
-      A(I,K)=A(J1,K)
-5     A(J1,K)=-X
-12    IF(K1.EQ.I)GO TO 13
-      DO 6 J=1,N
-      X=A(J,I)
-      A(J,I)=A(J,K1)
-6     A(J,K1)=-X
-13    I1=I+1
-      DO 30 J=I1,N
-      IF(A(J,I).EQ.0.)GO TO 30
-      X=A(J,I)/A(I,I)
-      DO 7 K=I,N
-7     A(J,K)=A(J,K)-X*A(I,K)
-30    CONTINUE
-1     DETERM1=DETERM1*A(I,I)
-      DETERM1=DETERM1*A(N,N)
-      RETURN
-      END FUNCTION DETERM1
-C
-C
-
-c**************************************************************
-c
-      REAL*8 FUNCTION DETERM(B,N,A)
-C     COMPUTES THE DETERMINANT OF THE MATRIX B
-      INTEGER*4 I,J,K,N1,N,I1,J1,K1,J2,K2
-      real*8 A(N,N),B(N,N),X
-      DO 55 I=1,N
-      DO 55 J=1,N
-   55 A(I,J)=B(I,J)
-      N1=N-1
-      DETERM=1.
-      DO 1 I=1,N1
-      J1=I
-      K1=I
-      DO 10 J2=I,N
-      DO 10 K2=I,N
-      IF(ABS(A(J1,K1)).GE.ABS(A(J2,K2)))GO TO 10
-      J1=J2
-      K1=K2
-10    CONTINUE
-      IF(ABS(A(J1,K1)).GT.1.E-30)GO TO 11
-      DETERM=0.
-      RETURN
-11    CONTINUE
-      IF(J1.EQ.I)GO TO 12
-      DO 5 K=I,N
-      X=A(I,K)
-      A(I,K)=A(J1,K)
-5     A(J1,K)=-X
-12    IF(K1.EQ.I)GO TO 13
-      DO 6 J=1,N
-      X=A(J,I)
-      A(J,I)=A(J,K1)
-6     A(J,K1)=-X
-13    I1=I+1
-      DO 30 J=I1,N
-      IF(A(J,I).EQ.0.)GO TO 30
-      X=A(J,I)/A(I,I)
-      DO 7 K=I,N
-7     A(J,K)=A(J,K)-X*A(I,K)
-30    CONTINUE
-1     DETERM=DETERM*A(I,I)
-      DETERM=DETERM*A(N,N)
-      RETURN
-      END FUNCTION DETERM
-C
-C
-C
-        SUBROUTINE DIAG(A,ADA,B)
-C***********************************************************************
-C   diagonalizes real*4 matrix A(4,4), B(4,4) is corresponding rotation matrix
-C***********************************************************************
-        INTEGER*4 I,J,K,L,N,ND,KK,KI,KJ,JR,KL,NDK,NDI,NDJ,JTES,NDN,II
-        INTEGER*4 IJ,JI,JJ,JK,IK,ITES,JRMAX(16)
-        REAL*4 A(16),ADA(16),B(16),ARMAX(16)
-        REAL*4 E,Y,X,T,TY,TSQ,C,S,CSQ,AMAX,AII,AJJ,AIJ
-        DATA N,ND,E/4,4,1.E-24/
-        NDN=ND*N
-        DO 1 K=1,NDN
-        ADA(K)=A(K)
-        B(K)=0.
-    1        CONTINUE
-        DO 2 K=1,N
-        KK=K*(ND+1)-ND
-        ARMAX(K)=0.
-        B(KK)=1.
-        DO 3 L=K,N
-        IF(L-K)4,3,4
-    4        KL=K+ND*(L-1)
-        Y=ABS(ADA(KL))
-        IF(ARMAX(K)-Y)5,3,3
-    5        ARMAX(K)=Y
-        JRMAX(K)=L
-    3        CONTINUE
-    2        CONTINUE
-   11        AMAX=0.
-        DO 6 K=1,N
-        Y=ABS(ARMAX(K))
-        IF(AMAX-Y)7,6,6
-    7        AMAX=Y
-        I=K
-    6        CONTINUE
-        J=JRMAX(I)
-        IF(E-AMAX)8,9,9
-    8        NDI=ND*(I-1)
-        NDJ=ND*(J-1)
-        II=I+NDI
-        JJ=J+NDJ
-        IJ=I+NDJ
-        JI=J+NDI
-        AII=ADA(II)
-        AJJ=ADA(JJ)
-        AIJ=ADA(IJ)
-        Y=2.*AIJ
-        X=AII-AJJ
-        T=SIGN(1.E0,X)*Y/(ABS(X)+SQRT(X**2+Y**2))
-        TSQ=T**2
-        C=1./SQRT(ABS(1.+TSQ))
-        TY=T*Y
-        S=T*C
-        CSQ=C**2
-        ADA(II)=CSQ*(AII+TY+AJJ*TSQ)
-        ADA(JJ)=CSQ*(AJJ-TY+AII*TSQ)
-        ADA(IJ)=0.
-        ADA(JI)=0.
-        DO 10 K=1,N
-        JTES=(K-I)*(K-J)
-        NDK=ND*(K-1)
-        KI=K+NDI
-        KJ=K+NDJ
-        IF(JTES)13,12,13
-   13        JK=J+NDK
-        IK=I+NDK
-        ADA(KI)=C*ADA(IK)+S*ADA(JK)
-        ADA(KJ)=-S*ADA(IK)+C*ADA(JK)
-        ADA(JK)=ADA(KJ)
-        ADA(IK)=ADA(KI)
-   12        X=B(KI)
-        B(KI)=C*X+S*B(KJ)
-        B(KJ)=-S*X+C*B(KJ)
-   10        CONTINUE
-        ARMAX(I)=0.
-        DO 14 K=1,N
-        IF(K-I)15,14,15
-   15        IK=I+ND*(K-1)
-        Y=ABS(ADA(IK))
-        IF(ARMAX(I)-Y)16,14,14
-   16        ARMAX(I)=Y
-        JRMAX(I)=K
-   14        CONTINUE
-        ARMAX(J)=0.
-        DO 17 K=1,N
-        IF(K-J)18,17,18
-   18        JK=J+ND*(K-1)
-        Y=ABS(ADA(JK))
-        IF(ARMAX(J)-Y)19,17,17
-   19        ARMAX(J)=Y
-        JRMAX(J)=K
-   17        CONTINUE
-        DO 20 K=1,N
-        ITES=(K-I)*(K-J)
-        KI=K+NDI
-        KJ=K+NDJ
-        IF(ITES)21,20,21
-   21        X=ABS(ADA(KI))
-        Y=ABS(ADA(KJ))
-        JR=J
-        IF(X-Y)22,22,23
-   23        Y=X
-        JR=I
-   22        IF(ARMAX(K)-Y)24,20,20
-   24        ARMAX(K)=Y
-        JRMAX(K)=JR
-
-   20        CONTINUE
-        GOTO 11
-9        CONTINUE
-        RETURN
-        END SUBROUTINE DIAG
-
-C-----------------------------------------------------------------
-      SUBROUTINE LINFIT(X,Y,N,DX,DY,DZ,ND,AMPL,BACK,CHISQ)
-C     Linear fit of the function (X,Y,N) to the data (DX,DY,DZ,ND)
-C in REAL*4 !!
-C-----------------------------------------------------------------
-      INTEGER*4 I,K,N,ND,KK
-      REAL*4 AMPL,BACK,CHISQ
-      REAL*4 X(N),Y(N),DX(ND),DY(ND),DZ(ND)
-      REAL*4 C1,C2,C3,C4,C5,C6,Z,YY,W,DDX,ZMIN
-
-      C1=0
-      C2=0
-      C3=0
-      C4=0
-      C5=0
-      C6=0
-      KK=0
-      zmin=0
-      DO i=1,N
-         if(abs(Y(i)).gt.zmin) zmin=abs(Y(i))
+      do I=1,N1
+          J1=I
+          K1=I
+          do J2=I,N
+          do K2=I,N
+            if (ABS(A(J1,K1)).LT.ABS(A(J2,K2))) then
+              J1=J2
+              K1=K2
+            endif
+          enddo
+          enddo
+          if (ABS(A(J1,K1)).LE.1.D-30) then
+            DETERM1=0.
+            RETURN
+          endif
+          IF (J1.NE.I) then
+              do K=I,N
+                X=A(I,K)
+                A(I,K)=A(J1,K)
+                A(J1,K)=-X
+              enddo
+          endif
+          if (K1.NE.I) then
+              do J=1,N
+                  X=A(J,I)
+                  A(J,I)=A(J,K1)
+                  A(J,K1)=-X
+              enddo
+          endif
+          I1=I+1
+          do J=I1,N
+              if (A(J,I).NE.0.D0) then
+                  X=A(J,I)/A(I,I)
+                  do  K=I,N
+                    A(J,K)=A(J,K)-X*A(I,K)
+                  enddo
+              endif
+          enddo
+          DETERM1=DETERM1*A(I,I)
       enddo
-      zmin=abs(zmin/10.)
-      DO I=1,ND
-        DDX=X(2)-X(1)
-        Z=(DX(I)-X(1))/DDX
-        IF(Z.GE.0) THEN
-           K=INT(Z)+1
-        ELSE
-           K=INT(Z)
-        ENDIF
-        IF((K.GT.0).AND.(K.LT.N)) THEN
-           KK=KK+1
-           YY=Y(K)+(Y(K+1)-Y(K))*(Z+1-K)  ! linear interpolation
-C           SIG2=DZ(I)**2
-C           IF(SIG2.EQ.0) SIG2=1.
-C           W=1/SIG2
+      DETERM1=DETERM1*A(N,N)
+      END FUNCTION DETERM1
 
-            IF (abs(YY).LE.zmin) THEN
-               W=SQRT(ZMIN)
-            ELSE
-               W=SQRT(abs(YY))   ! weighted by SQRT(Y) (for RESTRAX only)
-            ENDIF
-           C1=C1+DY(I)*W
-           C2=C2+YY*W
-           C3=C3+W
-           C4=C4+DY(I)*YY*W
-           C5=C5+YY*YY*W
-           C6=C6+DY(I)*DY(I)*W
-        ENDIF
-      END DO
-      IF(KK.GT.0) THEN
-         IF((C2*C2-C3*C5).EQ.0) THEN
-            AMPL=0
-            BACK=0
-            CHISQ=C6
-         ELSE
-            AMPL= (C1*C2-C3*C4)/(C2*C2-C3*C5)
-            BACK=(C4*C2-C5*C1)/(C2*C2-C3*C5)
-            CHISQ=(AMPL**2)*C5+(BACK**2)*C3+C6+2*AMPL*BACK*C2-2*AMPL*C4-
-     1         2*BACK*C1
-            CHISQ=CHISQ/KK/C3
-         ENDIF
-      ELSE
-         WRITE(*,*) 'Cannot fit data ! '
-         AMPL=0.
-         BACK=0.
-      ENDIF
-      RETURN
-      END SUBROUTINE LINFIT
+
 
 C------------------------------------------------
-      REAL*4 FUNCTION LINTERP4(X,Y,N,Z)
-C linear interpolation on equidistant data
-C in REAL*4 !!
-C------------------------------------------------
-      INTEGER*4 I0,N
-      REAL*4 Z0,X(N),Y(N),Z,DX
-
-      IF (Z.LE.X(1)) THEN
-         LINTERP4=Y(1)
-         RETURN
-      ELSE IF (Z.GE.X(N)) THEN
-         LINTERP4=Y(N)
-         RETURN
-      ELSE
-         DX=(X(N)-X(1))/(N-1)
-         Z0=(Z-X(1))/DX
-         I0=INT(Z0)+1
-         LINTERP4=Y(I0)+(Y(I0+1)-Y(I0))*(Z0-I0+1)
-         RETURN
-      ENDIF
-      END FUNCTION LINTERP4
-
-C------------------------------------------------
-      REAL*8 FUNCTION LINTERP8(X,Y,N,Z)
+      real(kind(1.D0)) FUNCTION LINTERP8(X,Y,N,Z)
 C linear interpolation on equidistant data
 C in REAL*8!!
 C------------------------------------------------
-      INTEGER*4 I0,N
-      REAL*8 Z0,X(N),Y(N),Z,DX
-
+      integer, intent(in) :: N
+      real(kind(1.D0)), intent(in) :: X(N),Y(N),Z
+      real(kind(1.D0)) :: Z0,DX
+      integer :: I0
       IF (Z.LE.X(1)) THEN
          LINTERP8=Y(1)
          RETURN
@@ -1594,11 +1364,13 @@ C------------------------------------------------------------
       call EXCHANGE_INDEX_S(M(1,1,4),IX,1)
       call EXCHANGE_INDEX_S(M(1,1,4),IY,2)
   ! projection
-      DO 30 I=4,3,-1
-      DO 30 J=1,I
-      DO 30 K=1,I
+      DO I=4,3,-1
+      DO J=1,I
+      DO K=1,I
         M(J,K,I-1)=M(J,K,I)-M(J,I,I)*M(K,I,I)/M(I,I,I)
-30    CONTINUE
+      enddo
+      enddo
+      enddo
       PROJ(1:2,1:2)=M(1:2,1:2,2)
   ! section
       do I=1,2

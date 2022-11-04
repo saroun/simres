@@ -21,7 +21,7 @@
       use SIMATH
       implicit none
 
-      integer,parameter :: MIMAX=256	! Max. & default dimension of image arrays
+      integer,parameter :: MIMAX=256    ! Max. & default dimension of image arrays
 
 c array for gauge volume map
       REAL :: SVOL(MIMAX,MIMAX),ARRIMA(MIMAX,MIMAX)

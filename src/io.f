@@ -98,7 +98,7 @@
       integer :: LCOUNT,IS,IL
 
 1     format(a)
-2     format('RSXREAD ',a,'|',a,'| count=',I3)
+!2     format('RSXREAD ',a,'|',a,'| count=',I3)
 
       call SBUFF_LCOUNT(LCOUNT)
       S=' '

@@ -124,6 +124,7 @@
       character(MAX_FNAME_LENGTH) :: FRES,FN
       integer :: IRES
       ierr=1
+      error = .false.
   ! prepare prompt and current filename
       if (len_trim(FNAME).le.0) then
         FN=adjustl(XCONFIG_CLASSES)

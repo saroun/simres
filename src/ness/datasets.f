@@ -124,6 +124,7 @@
 !--------------------------------------------------------
       integer,intent(in) :: IDAT
       type(PDATASET) :: DT
+      NULLIFY(DT%P)
       if (check_index(IDAT)) then
         if (associated(PDSET(IDAT)%P)) then
           DT=PDSET(IDAT)

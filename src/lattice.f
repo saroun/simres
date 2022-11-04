@@ -232,9 +232,9 @@
       real(kind(1.D0)) :: G(3,3)
       integer :: k
       real(kind(1.D0)) :: AX(3),SINA(3),COSA(3),VOL2
-	  LAT%VOL=GET_CELLVOL(LAT,298.D0)
+      LAT%VOL=GET_CELLVOL(LAT,298.D0)
       if (LAT%VOL.gt.0.D0) then
-	    VOL2 = LAT%VOL**2
+        VOL2 = LAT%VOL**2
         do k=1,3
           COSA(k)=cos(LAT%ANG(k)*deg)
           SINA(k)=sin(LAT%ANG(k)*deg)
@@ -252,7 +252,7 @@
       else
         G=0.D0
       endif
-	  LAT%G = G
+      LAT%G = G
       end subroutine GET_METRIC
 
 

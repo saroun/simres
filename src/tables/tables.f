@@ -28,7 +28,7 @@
         real(kind(1.D0)) ::  QML      !   4*PI*(F*dhkl/V0)**2 [ A^-1 cm^-1] (Maier-Leibnitz reflectivity)
         real(kind(1.D0)) ::  sigmab   !   bound-atom scattering cross-section [barn]
         real(kind(1.D0)) ::  sigmaa   !   absorption for 1A neutrons [barn*A^-1]
-		real(kind(1.D0)) ::  sigmai   !   incoherent scattering cross-section [barn]
+        real(kind(1.D0)) ::  sigmai   !   incoherent scattering cross-section [barn]
         real(kind(1.D0)) ::  VOL      !   volume [A^3]/atom
         real(kind(1.D0)) ::  A        !   atomic number
         real(kind(1.D0)) ::  thetaD   !   Debye temperature (K)

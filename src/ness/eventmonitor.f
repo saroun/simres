@@ -118,8 +118,8 @@
             call mcplcloseread
             write(*,1) trim(FNAME), NCNT, SUMA, ISTORE
           else
-		        write(*,*) 'Cann''t load libmcplio: ',dll
-		      endif
+                write(*,*) 'Cann''t load libmcplio: ',dll
+              endif
         ENDIF
       endif
       end subroutine BMONITORS_READMCPL
@@ -183,8 +183,8 @@
             call mcplclosewrite
             write(*,1) trim(FNAME),NCNT,SUMA,ISTORE
           else
-		        write(*,*) 'Cann''t load libmcplio: ',dll
-		      endif
+                write(*,*) 'Cann''t load libmcplio: ',dll
+              endif
         else
           write(*,2) STORAGE
         ENDIF

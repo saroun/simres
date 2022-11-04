@@ -157,7 +157,7 @@
       TYPE(DCHOPPER),POINTER :: OBJ
       integer :: i
       real(kind(1.D0)) :: SGN, wx, wy, w
-	  integer,parameter :: IX(2)=(/1,2/)
+      integer,parameter :: IX(2)=(/1,2/)
       integer,parameter :: IY(2)=(/2,1/)
       if (.not.DCHOPPER_isValid(INST)) return
       OBJ => ADCHOPPERS(INST)%X
@@ -166,18 +166,18 @@
         if (OBJ%WIN*OBJ%WIDTHS(i)>0.5D0) SGN=-1.D0
         OBJ%TANWS(i)=SGN*abs(tan(0.5D0*OBJ%WIN*OBJ%WIDTHS(i)*TWOPI))
       enddo
-	  ! determine if the chopper is active
-	  OBJ%ACTIVE=.true.
-	  if ((OBJ%FRQ==0.D0).and.(OBJ%PHI+OBJ%PHASES(1)==0.D0)) then
-	    wx = OBJ%FRAME%SIZE(IX(OBJ%ORI+1)) ! chopper frame width
-		wy = OBJ%FRAME%SIZE(IY(OBJ%ORI+1))
-	    w = (2*OBJ%RAD-wy)*OBJ%TANWS(1) ! 1st window width at the bottom edge
-		OBJ%ACTIVE = (w<=wx) ! not active if the window width is bigger than the frame width
-		if (OBJ%ACTIVE) then
-			write(*,*) 'active chopper: '//trim(OBJ%FRAME%ID)
-		endif
-	  endif
-	  
+      ! determine if the chopper is active
+      OBJ%ACTIVE=.true.
+      if ((OBJ%FRQ==0.D0).and.(OBJ%PHI+OBJ%PHASES(1)==0.D0)) then
+        wx = OBJ%FRAME%SIZE(IX(OBJ%ORI+1)) ! chopper frame width
+        wy = OBJ%FRAME%SIZE(IY(OBJ%ORI+1))
+        w = (2*OBJ%RAD-wy)*OBJ%TANWS(1) ! 1st window width at the bottom edge
+        OBJ%ACTIVE = (w<=wx) ! not active if the window width is bigger than the frame width
+        if (OBJ%ACTIVE) then
+            write(*,*) 'active chopper: '//trim(OBJ%FRAME%ID)
+        endif
+      endif
+      
       END SUBROUTINE DCHOPPER_INIT
 
 

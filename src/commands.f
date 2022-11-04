@@ -273,9 +273,9 @@ C---------------------------------------------------------
             IPAR=getParIndex(myCOMMANDS(IOBJ),trim(PARID))
             if (IPAR.gt.0) then
               IX=min(IDX,myCOMMANDS(IOBJ)%FIELDS(IPAR)%NP)
-		!  write(*,*) 'getCmdParam ',trim(CMD),'.',trim(PARID),' IX=',IX,' IPAR=',IPAR
+        !  write(*,*) 'getCmdParam ',trim(CMD),'.',trim(PARID),' IX=',IX,' IPAR=',IPAR
               call FIELD2ARRAY(myCOMMANDS(IOBJ)%FIELDS(IPAR),IX,AUX,1,N)
-		!  if (CMD.eq.'PLOT') write(*,*) 'getCmdParam PARID='//trim(PARID)//' result=',AUX(1:N)
+        !  if (CMD.eq.'PLOT') write(*,*) 'getCmdParam PARID='//trim(PARID)//' result=',AUX(1:N)
             else
 
               call send_message('P',PARID,' ')

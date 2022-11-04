@@ -45,16 +45,18 @@
       REAL(KIND(1.D0)),intent(out) :: C(CRND)
       INTEGER,intent(in) :: M,IT
       INTEGER :: J,I
-      DO 10 J=1,M
+      DO J=1,M
          C(J)=0.
          IF (IT.GT.0) THEN
-           DO 20 I=1,M
-20         C(J)=C(J)+A(J,I)*B(I)
+           DO I=1,M
+             C(J)=C(J)+A(J,I)*B(I)
+           enddo
          ELSE
-           DO 30 I=1,M
-30         C(J)=C(J)+A(I,J)*B(I)
+           DO I=1,M
+             C(J)=C(J)+A(I,J)*B(I)
+           enddo
          ENDIF
-10    CONTINUE
+      enddo
       END SUBROUTINE M16XV16
 
 

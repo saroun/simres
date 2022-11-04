@@ -17,7 +17,7 @@
 !////  Includes option for non-XML format (console)
 !//////////////////////////////////////////////////////////////////////
       MODULE XMLWRITER
-    !  use FIELDS
+!  use FIELDS
       use xmlparse
       USE CLASSES
       use COMMANDS

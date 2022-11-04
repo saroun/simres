@@ -289,6 +289,8 @@
       if (myDBG) write(*,1) '--------------------------------------------------------'
       if (myDBG) write(*,1) 'XTAL_ARRAY_GO R,K',NEUT%R, NEUT%K
       if (myDBG) write(*,1) 'bounding box',CR%A3D%SA
+! target node index      
+      SELNODE=RLNODE_GET(CR%ICR,CR%HKL) 
 
 ! get time to crystal entry, go to end if entry is missed
 ! permit back step if R is inside the array, to ensure the start at the array entry
@@ -301,7 +303,6 @@
       INODE=1   ! starting node in rec. lattice (1=direct beam)
       PSEL(0)=0.D0  ! this is always zero
       MI=XTAL_GETMI(CR,NEUT%K0)  ! absorption coeficient
-      SELNODE=RLNODE_GET(CR%ICR,CR%HKL) ! target node index
       NEU0=NEUT  ! NEU0 is neutron in array local coordinates
       transmitted=.false.
   !    if (myDBG) write(*,1) 'tin',tin

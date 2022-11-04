@@ -46,7 +46,7 @@
 ! subroutines added by Richard Woloshyn. (rwww@triumf.ca). June 30, 1999
 ! see http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/VERSIONS/FORTRAN/mtfort90.f
       module mtmod
-			private
+            private
 ! Default seed
       integer, parameter :: defaultsd = 4357
 ! Period parameters
@@ -70,7 +70,7 @@
         module procedure mtgetu
       end interface
 
-			public sgrnd,grnd, mtmod_ngen
+            public sgrnd,grnd, mtmod_ngen
       contains
 
 !Initialization subroutine

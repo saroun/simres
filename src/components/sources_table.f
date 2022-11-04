@@ -270,7 +270,7 @@
       end select
       ! table is dPhi/dLam/dTime in [10^10/us/cm^2/A]
       ! convert to dPhi/d^3K/dTime in [1e14/us/cm^2*Ang^3]
-	  ! NOTE; program integrates over time x hbar/m
+      ! NOTE; program integrates over time x hbar/m
       K02=k**2
       SPS_TAB=FLX/2.D0/K02**2*RES*1.D-4
       end FUNCTION SPS_TAB
@@ -999,7 +999,7 @@
           !FLXPULSE(i)=FLXPULSE(i)/Z
           if (i.gt.1) then
             LOG1=(LOG1.and.(abs(1.D0-(ST(it)%FLXTIME(i)-ST(it)%FLXTIME(i-1))/ST(it)%FLXDTIME).lt.EPS))
-			!write(*,*) i, LOG1, FLXDTIME, FLXTIME(i)-FLXTIME(i-1)
+            !write(*,*) i, LOG1, FLXDTIME, FLXTIME(i)-FLXTIME(i-1)
           endif
         enddo
 ! set time=0 in the middle of the table range

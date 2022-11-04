@@ -1030,13 +1030,14 @@
 !-----------------------------------------------------------------------
       SUBROUTINE SURFACE_SECTOR(r,k,cosa,sina,tin,tout)
 ! get entry and exit times for a sector defined by 2 planes
-! with cross-section = y-xis
+! with cross-section = y-axis
 ! r=(x,z), k=(kx,kz)
 !------------------------------------------------------------------------
       REAL(kind(1.D0)),intent(in)  :: r(2),k(2),cosa,sina
       REAL(kind(1.D0)),intent(out)  :: tin,tout
       REAL(kind(1.D0)) :: kn1,kn2,rn1,rn2,t1,t2
       REAL(kind(1.D0)),parameter :: EPS=1.D-30
+      logical :: k12neg
       tin=TLIB_INF
       tout=-TLIB_INF
       kn1=cosa*k(1)-sina*k(2)
@@ -1055,7 +1056,8 @@
         kn2=sign(EPS,kn2)
       endif
     ! there is only one entry and one exit
-      if (kn1*kn2<0.D0) then
+      k12neg = (kn1*kn2<0.D0)
+      if (k12neg) then
         if (kn2<0.D0) then
           t1=-rn2/kn2
           t2=-rn1/kn1
@@ -1063,12 +1065,15 @@
           t1=-rn1/kn1
           t2=-rn2/kn2
         endif
+      else
+        t1 = 0.D0
+        t2 = 0.D0
       endif
     ! we have to distinguish two cases:
     ! sector angle < PI; once you escape, you can't re-enter
       if (cosa>0.D0) then
         ! there is only one entry and one exit
-        if (kn1*kn2<0.D0) then
+        if (k12neg) then
           if (t1<t2) then
             tin=t1
             tout=t2
@@ -1089,7 +1094,7 @@
     ! sector angle > PI; once you enter, you can't escape
       else
         ! there is only one entry and one exit
-        if (kn1*kn2<0.D0) then
+        if (k12neg) then
           if (t1>t2) then
             tin=t1
             tout=t2
