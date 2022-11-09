@@ -987,7 +987,7 @@
       REAL(kind(1.D0)),intent(out) :: prob(4)
       REAL(kind(1.D0)) :: qT, r, r0, rc, PR, PA, PS, PT
       REAL(kind(1.D0)) :: P(4),d(3),sig(3), mValue, mpar(2)
-      logical isc, validTable
+      logical :: isc, validTable, isNiTi
 1     format(a,7(1x,G12.5))
 
       validTable = ((itab>0).and.(itab<=m_num))
@@ -998,8 +998,9 @@
         isc = .false.
         mValue = MC
       endif
+      isNiTi = (m_coating(6,itab)>0)
       r=MIRROR_REF(itab,mValue,Q,S)
-      if (.not. (isMonitor .or. isc)) then
+      if (.not. (isMonitor .or. isc.or.isNiTi)) then
       ! no need to evaluate scattering and capture
         PR =r ! reflection
         PA = 0.D0
