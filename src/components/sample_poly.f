@@ -50,7 +50,6 @@
 
 C------------------------------------
       SUBROUTINE PCRYST_SETDBG(b)
-! default values for Fe 211
 C------------------------------------
       logical :: b
         dbg=b
@@ -577,15 +576,15 @@ C------------------------------------------------------
       TYPE(TPCRYST),intent(in) :: OBJ
       REAL(kind(1.D0)),intent(in) :: Q,PHI
       REAL(kind(1.D0)) :: KI,stb,ctb,sinphi,cosphi,s2tb,c2tb
-      REAL(kind(1.D0)) :: TM(3,3),C(3),VQ(3),R(3),AUX(3),E(6), SP(3)
-      REAL(kind(1.D0)) :: depth,dQ,Q0, dP
+      REAL(kind(1.D0)) :: TM(3,3),TD(3,3),C(3),VQ(3),R(3),AUX(3),E(6),SP(3)
+      REAL(kind(1.D0)) :: depth,dQ,Q0,dP
       integer :: i
 1     format(a,': ',6(G13.6,1x))
       sinphi=sin(PHI)
       cosphi=cos(PHI)
       dQ=0.D0
       KI=NEUT%K0
-  ! get conversion matrix for Z//NEU%K
+  ! get conversion matrix from local to Z//NEU%K, Y//(NEU%K x (1,0,0)_loc)
       call getRotZX(NEUT%K,(/1.D0,0.D0,0.D0/),TM)
   ! include strain
       if (STRAIN_ISDEF(OBJ%ID_STRAIN_TABLE)) then
@@ -604,19 +603,22 @@ C------------------------------------------------------
           VQ(2)=KI*s2tb*sinphi
           VQ(3)=KI*(c2tb-1.D0)
         endif
-        ! transform to sample coordinates
-        call M3xV3(-1,TM,VQ,AUX)
-        call M3xV3(-1,OBJ%SAM%QMAT,AUX,VQ)
-        ! calculate direction cosines
-        do i=1,3
-          C(i)=VQ(i)/Q
-        enddo
+        ! transform to local coordinates
+        call M3xV3(-1,TM,VQ,AUX) ! to y // Ki x Q
+        call M3xV3(-1,OBJ%SAM%QMAT,AUX,VQ) ! from y // Ki x Q to local       
         ! get depth under surface
         call M3xV3(-1,OBJ%SAM%QMAT,NEUT%R,R)
-        depth = CONTAINER_DEPTH(OBJ%SAM%FRAME, R)
+        ! depth = CONTAINER_DEPTH(OBJ%SAM%FRAME, R)
+        call CONTAINER_COORD(OBJ%SAM%FRAME, R, depth, TD)
+        !call PCRYST_SETDBG((OBJ%SAM%FRAME%COUNT<10))
+        ! calculate direction cosines
+        do i=1,3
+          !C(i)=VQ(i)/Q
+          C(i) = V3xV3(VQ, TD(:,i))/Q
+        enddo
         ! get strain and probability
-        call STRAIN_GET(dbg, OBJ%ID_STRAIN_TABLE,depth,E, SP )
-        ! transform tensor elements in delta_Q
+        call STRAIN_GET(dbg, OBJ%ID_STRAIN_TABLE,depth, E, SP )
+        ! transform strain tensor elements to delta_Q 
         dQ=E(1)*C(1)**2+E(2)*C(2)**2+E(3)*C(3)**2
         dQ=dQ+E(4)*C(2)*C(3)+E(5)*C(1)*C(3)+E(6)*C(1)*C(2)
         dQ=Q*dQ
@@ -624,6 +626,10 @@ C------------------------------------------------------
         NEUT%P = NEUT%P*dP
         if (dbg) write(*,1) '    R',R
         if (dbg) write(*,1) '    depth',depth
+		if (dbg) write(*,1) '    TD(1)',TD(:,1)
+		if (dbg) write(*,1) '    TD(2)',TD(:,2)
+		if (dbg) write(*,1) '    TD(3)',TD(:,3)
+		if (dbg) write(*,1) '    Q',VQ/Q
         if (dbg) write(*,1) '    C',C
         if (dbg) write(*,1) '    E',E
         if (dbg) write(*,1) '    SP',SP

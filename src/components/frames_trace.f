@@ -543,8 +543,9 @@
 
 !------------------------------------------------------------
       REAL(KIND(1.D0)) FUNCTION CONTAINER_DEPTH(OBJ, R)
-! Transport inside a 3D container
-! Leaves neutron in local coordinates !
+! Calculate depth under container surface.
+! Depth depends on the container symmetry. It should
+! measure distance to the nearest surface (or front z-surface for a box).
 !------------------------------------------------------------
       TYPE(TFRAME) :: OBJ
       real(kind(1.D0)), intent(in) :: R(3)
@@ -588,6 +589,86 @@
       end select
       CONTAINER_DEPTH = depth
       end FUNCTION CONTAINER_DEPTH
+
+
+!------------------------------------------------------------
+      subroutine CONTAINER_COORD(OBJ, R, depth, TM)
+! Calculate depth under container surface.
+! Return also corresponding R-coordinate system as a column matrix.
+! The R-coordinates depend on the container symmetry:
+! BOX: depth is  measured from front z-surface inwards, TM=identity.
+! CYLINDER, DISC: x // hoop direction, z // radial direction
+! ELLIPSOID: z // R, y // (R x x_loc) or (z_loc x R)
+! for alll round shapes, depth is the radial distance to the surface
+! NOTE: depth may not be the shortes distance to the surface! 
+! On input, R is in local coordinates.
+!------------------------------------------------------------
+      TYPE(TFRAME) :: OBJ
+      real(kind(1.D0)), intent(in) :: R(3)
+      real(kind(1.D0)), intent(out) :: depth, TM(3,3)
+      REAL(kind(1.D0)) :: sz(3), ksi, rn, x1, x2, x3      
+      sz = OBJ%SIZE(1:3)
+      TM(:,1) = (/1.D0, 0.D0, 0.D0/)
+      TM(:,2) = (/0.D0, 1.D0, 0.D0/)
+      TM(:,3) = (/0.D0, 0.D0, 1.D0/)
+      select case(OBJ%SHAPE)
+        case(FRAME_SHAPE_BOX)
+          depth = 0.5*sz(3)-R(3)
+        case(FRAME_SHAPE_DISC)
+          x1 = R(1)*2.D0/sz(1)
+          x2 = R(2)*2.D0/sz(2)
+          rn = sqrt(R(1)**2 + R(2)**2)
+          ksi = sqrt(x1**2 + x2**2)
+          if (ksi.eq.0.D0) then
+            depth = 0.5*sz(1)
+            TM(:,1) = (/0.D0, 1.D0, 0.D0/)
+            TM(:,2) = (/0.D0, 0.D0, 1.D0/)
+            TM(:,3) = (/1.D0, 0.D0, 0.D0/)
+          else
+            depth = rn*(1.D0/ksi - 1.D0)
+            TM(:,1) = (/-R(2), R(1), 0.D0/)/rn ! hoop
+            TM(:,2) = (/0.D0, 0.D0, 1.D0/) ! axial
+            TM(:,3) = (/R(1), R(2), 0.D0/)/rn ! radial
+          endif
+        case(FRAME_SHAPE_CYLINDER)
+          x1 = R(1)*2.D0/sz(1)
+          x2 = R(3)*2.D0/sz(3)
+          rn = sqrt(R(1)**2 + R(3)**2)
+          ksi = sqrt(x1**2 + x2**2)
+          if (ksi.eq.0.D0) then
+            depth = 0.5*sz(3)
+          else
+            depth = rn*(1.D0/ksi - 1.D0)
+            TM(:,1) = (/-R(3), 0.D0, R(1)/)/rn ! hoop
+            TM(:,2) = (/0.D0, 1.D0, 0.D0/) ! axial
+            TM(:,3) = (/R(1), 0.D0, R(3)/)/rn ! radial
+          endif
+        case default ! FRAME_SHAPE_ELLIPSOID
+          x1 = R(1)*2.D0/sz(1)
+          x2 = R(2)*2.D0/sz(2)
+          x3 = R(3)*2.D0/sz(3)
+          rn = sqrt(R(1)**2 + R(2)**2 +R(3)**2)
+          ksi = sqrt(x1**2 + x2**2 + x3**2)
+          if (ksi.eq.0.D0) then
+            depth = 0.5*sz(3)
+          else
+            depth = rn*(1.D0/ksi - 1.D0)
+            TM(:,1) = (/-R(1), R(3), 0.D0/)/rn ! hoop
+            TM(:,2) = (/0.D0, 1.D0, 0.D0/) ! axial
+            TM(:,3) = (/R(1), R(2), R(3)/)/rn ! radial
+            ! try to find hoop direction as normal to y_loc and radial
+            if (abs(TM(2,3)-1.D0) < 1.D-3) then
+               ! R is near y_loc => hoop is // x_loc
+               TM(:,1) = (/1.D0, 0.D0, 0.D0/)
+            else
+               call V3cV3((/0.D0, 1.D0, 0.D0/), TM(:,3), TM(:,1))
+            endif
+            call V3cV3(TM(:,3), TM(:,1), TM(:,2)) ! axial
+          endif
+      end select
+      
+      end subroutine CONTAINER_COORD
+
 
       end MODULE FRAMES_TRACE
 

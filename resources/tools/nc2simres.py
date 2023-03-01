@@ -65,7 +65,7 @@ def cal_RTDS(x):
     return R
 
 
-def dumpInfo(info):
+def dumpInfo(info, fname):
     """Print selected values fromn NCrystal Info object."""
     print("Info on {}".format(fname))
     if info.hasComposition():
@@ -261,13 +261,13 @@ def gen_SIMRES_table(inpfile, outfile, dmin=0.5, names=None):
         datalist = []
         for inp in inpfile:
             f = inp[0]
-            data = genData(inp[1], temperature=None, dmin=dmin)
+            data = genData(inp[1], temperature=300.0, dmin=dmin)
             datalist.append([f,data])
         data = mergeData(datalist, names=names)
         nphases = len(inpfile)
         isList = True
     else:
-        data = genData(inpfile, temperature=None, dmin=dmin)
+        data = genData(inpfile, temperature=300.0, dmin=dmin)
         nphases = 1
     hdr = []
     hdr.extend(["polycrystal lookup table"])
@@ -308,7 +308,7 @@ def gen_SIMRES_table(inpfile, outfile, dmin=0.5, names=None):
 # fname = "Fe_sg229_Iron-alpha.ncmat"
 #fname = "MgO_sg225_Periclase.ncmat"
 #info = nc.createInfo(fname)    
-#dumpInfo(info)
+#dumpInfo(info, fname)
 #data = genData(fname, temperature=None, dmin=1)
 #print(data)
 
@@ -323,6 +323,6 @@ gen_SIMRES_table("Cu_sg225.ncmat", "Cu.dat", dmin=0.2)
 gen_SIMRES_table("Al_sg225.ncmat", "Al.dat", dmin=0.2)
 gen_SIMRES_table("Mg_sg194.ncmat", "Mg.dat", dmin=0.2)
 gen_SIMRES_table("Ni_sg225.ncmat", "Ni.dat", dmin=0.2)
-gen_SIMRES_table("SiO2_sg154_Quartz.ncmat", "SiO2.dat", dmin=0.2)
+gen_SIMRES_table("SiO2-alpha_sg154_AlphaQuartz.ncmat", "a-SiO2.dat", dmin=0.2)
 gen_SIMRES_table("Ti_sg194.ncmat", "Ti.dat", dmin=0.2)
 
