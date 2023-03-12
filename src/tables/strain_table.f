@@ -153,12 +153,12 @@
             do i=ird+1,7
               s_eps(nrow,i-1,itab)=0.D0
             enddo
-            ! read px,	py,	pz if present
+            ! read px,    py,    pz if present
             if (ird>9) then
               do i=1,3
                 p_depth(nrow,i,itab)=A(i+7)
               enddo
-            ! clear  px,	py,	pz  if not read
+            ! clear  px,    py,    pz  if not read
             else
               do i=1,3
                 p_depth(nrow,i,itab)=0.D0
@@ -224,7 +224,7 @@
 
 !-----------------------------------------------------------
       subroutine STRAIN_GET(db, itab,depth,E, P)
-! returns 6 components of the strain tensor for given depth
+! returns 6 components of the strain tensor for given depth 
 !-----------------------------------------------------------
       logical,intent(in) :: db
       integer,intent(in) :: itab
@@ -234,19 +234,23 @@
       integer :: iz,NR,N,i
 1     format(a,': ',6(G13.6,1x))
       E(1:6)=0.D0
-      P(1:3)=0.D0
+      P(1:3)=1.D0
       if ((itab<1).or.(itab>s_num)) return
       NR=itab
       N=s_n(NR)
       dd=(s_depth(N,NR)-s_depth(1,NR))/(N-1)
       z=(depth-s_depth(1,NR))/dd
       if (db) write(*,1) 'STRAIN_GET ', N, z, dd
+	  if (db) write(*,1) 's_used', s_used(1:6,NR)
+      if (db) write(*,1) 'p_used', p_used(1:3,NR)
       if (z<0.D0) then
         do i=1,6
           E(i)=s_eps(1,i,NR)
         enddo
         do i=1,3
-          P(i)=p_depth(1,i,NR)
+		   if (p_used(i,NR)>0) then
+              P(i)=p_depth(1,i,NR)
+		   endif
         enddo
         return
       else if (z>=1.D0*(N-1)) then
@@ -254,7 +258,9 @@
           E(i)=s_eps(N,i,NR)
         enddo
         do i=1,3
-          P(i)=p_depth(N,i,NR)
+		   if (p_used(i,NR)>0) then
+              P(i)=p_depth(1,i,NR)
+		   endif
         enddo
         return
       else
@@ -262,8 +268,7 @@
         if (iz>N-2) iz=N-2
         delta=depth-s_depth(iz,NR)
         if (db) write(*,1) '   delta', delta, iz
-        if (db) write(*,1) 's_used', s_used(1:6,NR)
-        if (db) write(*,1) 'p_used', s_used(1:3,NR)
+
         do i=1,6
           if (s_used(i,NR)>0) then
             call quadinterp3(s_depth(iz:iz+2,NR),s_eps(iz:iz+2,i,NR),d)
@@ -271,7 +276,6 @@
               write(*,1) 'interp', s_depth(iz:iz+2,NR), s_eps(iz:iz+2,i,NR)
               write(*,1) '     d', d
             endif
-
             E(i)=d(1)*delta**2+d(2)*delta+d(3)
           endif
         enddo
@@ -279,9 +283,12 @@
           if (p_used(i,NR)>0) then
             call quadinterp3(s_depth(iz:iz+2,NR),p_depth(iz:iz+2,i,NR),d)
             P(i)=d(1)*delta**2+d(2)*delta+d(3)
+          else
+            P(i)=1.D0
           endif
         enddo
       ENDIF
+	  if (db) write(*,1)  'STRAIN_GET P', P
       END subroutine STRAIN_GET
 
 !--------------------------------------------------------------------

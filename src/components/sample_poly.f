@@ -622,7 +622,7 @@ C------------------------------------------------------
         dQ=E(1)*C(1)**2+E(2)*C(2)**2+E(3)*C(3)**2
         dQ=dQ+E(4)*C(2)*C(3)+E(5)*C(1)*C(3)+E(6)*C(1)*C(2)
         dQ=Q*dQ
-        dP = 1.D0 + SP(1)*abs(C(1))+SP(2)*abs(C(2))+SP(3)*abs(C(3))
+        dP = SP(1)*C(1)**2+SP(2)*C(2)**2+SP(3)*C(3)**2
         NEUT%P = NEUT%P*dP
         if (dbg) write(*,1) '    R',R
         if (dbg) write(*,1) '    depth',depth
@@ -632,7 +632,7 @@ C------------------------------------------------------
 		if (dbg) write(*,1) '    Q',VQ/Q
         if (dbg) write(*,1) '    C',C
         if (dbg) write(*,1) '    E',E
-        if (dbg) write(*,1) '    SP',SP
+        if (dbg) write(*,1) '    E''',E(1)*C(1)**2, E(2)*C(2)**2, E(3)*C(3)**2
         if (dbg) write(*,1) '    dQ/Q, dP ',dQ/Q, dP
       endif
   ! include strain broadening (Gaussian)
