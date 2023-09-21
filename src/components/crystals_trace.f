@@ -127,7 +127,8 @@
           OBJ%MAPG(3)=.TRUE.
         endif
       endif
-      if ((OBJ%DGR.NE.0.D0).and.(OBJ%TYP.eq.ctyp_gradient)) then
+      ! if ((OBJ%DGR.NE.0.D0).and.(OBJ%TYP.eq.ctyp_gradient)) then
+	  if (OBJ%DGR.NE.0.D0) then
           Z=1.D-4*OBJ%GTOT*OBJ%DGR
           OBJ%DG_DR(1,1)=OBJ%DG_DR(1,1)+Z*cos(OBJ%DGA+OBJ%CHI)
           OBJ%DG_DR(1,3)=OBJ%DG_DR(1,3)-Z*sin(OBJ%DGA+OBJ%CHI)
