@@ -228,7 +228,7 @@
 
 1     format(4(G12.5,2x))
 2     format(a,7(2x,G12.5))
-3     format(11(G12.5,1x), G13.6)
+3     format(4(G12.5,1x), 8(G13.6,1x))
 
       !write(*,2) 'DOGAUGE2D: ',IX,IY,ivar,X0-DX/2,X0+DX/2,Y0-DY/2,Y0+DY/2
 
