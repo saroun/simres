@@ -104,7 +104,7 @@
   ! define scattering vector
       OBJ%GTOT=TWOPI/OBJ%DHKL
       OBJ%G(1)=OBJ%GTOT*SIN(OBJ%CHI)*COS(OBJ%PSI)
-      OBJ%G(2)=-SIN(OBJ%PSI)
+      OBJ%G(2)=-OBJ%GTOT*SIN(OBJ%PSI)
       OBJ%G(3)=OBJ%GTOT*COS(OBJ%CHI)*COS(OBJ%PSI)
 
       CALL FRAME_INIT(OBJ%FRAME)
