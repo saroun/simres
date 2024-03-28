@@ -365,8 +365,8 @@ c        write(*,*) 'cycle 2 TCOUNT ',TCOUNT
         call TRACING_OnTrigger
     ! check end conditions
         END_COUNT=(trace_cnt.ge.TCOUNT)
-        END_PRECISION=(TRACING_PRECISION.le.TROPT%PLIMIT)
-!        if (END_PRECISION) write(*,*) 'precission limit: ',TRACING_PRECISION,IPARC
+        END_PRECISION=(TRACING_PRECISION.lt.TROPT%PLIMIT)
+        if (END_PRECISION) write(*,*) 'precission limit: ',TRACING_PRECISION,IPARC
       !  if (mod(trace_tot,100000.D0).eq.0) then
       !    write(*,*) 'TRACING_PROC_PARC ',trace_tot,trace_cnt
       !  endif
@@ -776,7 +776,10 @@ c      call EVARRAY(4,0,I,AUX,DUM)
         if (N.GT.5) then
           TRACING_DINT=SQRT((TRACING_DINT/N-TRACING_INT**2)/(N-1))
           TRACING_DVOL=SQRT((TRACING_DVOL/N-TRACING_VOL**2)/(N-1))
-          TRACING_PRECISION=TRACING_DINT/TRACING_INT
+		  ! disable precission limit if not set
+		  if (TROPT%PLIMIT>1.D-10) then
+			 TRACING_PRECISION=TRACING_DINT/TRACING_INT
+		  endif
 c          write(*,*) IPARC,CPARC(IPARC-1),CPARC(IPARC)-CPARC(IPARC-1),trace_cnt
         endif
     ! renormalize to the flux 10^14/s/cm^2 or flux at the sample
