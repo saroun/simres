@@ -37,6 +37,7 @@
       ! incoherent: SIGI*DW_AVE
       ! Debye-Waller factor: DW = exp(-2*BT/dhkl**2)
       ! averaged DW factor: DW_AVE = (1 - exp(-8*BT/lambda**2))/(8*BT/lambda**2)
+	  ! BT should be 2*pi**2*MSD (MSD = directional mean squared displacement, <ux^2>)
       REAL(KIND(1.D0)) :: SIGA, SIGI, SIGF, SIGS, BT, BMPH
       INTEGER :: PCRYST_NREF ! number of points, log-scale
       character*(128) :: REF_TABLE_NAME
@@ -220,7 +221,7 @@
               PCRYST_NREF=PCRYST_NREF+1
               REFTAB(1,PCRYST_NREF)=Z(1)
               REFTAB(2,PCRYST_NREF)=Z(2)
-              REFTAB(3,PCRYST_NREF)=Z(3)*exp(-BT/Z(1)**2)
+              REFTAB(3,PCRYST_NREF)=Z(3)*exp(-2.0*BT/Z(1)**2)
             endif
           endif
         endif
