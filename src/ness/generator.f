@@ -285,9 +285,10 @@ C--------------------------------------------------------------
       type(PDATASET) :: DTS
 
 1     format(I8,12(1x,G11.5))
-
+4     format(a25,': ',8(G10.4,1x))
       PP=0.D0
-      isProbe=((.not.isProbe).and.(mod(EVENTGEN%COUNT,NPROBE).eq.0))
+      isProbe=((.not.isProbe).and.(mod(EVENTGEN%COUNT,NPROBE).eq.0))	  
+      if (DBG)  write(IUDBG,4) 'GENERATOR_GO isProbe',isProbe	  
 ! repeat until an event with non-zero weight is generated
       do while (PP.LE.PLIM)
 ! generate uniform random numbers, XNORM
@@ -439,6 +440,7 @@ C--------------------------------------------------------------
 
 ! weight the event
       NEUT%P=PP
+      if (DBG) write(IUDBG,4) 'generator done', NEUT%R, NEUT%K,NEUT%P,PP
 ! initialize gravity vector = start in lab. coord. at the generator
 
 c      write(*,1) 'GEN: ',NEUT%R,NEUT%K

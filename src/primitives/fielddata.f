@@ -297,7 +297,8 @@ C---------------------------------------------------------
       integer,intent(out) :: NARG
       character(256) :: CNUM
       integer :: imin,imax,LL,i
-      character(LEN_NAME) :: SID,SMI,SMA,SINC
+      character(LEN_NAME) :: SMI,SMA,SINC
+      character(2*LEN_ID+1) :: SID
       logical :: dbg = .false.
       !  dbg=(trim(SRC%ID).eq.'SGN')
       NARG=0

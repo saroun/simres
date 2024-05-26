@@ -242,7 +242,7 @@ C------------------------------------------
       real,intent(out) :: B(NB,NB)
       integer,PARAMETER :: NMAX=256
       real :: A1(NMAX,NMAX),WK(2*NMAX)
-      INTEGER :: I,J,IRES,KVERTD
+      INTEGER :: I,J,IRES,KVERT
       if (N<1) then
             INVERT_R4=0
             return
@@ -252,7 +252,7 @@ C------------------------------------------
           A1(I,J)=A(I,J)
         enddo
       enddo
-      IRES=KVERTD(A1,NMAX,N,WK)
+      IRES=KVERT(A1,NMAX,N,WK)
       IF (IRES.EQ.0) then
         DO I=1,N
           DO J=1,N

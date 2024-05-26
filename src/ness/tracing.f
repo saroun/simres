@@ -356,10 +356,10 @@ c        write(*,*) 'cycle 2 TCOUNT ',TCOUNT
 ! *****  TRACING CYCLE  *****
       do while ((.not.END_COUNT).and.(.not.END_PRECISION).and.(.not.TIMEOUT).and.(.not.STOPTRACING))
     ! log events if REPOPT%ELOG=true
-        ! NEUT_DBG=(icycle==1)
+        !NEUT_DBG=((mod(NINT(trace_tot),1000).eq.0))
         call StartEventLog
     ! TRACE EVENT
-        !if (NEUT_DBG)  write(*,*) 'TRACING_PROC INI OK'
+        !if (NEUT_DBG)  write(*,*) 'before TRACING_RUN'
         call TRACING_RUN
     ! call actions triggered by trace_clock
         call TRACING_OnTrigger
@@ -488,13 +488,14 @@ C------------------------------------------------------------------------
       END SUBROUTINE TRACING_RUN
 
 !------------------------------------------------------------------------
-      SUBROUTINE TRACING_REP(MSG, NEU)
+      SUBROUTINE TRACING_REP(MSG, NEU, STATE)
 ! write neutron record
 !------------------------------------------------------------------------
       TYPE(NEUTRON) :: NEU
       CHARACTER*(*) :: MSG
+        logical :: state
 1     format(a25,': ',8(G10.4,1x))
-      write(*,1) MSG,NEU%R, NEU%K,NEU%P
+      write(*,1) MSG,NEU%R, NEU%K,NEU%P, state
       END SUBROUTINE TRACING_REP
 
 
@@ -510,11 +511,14 @@ C---------------------------------------------------------------
       integer :: i
       TYPE(NEUTRON) :: NEU0,NEU1,NEU2,NEU3,NEU4
 1     format(a12,': ',8(G10.4,1x))
+2     format(a25,'ibeam=',G10.4,', tot=',G10.4, ', cnt=',G10.4)
       LOG1=(NEUT%P.GT.0)
+        if (NEUT_DBG) call TRACING_REP('TRACING_GO start',NEUT, LOG1)
       if (.not.log1) then
         TRACING_GO=.false.
         return
       endif
+        if (NEUT_DBG) write(*,2) ' ',IBEAM,trace_tot,trace_cnt
       STOPTIME=.false.
 
       !if (NINT(trace_tot)<10) then
@@ -588,6 +592,7 @@ C---------------------------------------------------------------
           !  mirror_dbg = GUIDES_dbg
             LOG1=PCOM_GO(BEAMLINE(i,IBEAM)%OBJ)
             LOG1=(LOG1.and.(.not.STOPTIME))
+              if (NEUT_DBG) call TRACING_REP(trim(BEAMLINE(i,IBEAM)%OBJ%ID),NEUT, LOG1)
             i=i-1
           enddo
         ! correct event records so that they are equivalent to the down-stream case
@@ -628,12 +633,11 @@ C---------------------------------------------------------------
 !debug
         if (NEUT_DBG) NEU4 = NEUT
 
-        if (NEUT_DBG.and.LOG1) then
-          call TRACING_REP('TRACING_GO after container',NEU1)
-          call TRACING_REP('TRACING_GO after   primary',NEU2)
-          call TRACING_REP('TRACING_GO before   sample',NEU3)
-          call TRACING_REP('TRACING_GO after    sample',NEU4)
-          write(*,*)
+        if (NEUT_DBG) then
+          !call TRACING_REP('TRACING_GO after container',NEU1, LOG1)
+          !call TRACING_REP('TRACING_GO after   primary',NEU2, LOG1)
+          call TRACING_REP('TRACING_GO before sample',NEU3, LOG1)
+          call TRACING_REP('TRACING_GO after  sample',NEU4, LOG1)
         endif
 
           NEUF=NEUT
@@ -646,9 +650,7 @@ C---------------------------------------------------------------
           i=i+1
           LOG1=PCOM_GO(BEAMLINE(i,IBEAM)%OBJ)
           LOG1=(LOG1.and.(.not.STOPTIME))
-        !  if (NEUT_DBG) then
-        !    write(*,1) trim(BEAMLINE(i,IBEAM)%OBJ%ID),NEUT%R(1:3),NEUT%T/HOVM, NEUT%P, LOG1
-        !  endif
+          if (NEUT_DBG) call TRACING_REP(trim(BEAMLINE(i,IBEAM)%OBJ%ID),NEUT, LOG1)
         enddo
         NEUF1=NEUT
         NEUF%P=NEUT%P
@@ -776,10 +778,10 @@ c      call EVARRAY(4,0,I,AUX,DUM)
         if (N.GT.5) then
           TRACING_DINT=SQRT((TRACING_DINT/N-TRACING_INT**2)/(N-1))
           TRACING_DVOL=SQRT((TRACING_DVOL/N-TRACING_VOL**2)/(N-1))
-		  ! disable precission limit if not set
-		  if (TROPT%PLIMIT>1.D-10) then
-			 TRACING_PRECISION=TRACING_DINT/TRACING_INT
-		  endif
+          ! disable precission limit if not set
+          if (TROPT%PLIMIT>1.D-10) then
+               TRACING_PRECISION=TRACING_DINT/TRACING_INT
+          endif
 c          write(*,*) IPARC,CPARC(IPARC-1),CPARC(IPARC)-CPARC(IPARC-1),trace_cnt
         endif
     ! renormalize to the flux 10^14/s/cm^2 or flux at the sample

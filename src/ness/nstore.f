@@ -427,10 +427,13 @@
 !--------------------------------------------------------------------------
         integer , intent(in):: IREF,NEV
         logical :: LOG1
-    ! valid storage
-        LOG1=((IREF>0).and.REGSTORE(IREF)%OK)
-    ! valid event
-        LOG1=(LOG1.and.(REGSTORE(IREF)%R%NEV>=NEV))
+        LOG1=(IREF>0)
+        if (LOG1) then
+        ! valid storage
+            LOG1=((IREF>0).and.REGSTORE(IREF)%OK)
+        ! valid event
+            LOG1=(LOG1.and.(REGSTORE(IREF)%R%NEV>=NEV))
+        endif
         CHECK_VALID=LOG1
       end FUNCTION CHECK_VALID
 
@@ -444,12 +447,12 @@
         !write(*,1) 'NSTORE_CHECK_ACCESS ',IREF,NEV
     ! valid storage
         LOG1=(IREF>0)
-        LOG1=(LOG1.and.(NEV>0))
-        LOG1=(LOG1.and.REGSTORE(IREF)%OK)
-        !write(*,1) '      LOG1',LOG1
+        if (LOG1) then
+            LOG1=(LOG1.and.(NEV>0))
+            LOG1=(LOG1.and.REGSTORE(IREF)%OK)
     ! valid event
-        LOG1=(LOG1.and.(REGSTORE(IREF)%R%NALLOC>=NEV))
-        !write(*,1) '      LOG1',LOG1
+            LOG1=(LOG1.and.(REGSTORE(IREF)%R%NALLOC>=NEV))
+        endif
         NSTORE_CHECK_ACCESS=LOG1
       end FUNCTION NSTORE_CHECK_ACCESS
 

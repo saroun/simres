@@ -580,7 +580,7 @@ c array for gauge volume map
       write(iunit,31,err=998) trim(CNUM(1)),trim(CNUM(2))
       write(iunit,41,err=998) trim(CNUM(3)),trim(CNUM(4))
       do i=1,3
-        call float2str(GRFPORT(iport)%LOGSCALE,CNUM(i))
+        call float2str(1.D0*GRFPORT(iport)%LOGSCALE(i),CNUM(i))
       enddo
       write(iunit,7,err=998) (trim(CNUM(i)),i=1,3)
       write(iunit,5,err=998) trim(GRFPORT(iport)%LEGEND)

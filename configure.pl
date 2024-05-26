@@ -37,7 +37,7 @@ my $DOMAKE="yes";   # set to "no" if you don't want to create makefile
 my $DBGOPT="no";   # compile with debugging options
 #------------  DEFINE VERSION HERE  ------------
 my $PGMNAME="simres";      # program name
-my $VERSION="6.5.5";       # version
+my $VERSION="6.5.6";       # version
 my $LPGPLOT="";            # PGPLOT link option (if empty,  it will be set by this script)
 my $LMCPL="";              # MCPL link option (if empty,  it will be set by this script)
 #--------------------------------------------
@@ -705,8 +705,8 @@ sub CreateMakefile {
     my $jsdrivsrv=fpath("\$(PWD)/\$(LIB)/pgplot/jsdriv_server.exe");
     
     printf(OUTFILE "jsdriv: %s %s \n",$jsdrivlib,$jsdrivsrv);
-    printf(OUTFILE "\trmdir /S /Q %s\\bin \n",$VARS{'JSDRIV'});
-    printf(OUTFILE "\trmdir /S /Q %s\\lib \n",$VARS{'JSDRIV'});
+    printf(OUTFILE "\tif exist %s\\bin rmdir /S /Q %s\\bin \n",$VARS{'JSDRIV'},$VARS{'JSDRIV'});
+    printf(OUTFILE "\tif exist %s\\lib rmdir /S /Q %s\\lib \n",$VARS{'JSDRIV'},$VARS{'JSDRIV'});
 
     printf(OUTFILE "%s: \n",$jsdrivlib);
     printf(OUTFILE "\tlazbuild %s\\jsdrivlib.lpi \n",$VARS{'JSDRIV'});
