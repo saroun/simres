@@ -547,9 +547,9 @@
 ! get time of flight to the intersection with a plane with given normal angle w.r.t. x-axis
 ! INPUT:
 !   x      ... position of neutron
-!   kx     ... direction of neutron
-!   dx     ... position of the plane
-!   a      ... tangents of the plane
+!   kx     ... x-component of k-vector
+!   dx     ... x-position of the plane
+!   a      ... kz * tangents of the plane
 ! OUTPUT
 !   t      ... time to cross-sections
 !------------------------------------------------------------------------
@@ -755,15 +755,15 @@
 
       if (dbg) write(*,1) 'BORDER_SANDWICH ',r,k,astack(1)
 
-      call BORDER_PLANE(r(1),k(1),-0.5*csize(1)+astack(1)*r(3),astack(1),t1)
-      call BORDER_PLANE(r(1),k(1),0.5*csize(1)+astack(1)*r(3),astack(1),t2)
+      call BORDER_PLANE(r(1),k(1),-0.5*csize(1)+astack(1)*r(3),0.D0,t1)
+      call BORDER_PLANE(r(1),k(1),0.5*csize(1)+astack(1)*r(3),0.D0,t2)
       if(t2.lt.t1) then
             z=t1
             t1=t2
             t2=z
       endif
-      call BORDER_PLANE(r(2),k(2),-0.5*csize(2)+astack(2)*r(3),astack(2),t3)
-      call BORDER_PLANE(r(2),k(2),0.5*csize(2)+astack(2)*r(3),astack(2),t4)
+      call BORDER_PLANE(r(2),k(2),-0.5*csize(2)+astack(2)*r(3),0.D0,t3)
+      call BORDER_PLANE(r(2),k(2),0.5*csize(2)+astack(2)*r(3),0.D0,t4)
       if(t4.lt.t3) then
             z=t3
             t3=t4
@@ -800,11 +800,11 @@
       ! top edge
       a=0.5D0*(h2-h1)/length
       dx=0.5D0*h1
-      call BORDER_PLANE(r(2),k(2),dx,a,t3)
+      call BORDER_PLANE(r(2),k(2),dx,a*k(3),t3)
       ! bottom edge
       a=-a
       dx=-dx
-      call BORDER_PLANE(r(2),k(2),dx,a,t4)
+      call BORDER_PLANE(r(2),k(2),dx,a*k(3),t4)
       ! front and rear edge
       if(t4.lt.t3) then  ! ensure t3<=t4
         z=t3

@@ -137,21 +137,23 @@
           OBJ%MAPG(1)=.TRUE.
           OBJ%MAPG(3)=.TRUE.
       ENDIF
-! unit vector |- to G
-      OBJ%gama(1)=COS(OBJ%CHI)*COS(OBJ%PSI)
-      OBJ%gama(3)=-SIN(OBJ%CHI)*COS(OBJ%PSI)
+! unit vector |- to G in horizontal plane
+! NOTE: the code does not work correctly if OBJ%PSI<>0 ... 
+      OBJ%gama(1)=COS(OBJ%CHI)
+      OBJ%gama(3)=-SIN(OBJ%CHI)
       OBJ%gama(2)=0
 ! extinction length
       if (OBJ%LAMBDA.LE.0.D0) OBJ%LAMBDA=OBJ%DHKL
 ! kin. reflectivity
       OBJ%QHKL=GETQKIN(OBJ,OBJ%lambda)
       ! write(*,*) ' CRYSTAL_INIT DEXT' ,OBJ%DHKL,OBJ%LAMBDA,OBJ%QML
+! extinction length = 1/lambda/(Fhkl/V0)
       OBJ%dext=OBJ%DHKL/OBJ%LAMBDA*SQRT(4*PI/OBJ%QML)
 ! absorption coefficient
       OBJ%MI=GETMI(OBJ,OBJ%lambda,300.D0)
 ! peak reflectivity (no mosaic)
       OBJ%REF=GETREFDYN(OBJ,OBJ%LAMBDA)
-! Darwin box width
+! Darwin box width = Qkin/(pi*lambda*Fhkl/V0)
       !  write(*,*) ' CRYSTAL_INIT DELTA' ,OBJ%QHKL,OBJ%Dext,PI
       OBJ%DELTA=OBJ%QHKL*OBJ%Dext*1D-4/PI
 
@@ -162,7 +164,7 @@
   ! mosaicity is always larger than Darwin box
 !    write(*,*) ' CRYSTAL_INIT ' ,OBJ%HMOS,OBJ%DELTA
         OBJ%HMOS=MAX(OBJ%HMOS,OBJ%DELTA)
-  ! primary extinction
+  ! primary extinction. dlam = effective size of of the mosaic domain along the beam
         Z=OBJ%dlam/OBJ%Dext
         IF (Z.GT.1D-5) OBJ%Ext1=TANH(Z)/Z
       END select
