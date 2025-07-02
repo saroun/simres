@@ -192,9 +192,9 @@ c        CALL WRITE_XML(20)
         call XML_ARRAY(IUDBG,N,'LIMIT',MATLEG,RNDLIST%LIMITS(1))
       endif
 
-      if (DBG) then
-        close(IUDBG)
-      endif
+      !if (DBG) then
+      !  close(IUDBG)
+      !endif
 
       END SUBROUTINE TRACING_INI
 
@@ -423,8 +423,11 @@ C------------------------------------------------------------------------
 2     format(a,': ',G14.8,2x,8(G10.4,1x))
 3     format(a,': ',8(G10.4,1x))
 
+      if (NEUT_DBG) write(*,*) 'TRACING_RUN GENERATOR_GO before'
+
 ! generate the initial neutron state in NEUT
       call GENERATOR_GO
+      if (NEUT_DBG) write(*,3) 'TRACING_RUN GENERATOR_GO done: ',NEUT%R(1),NEUT%R(3),NEUT%K(1),NEUT%K(3),NEUT%P
 
 !      if (isProbe) then
 !        write(*,3) 'TRACING_RUN probe hit: ',NEUT%R(1),NEUT%R(3),NEUT%K(1),NEUT%K(3),NEUT%P

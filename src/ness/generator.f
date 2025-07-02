@@ -68,7 +68,8 @@ C uses random numbers from RNDX() array (see modules RESMAT and TRACING)
   ! debug options
       logical, private :: DBG=.false.     ! flag
       integer, private :: IUDBG=6   ! Log-file unit
-
+      integer, private :: dbg_max=200   ! limit reporting
+      integer, private :: dbg_i=0   ! limit reporting
       private SAMPLING_VOLUME
 
       contains
@@ -285,11 +286,17 @@ C--------------------------------------------------------------
       type(PDATASET) :: DTS
 
 1     format(I8,12(1x,G11.5))
-
+2     format(a,': ',10(1x,G12.5))
       PP=0.D0
       isProbe=((.not.isProbe).and.(mod(EVENTGEN%COUNT,NPROBE).eq.0))
 ! repeat until an event with non-zero weight is generated
       do while (PP.LE.PLIM)
+        if (DBG) dbg_i=dbg_i+1
+
+        if (DBG) then
+          write(*,*) 'GENERATOR_GO isprobe ',isProbe
+          write(*,2) '    PP, PNORM, PLIM: ',PP, PNORM, PLIM
+        endif
 ! generate uniform random numbers, XNORM
   ! probe event is generated time to time
   ! it samples larger space to check sampling limits more efficiently
@@ -301,6 +308,8 @@ C--------------------------------------------------------------
           NEUT%LABEL=0
         endif
         NEUT%STATE=0
+
+        if (DBG) write(*,*) 'GENERATOR_GO passed 1 '
 
         ! if (EVENTGEN%COUNT.lt.100) NEUT%LABEL=2
 
@@ -347,6 +356,7 @@ C--------------------------------------------------------------
             NEUT%K(2)=XRND(4)*EVENTGEN%K0
             NEUT%K(3)=XRND(5)*EVENTGEN%K0+EVENTGEN%K0
             NEUT%K0=SQRT(NEUT%K(1)**2+NEUT%K(2)**2+NEUT%K(3)**2)
+            if (DBG) write(*,2) '    kspace: ',PP
         ! XRND(3)=sina, XRND(4)=sinb, XRND(5)=-delta_lammbda/lambda_nom
           else if ((abs(XRND(3))<1.D0).and.(abs(XRND(4))<1.D0).and.(XRND(5)<1.D0)) then
             NEUT%K0=EVENTGEN%K0/(1.D0-XRND(5))
@@ -358,8 +368,10 @@ C--------------------------------------------------------------
             !NEUT%K(3)=SQRT(NEUT%K0**2-NEUT%K(1)**2-NEUT%K(2)**2)
             !PP=PP*NEUT%K0**4/TWOPI/cosa
             PP=PP*NEUT%K0**4/EVENTGEN%K0**4/cosa
+            if (DBG) write(*,2) '    within limits: ',PP
           else
             PP=0.D0
+            if (DBG) write(*,2) '    out of limits: ',PP
           endif
           NEUT%S(1:3)=0.D0
           NEUT%S(1)=2*NINT(RAN1())-1
@@ -404,8 +416,8 @@ C--------------------------------------------------------------
         endif
         NEUT%CNT=trace_cnt+1
 
+        if (DBG) write(*,2) '    passed 2: ',PP
 
-2     format(a,': ',10(1x,G12.5))
       !if (trace_tot<18) then
       !  write(*,2) 'GENERATOR_GO ',NINT(trace_tot), mtmod_ngen, trace_cnt, PP, XNORM(1:5),isProbe
       !endif
@@ -427,8 +439,8 @@ C--------------------------------------------------------------
 !      endif
 
         if (DBG) then
-          write(IUDBG,1) EVENTGEN%COUNT,NEUT%R(1:3),NEUT%K(1:2),NEUT%K(3)-EVENTGEN%K0,(XRND(i),i=6,RNDLIST%DIM)
-          if (EVENTGEN%COUNT.ge.REPOPT%NRAYS) then
+          write(IUDBG,1) EVENTGEN%COUNT,PP, NEUT%R(1:3),NEUT%K(1:2),NEUT%K(3)-EVENTGEN%K0,(XRND(i),i=6,RNDLIST%DIM)
+          if (dbg_i.ge.dbg_max) then
             close(IUDBG)
             IUDBG=6
             DBG=.false.
