@@ -83,7 +83,7 @@ $PACKNUM =~ s/[.]//g;
 $BUILDNUM =~ s/(\d*)[.](\d*)[.](\d*)/$1.$2$3/;
 
 # project information
-$VARS{'HOMEPAGE'}="http://neutron.ujf.cas.cz/restrax";  # RESTRAX hommepage
+$VARS{'HOMEPAGE'}="https://github.com/saroun/simres";  # RESTRAX hommepage
 $VARS{'PGMNAME'}=$PGMNAME;        # program name
 $VARS{'VERSION'}=$VERSION;        # version number
 $VARS{'BUILDNUM'}=$BUILDNUM;      # build number (derived from version number)

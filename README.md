@@ -1,53 +1,25 @@
 # SIMRES - neutron ray-tracing simulation
 
+SIMRES repository: https://github.com/saroun/simres  
+Terms of use: [COPYING.md](COPYING.md)  
+Maintained by: [saroun@ujf.cas.cz](https://github.com/saroun)
+
+## About SIMRES
+
 SIMRES is an application for simulation of neutron beams using Monte Carlo ray-tracing method. It has been developed for instrument scientists as a tool for realistic simulation of neutron beam characteristics, optimization of instrument parameters, planning of experiments as well as simulation of synthetic data for validation of data analysis methods. 
 
-Homepage: http://neutron.ujf.cas.cz/restrax   
-SIMRES repository: https://github.com/saroun/simres  
-User guide: http://neutron.ujf.cas.cz/restrax/download/simres-guide.pdf  
-Download: see [DOWNLOAD.md](DOWNLOAD.md).  
+The program is designed for interactive work with a virtual neutron scattering instrument or its part constructed from a given list of beamline components. Typically, results obtained by the ray-tracing method allow to visualize and export neutron beam intensities projected onto 1D and 2D intensity maps in any of the relevant phase space variables, energy and time-of-flight. In addition detector components can be configured to provide histograms in units relevant for diffraction experiments such as scattering angles and lattice spacing.
 
------------------------------------------------------------------
+## Documentation
 
-## Use conditions
+The user guide is avaliable for download from the download site: [simres-guide.pdf](https://owncloud.cesnet.cz/index.php/s/SEekUBDtXu725TT)  
 
-SIMRES is provided under the terms of the *GNU General Public License v. 2.0* (see LICENSE), with the exception of the `3rd party software` listed below. 
+For compilation and installation instructions, see [INSTALL.md](INSTALL.md)
 
-### 3rd party software
+## Download 
 
-`PGPLOT` - The Fortran graphics library written by Tim Pearson, California Institute of Technology, provides graphical representation of results.  
-http://www.astro.caltech.edu/~tjp/pgplot  
-*License*: see licenses/pgplot.txt
+See [DOWNLOAD.md](DOWNLOAD.md)
 
-`Mersenne-Twister` - The random number generator developed by Makoto Matsumoto and Takuji Nishimura [ACM Trans. on Modeling and Computer Simulation Vol. 8, No. 1, Januray pp.3-30, 1998] and coded to Fortran by Hiroshi Takano.  
-http://www.math.sci.hiroshima-u.ac.jp/%7Em-mat/MT/emt.html  
-*License*: see licenses/mersenne_twister.txt
+## Terms of use
 
-`MCPL` - Monte Carlo Particle Lists library   
-https://github.com/mctools/mcpl  
-*License*: Creative Commons, licenses/mcpl.txt
-
-`Java3D` - 3D Graphics Package  
-http://www.java3d.org/
-*License*: see licenses/java3d.txt
-
-`Jama` - Java Matrix Package.   
-http://math.nist.gov/javanumerics/jama/  
-*License*: public domain
-
------------------------------------------------------------------
-
-## System requirements
-
-Linux: 
-- tested with Ubuntu 18.04 LTE
-- `Java`, JRE or SDK (ver. 8 or higher), 64 bit
-- `perl` (for running installation and build scripts)
-- `gcc`, `gfortran` (version >= 7), if you want to compile from sources
-
-Windows:
-- tested with Windows 10 ver. 1809 
-- `Java`, JRE or SDK (ver. 8 or higher), 64 bit
-- `perl` (only for running build scripts)
-- `mingw-w64` with gcc and gfortran (version >= 7), if you want to compile from sources
-- `Lazarus` FreePascal, if you want to compile the PGPLOT graphics driver for Windows (jsdriv_server) 
+The source code of SIMRES is distributed under the terms of the GNU General Public License ver. 2. For details and license conditions for the 3rd party software, see [COPYING.md](COPYING.md)  
