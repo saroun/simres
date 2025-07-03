@@ -9,7 +9,7 @@
 #  -q                               ; quiet (no console output
 #  -log [filename]                  ; print console output to the given file
 GUI=@INSTDIR@/GUI/simresCON.jar
-JRE=@JRE@
+# JRE=@JRE@
 if [ ! -f $GUI ] ; then
   echo "jar file not found: "
   echo "$GUI"
