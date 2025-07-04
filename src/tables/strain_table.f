@@ -249,7 +249,7 @@
         enddo
         do i=1,3
 		   if (p_used(i,NR)>0) then
-              P(i)=p_depth(1,i,NR)
+              P(i)=1.D0+p_depth(1,i,NR)
 		   endif
         enddo
         return
@@ -259,7 +259,7 @@
         enddo
         do i=1,3
 		   if (p_used(i,NR)>0) then
-              P(i)=p_depth(1,i,NR)
+              P(i)=1.D0+p_depth(1,i,NR)
 		   endif
         enddo
         return
@@ -282,9 +282,7 @@
         do i=1,3
           if (p_used(i,NR)>0) then
             call quadinterp3(s_depth(iz:iz+2,NR),p_depth(iz:iz+2,i,NR),d)
-            P(i)=d(1)*delta**2+d(2)*delta+d(3)
-          else
-            P(i)=1.D0
+            P(i)=1.D0+d(1)*delta**2+d(2)*delta+d(3)
           endif
         enddo
       ENDIF
