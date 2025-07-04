@@ -3,6 +3,28 @@ Change log for SIMRES
 ==========================
 
 ------------------------
+update 6.5.5, 30/6/2025
+------------------------
+- bug fix: show help PDF in Linux
+- new '-seed n' command option to start with given random number seed
+- new '-test n' command option for CLI mode: 
+   Example: -test 0 will run the 1st project defined in ./tests/test_projects.xml 
+- fixed DW factor for polycrystals
+- fix zero precision limit problem
+- bug fix: wrong g-vector out of plane component in CRYSTAL
+- increase precision of event list output
+- patch: allow gradient crystals without mosaicity
+- fix projection to intensity branches in strain table
+- calculate strain projections on principal axes in sample_poly
+- add NITI parameter in mirror tables to switch on the NiTi model
+- code cleanup to comply with fortran 2018
+- bug fix, freezing with gcc ver>8, issue #12 resolved
+- beam cutting by parked choppers is allowed
+- bug fix - accept command strings  > 128 char
+- fix sample tables in demos, new format
+
+
+------------------------
 update 6.5.3, 17/6/2021
 ------------------------
 - updated crystal.tab by adding incoherent scattering cross-sections
