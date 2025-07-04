@@ -62,9 +62,9 @@ On Windows, there are two options:
 - Choose the open source GPL-licensed JDK from https://openjdk.java.net/. Binary distributions should be available at https://jdk.java.net/. 
 
 **NOTE** 
-Thete are incompatibility issues related to the Java3D package when using Java version > 13. 
+There are incompatibility issues related to the Java3D package when using Java version > 13. 
 
-The SIMRES installers try to fined the latest version installed on your system. If it fails, it is possible to provide the path to the `java` executable by editting the JRE variable in the start scripts `simres.bat` (Windows) or `simres` (Linux).
+The SIMRES installers will try to find the latest version installed on your system. If it fails, it is possible to provide the path to the `java` executable by editting the JRE variable in the start scripts `simres.bat` (Windows) or `simres` (Linux).
 
 #### Other Runtime Libraries
 The *Windows* binary distributions are build using the Mingw-w64 package and required runtime libraries should be included in the binary distribution.  
@@ -84,6 +84,7 @@ See the user guide at `[target directory]/doc/simres-guide.pdf` for more informa
 - Get the installer (see [DOWNLOAD.md](DOWNLOAD.md)).
 - Execute the installer and follow instructions.  
 - Run the program (a launch icon should be on the desktop and in the Start menu. See the user guide for more information (a link is provided in the Start menu in the Simres folder).
+- For testing the program in command mode, open the Simres command window (a link should be available in the program group). Then execute  e.g. `simres -test 0`.
 - Some antivirus programs like AVG may hinder the first launch of the program. If this happens, press RESET on the control panel to restart the kernel.
 
 ## Building from the source
